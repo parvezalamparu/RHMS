@@ -1,40 +1,43 @@
 import React, { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../general/Button";
-import { FaRegEye } from "react-icons/fa6";
+import Button from "../../components/store/general/Button";
+import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
-import AddRequisitionModal from "../forms/AddRequisitionModal";
-import CustomDatePicker from "../../general/CustomDatePicker";
+import AddVendorModal from "../../components/store/forms/AddVendorModal";
 
-interface Requisition {
+interface Vendor {
   id: string;
-  generatedBy: string;
-  department: string;
-  date: string;
+  name: string;
+  phone: string;
+  gst: string;
+  contactPerson: string;
+  address: string;
 }
 
-const generateRandomRequisitions = (count: number): Requisition[] => {
-  const departments = ["HR", "Finance", "Logistics", "Maintenance", "IT"];
-  const names = ["John Doe", "Jane Smith", "Robert Brown", "Alice Johnson", "Steve Adams"];
-
+const generateRandomVendors = (count: number): Vendor[] => {
+  const names = ["ABC Traders", "QuickMart", "SupplyCo", "Mega Distributors", "Nova Vendors"];
+  const contacts = ["Amit Sharma", "Rekha Verma", "Suresh Das", "Nisha Rai", "Dinesh Patel"];
+  const addresses = ["Kolkata", "Delhi", "Mumbai", "Chennai", "Hyderabad"];
   return Array.from({ length: count }, (_, i) => ({
-    id: `REQ-${(i + 1).toString().padStart(3, "0")}`,
-    generatedBy: names[Math.floor(Math.random() * names.length)],
-    department: departments[Math.floor(Math.random() * departments.length)],
-    date: new Date(2025, 6, Math.floor(Math.random() * 30) + 1).toISOString().split("T")[0],
+    id: `V-${(i + 1).toString().padStart(3, "0")}`,
+    name: names[Math.floor(Math.random() * names.length)],
+    phone: `98${Math.floor(100000000 + Math.random() * 89999999)}`,
+    gst: `27ABCDE${i + 1000}Z5`,
+    contactPerson: contacts[Math.floor(Math.random() * contacts.length)],
+    address: addresses[Math.floor(Math.random() * addresses.length)],
   }));
 };
 
-const RequisitionPage = () => {
-  const [requisitions, setRequisitions] = useState<Requisition[]>(generateRandomRequisitions(100));
+const VendorPage = () => {
+  const [vendors, setVendors] = useState<Vendor[]>(generateRandomVendors(20));
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Requisition; direction: "asc" | "desc" } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Vendor; direction: "asc" | "desc" } | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const handleSort = (key: keyof Requisition) => {
+  const handleSort = (key: keyof Vendor) => {
     setSortConfig((prev) => {
       if (prev?.key === key) {
         return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
@@ -43,7 +46,7 @@ const RequisitionPage = () => {
     });
   };
 
-  const sortedRequisitions = [...requisitions].sort((a, b) => {
+  const sortedVendors = [...vendors].sort((a, b) => {
     if (!sortConfig) return 0;
     const { key, direction } = sortConfig;
     const aVal = a[key]?.toString().toLowerCase() ?? "";
@@ -53,26 +56,21 @@ const RequisitionPage = () => {
     return 0;
   });
 
-  const filteredRequisitions = sortedRequisitions.filter((req) => {
+  const filteredVendors = sortedVendors.filter((vendor) => {
     const term = searchTerm.toLowerCase();
     return (
-      req.id.toLowerCase().includes(term) ||
-      req.generatedBy.toLowerCase().includes(term) ||
-      req.department.toLowerCase().includes(term) ||
-      req.date.toLowerCase().includes(term)
+      vendor.id.toLowerCase().includes(term) ||
+      vendor.name.toLowerCase().includes(term) ||
+      vendor.phone.toLowerCase().includes(term) ||
+      vendor.gst.toLowerCase().includes(term) ||
+      vendor.contactPerson.toLowerCase().includes(term) ||
+      vendor.address.toLowerCase().includes(term)
     );
   });
 
-  const totalPages = Math.ceil(filteredRequisitions.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredVendors.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentRequisitions = filteredRequisitions.slice(startIdx, startIdx + itemsPerPage);
-
-  const handleEdit = (id: string) => {
-    const req = requisitions.find((r) => r.id === id);
-    if (req) {
-      alert(`Edit Requisition:\n\n${JSON.stringify(req, null, 2)}`);
-    }
-  };
+  const currentVendors = filteredVendors.slice(startIdx, startIdx + itemsPerPage);
 
   const changePage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -80,20 +78,25 @@ const RequisitionPage = () => {
     }
   };
 
-
+  const handleEdit = (id: string) => {
+    const vendor = vendors.find((v) => v.id === id);
+    if (vendor) {
+      alert(`Edit Vendor:\n\n${JSON.stringify(vendor, null, 2)}`);
+    }
+  };
 
   const startNumber = startIdx + 1;
-  const endNumber = startIdx + currentRequisitions.length;
+  const endNumber = startIdx + currentVendors.length;
 
   return (
     <div className="p-6 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Requisitions</h1>
+      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
+        <h1 className="text-2xl font-bold uppercase text-[#035d67]">Vendors</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"
           textColor="text-black"
-          name="Add Requisition"
+          name="Add Vendor"
           icon={<FaPlus />}
           hover="hover:bg-gray-200"
           onClick={() => setShowAddModal(true)}
@@ -123,7 +126,7 @@ const RequisitionPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56"
+          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {
@@ -132,32 +135,34 @@ const RequisitionPage = () => {
           }}
         />
       </div>
-      <CustomDatePicker/>
-
 
       <div className="overflow-x-auto bg-white rounded shadow mb-8">
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SN</th>
-              {["id", "generatedBy", "department", "date"].map((key) => (
+              <th className="px-4 py-3 border-r border-gray-300">Sl. No</th>
+              {["name", "phone", "gst", "contactPerson", "address"].map((key) => (
                 <th
                   key={key}
                   className="px-4 py-3 border-r border-gray-300 cursor-pointer select-none"
-                  onClick={() => handleSort(key as keyof Requisition)}
+                  onClick={() => handleSort(key as keyof Vendor)}
                 >
-                  {key === "id"
-                    ? "Requisition No."
-                    : key === "generatedBy"
-                    ? "Generated By"
-                    : key.charAt(0).toUpperCase() + key.slice(1)}
-                  {" "}
+                  {(() => {
+                    switch (key) {
+                      case "name": return "Vendor Name";
+                      case "phone": return "Phone No";
+                      case "gst": return "Vendor GST";
+                      case "contactPerson": return "Contact Person Name";
+                      case "address": return "Address";
+                      default: return key;
+                    }
+                  })()}
                   <span>
                     {sortConfig?.key === key
                       ? sortConfig.direction === "asc"
-                        ? "▲"
-                        : "▼"
-                      : "⇅"}
+                        ? " ▲"
+                        : " ▼"
+                      : " ⇅"}
                   </span>
                 </th>
               ))}
@@ -165,26 +170,27 @@ const RequisitionPage = () => {
             </tr>
           </thead>
           <tbody>
-            {currentRequisitions.map((req, index) => (
+            {currentVendors.map((vendor, index) => (
               <tr
-                key={req.id}
+                key={vendor.id}
                 className="border-t border-gray-300 hover:bg-gray-50 transition duration-200"
               >
                 <td className="px-4 py-2 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">{req.id}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{req.generatedBy}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{req.department}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{req.date}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{vendor.name}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{vendor.phone}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{vendor.gst}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{vendor.contactPerson}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{vendor.address}</td>
                 <td className="px-4 py-2">
                   <Button
-                    icon={ <FaRegEye className="text-lg" />}
+                    icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"
                     border="border-2 border-gray-600"
                     textColor="text-blue-900"
                     hover="hover:bg-gray-200"
-                    onClick={() => handleEdit(req.id)}
+                    onClick={() => handleEdit(vendor.id)}
                   />
                 </td>
               </tr>
@@ -194,7 +200,7 @@ const RequisitionPage = () => {
 
         <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            Showing {startNumber} to {endNumber} of {filteredRequisitions.length} entries
+            Showing {startNumber} to {endNumber} of {filteredVendors.length} entries
           </div>
           <Stack spacing={2} direction="row" justifyContent="flex-end">
             <Pagination
@@ -208,9 +214,9 @@ const RequisitionPage = () => {
         </div>
       </div>
 
-      <AddRequisitionModal open={showAddModal} handleClose = {() => setShowAddModal(false)} />
+      <AddVendorModal open={showAddModal} handleClose={() => setShowAddModal(false)} />
     </div>
   );
 };
 
-export default RequisitionPage;
+export default VendorPage;

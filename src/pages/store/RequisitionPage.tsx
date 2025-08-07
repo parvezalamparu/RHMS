@@ -1,39 +1,39 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../general/Button";
-import { FaRegEdit } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
-import AddPurchesOrderModal from "../forms/AddPurchesOrderModal";
+import Button from "../../components/store/general/Button";
+import { FaRegEye, FaPlus } from "react-icons/fa6";
 
-interface PurchaseOrder {
+
+interface Requisition {
   id: string;
-  vendor: string;
   generatedBy: string;
+  department: string;
   date: string;
 }
 
-const generateRandomPOs = (count: number): PurchaseOrder[] => {
-  const vendors = ["ABC Suppliers", "XYZ Traders", "Delta Corp", "MegaMart", "QuickSupplies"];
+const generateRandomRequisitions = (count: number): Requisition[] => {
+  const departments = ["HR", "Finance", "Logistics", "Maintenance", "IT"];
   const names = ["John Doe", "Jane Smith", "Robert Brown", "Alice Johnson", "Steve Adams"];
 
   return Array.from({ length: count }, (_, i) => ({
-    id: `PO-${(i + 1).toString().padStart(3, "0")}`,
-    vendor: vendors[Math.floor(Math.random() * vendors.length)],
+    id: `REQ-${(i + 1).toString().padStart(3, "0")}`,
     generatedBy: names[Math.floor(Math.random() * names.length)],
+    department: departments[Math.floor(Math.random() * departments.length)],
     date: new Date(2025, 6, Math.floor(Math.random() * 30) + 1).toISOString().split("T")[0],
   }));
 };
 
-const PurchaseOrderPage = () => {
-  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>(generateRandomPOs(100));
+const RequisitionPage = () => {
+  const navigate = useNavigate();
+  const [requisitions, setRequisitions] = useState<Requisition[]>(generateRandomRequisitions(100));
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: keyof PurchaseOrder; direction: "asc" | "desc" } | null>(null);
-  const [showAddModal, setShowAddModal] = useState(false); // ✅ Modal state
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Requisition; direction: "asc" | "desc" } | null>(null);
 
-  const handleSort = (key: keyof PurchaseOrder) => {
+  const handleSort = (key: keyof Requisition) => {
     setSortConfig((prev) => {
       if (prev?.key === key) {
         return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
@@ -42,7 +42,7 @@ const PurchaseOrderPage = () => {
     });
   };
 
-  const sortedOrders = [...purchaseOrders].sort((a, b) => {
+  const sortedRequisitions = [...requisitions].sort((a, b) => {
     if (!sortConfig) return 0;
     const { key, direction } = sortConfig;
     const aVal = a[key]?.toString().toLowerCase() ?? "";
@@ -52,56 +52,47 @@ const PurchaseOrderPage = () => {
     return 0;
   });
 
-  const filteredOrders = sortedOrders.filter((order) => {
+  const filteredRequisitions = sortedRequisitions.filter((req) => {
     const term = searchTerm.toLowerCase();
     return (
-      order.id.toLowerCase().includes(term) ||
-      order.vendor.toLowerCase().includes(term) ||
-      order.generatedBy.toLowerCase().includes(term) ||
-      order.date.toLowerCase().includes(term)
+      req.id.toLowerCase().includes(term) ||
+      req.generatedBy.toLowerCase().includes(term) ||
+      req.department.toLowerCase().includes(term) ||
+      req.date.toLowerCase().includes(term)
     );
   });
 
-  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredRequisitions.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentOrders = filteredOrders.slice(startIdx, startIdx + itemsPerPage);
+  const currentRequisitions = filteredRequisitions.slice(startIdx, startIdx + itemsPerPage);
+  const startNumber = startIdx + 1;
+  const endNumber = startIdx + currentRequisitions.length;
 
   const handleEdit = (id: string) => {
-    const order = purchaseOrders.find((o) => o.id === id);
-    if (order) {
-      alert(`Edit Order:\n\n${JSON.stringify(order, null, 2)}`);
+    const req = requisitions.find((r) => r.id === id);
+    if (req) {
+      alert(`Edit Requisition:\n\n${JSON.stringify(req, null, 2)}`);
     }
   };
-
-  const changePage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  const startNumber = startIdx + 1;
-  const endNumber = startIdx + currentOrders.length;
 
   return (
     <div className="p-6 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Purchase Orders</h1>
+      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] px-4 max-h-14">
+        <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase pt-5">Requisitions</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"
           textColor="text-black"
-          name="Add PO"
+          name="Add Requisition"
           icon={<FaPlus />}
           hover="hover:bg-gray-200"
-          onClick={() => setShowAddModal(true)} // ✅ Open modal
+          onClick={() => navigate("/store/requisition/add-requisition-form" )}
         />
       </div>
 
       <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
-          <label htmlFor="pageSize" className="text-sm text-gray-700">
-            Show
-          </label>
+          <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
           <select
             id="pageSize"
             className="border rounded px-2 py-1 text-sm"
@@ -120,7 +111,7 @@ const PurchaseOrderPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56"
+          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {
@@ -135,14 +126,16 @@ const PurchaseOrderPage = () => {
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
               <th className="px-4 py-3 border-r border-gray-300">SN</th>
-              {["id", "vendor", "generatedBy", "date"].map((key) => (
+              {["id", "generatedBy", "department", "date"].map((key) => (
                 <th
                   key={key}
                   className="px-4 py-3 border-r border-gray-300 cursor-pointer select-none"
-                  onClick={() => handleSort(key as keyof PurchaseOrder)}
+                  onClick={() => handleSort(key as keyof Requisition)}
                 >
                   {key === "id"
-                    ? "Purchase Order No."
+                    ? "Requisition No."
+                    : key === "generatedBy"
+                    ? "Generated By"
                     : key.charAt(0).toUpperCase() + key.slice(1)}
                   {" "}
                   <span>
@@ -158,26 +151,24 @@ const PurchaseOrderPage = () => {
             </tr>
           </thead>
           <tbody>
-            {currentOrders.map((order, index) => (
+            {currentRequisitions.map((req, index) => (
               <tr
-                key={order.id}
+                key={req.id}
                 className="border-t border-gray-300 hover:bg-gray-50 transition duration-200"
               >
-                <td className="px-4 py-2 border-r border-gray-200">
-                  {(currentPage - 1) * itemsPerPage + index + 1}
-                </td>
-                <td className="px-4 py-2 border-r border-gray-200">{order.id}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{order.vendor}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{order.generatedBy}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{order.date}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{startIdx + index + 1}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{req.id}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{req.generatedBy}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{req.department}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{req.date}</td>
                 <td className="px-4 py-2">
                   <Button
-                    icon={<FaRegEdit className="text-lg" />}
+                    icon={<FaRegEye className="text-lg" />}
                     bgcolor="bg-gray-100"
                     border="border-2 border-gray-600"
                     textColor="text-blue-900"
                     hover="hover:bg-gray-200"
-                    onClick={() => handleEdit(order.id)}
+                    onClick={() => handleEdit(req.id)}
                   />
                 </td>
               </tr>
@@ -187,24 +178,21 @@ const PurchaseOrderPage = () => {
 
         <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            Showing {startNumber} to {endNumber} of {filteredOrders.length} entries
+            Showing {startNumber} to {endNumber} of {filteredRequisitions.length} entries
           </div>
           <Stack spacing={2} direction="row" justifyContent="flex-end">
             <Pagination
               count={totalPages}
               page={currentPage}
-              onChange={(_, page) => changePage(page)}
+              onChange={(_, page) => setCurrentPage(page)}
               variant="outlined"
               color="primary"
             />
           </Stack>
         </div>
       </div>
-
-      {/* ✅ Render modal */}
-      <AddPurchesOrderModal open={showAddModal} handleClose = {() => setShowAddModal(false)} />
     </div>
   );
 };
 
-export default PurchaseOrderPage;
+export default RequisitionPage;

@@ -1,36 +1,23 @@
-import * as React from 'react';
-import { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useState } from "react";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
-export default function CustomDatePicker() {
-  const [value, setValue] = React.useState<Dayjs | null>(null);
+const CustomDatePicker = () => {
+  const [date, setDate] = useState<Date | string>(new Date());
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-          slotProps={{
-            textField: {
-              sx: {
-                height: 20, // Sets the total height of the TextField within the DatePicker
-                // You might need to adjust padding inside if text isn't centered   kete
-                '& .MuiInputBase-root': {
-                  height: '100%',
-                },
-                '& .MuiInputBase-input': {
-                  paddingTop: '12px', // Adjust padding to vertically center
-                  paddingBottom: '12px',
-                },
-              },
-            },
-          }}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+    <div>
+      {/* <label className="block mb-1 text-sm font-medium">Date Picker</label> */}
+      <Flatpickr
+        options={{
+          dateFormat: "d-m-Y",
+        }}
+        className="border px-3 py-1 rounded w-full"
+        value={date}
+        onChange={(selectedDates) => setDate(selectedDates[0])}
+      />
+    </div>
   );
-}
+};
+
+export default CustomDatePicker;

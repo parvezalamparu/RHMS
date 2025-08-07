@@ -1,42 +1,33 @@
-import * as React from 'react';
-import { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { useState } from "react";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
-export default function CustomDateTimePicker() {
-  const [value, setValue] = React.useState<Dayjs | null>(null);
+
+type customeSize = {
+   height?: string,
+   width?: string,
+   isDisable? : boolean
+}
+
+const CustomDateTimePicker : React.FC <customeSize> = ({height = 'py-2', width = 'w-50',isDisable})   => {
+  const [dateTime, setDateTime] = useState<Date>(new Date()); 
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateTimePicker']}>
-        <DateTimePicker
-          label="Pick date & time"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-          slotProps={{
-            textField: {
-              sx: {
-                width: 250, // Customize width
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '8px',
-                  '& fieldset': {
-                    borderColor: '#ccc', // Default border
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#888', // On hover
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#1976d2', // On focus
-                    boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.2)', // Glow
-                  },
-                },
-              },
-            },
-          }}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+    <div className="mb-4">
+      <label className="block mb-1 text-sm font-medium">Date & Time Picker</label>
+      <Flatpickr
+        options={{
+          enableTime: true,
+          dateFormat: "d-m-Y h:i K",
+          time_24hr: false,
+        }}
+        className= {`border ${height} ${width} px-2 rounded w-6/9`}
+        value={dateTime}
+        disabled = {isDisable}
+        onChange={(selectedDates) => setDateTime(selectedDates[0])}
+      />
+    </div>
   );
-}
+};
+
+export default CustomDateTimePicker;

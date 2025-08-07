@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BiPlus, BiSave } from "react-icons/bi";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import Button from "../general/Button";
+import { FaPlus } from "react-icons/fa";
+// import CustomDateTimePicker from "../../general/CustomDateTimePicker";
+import CustomDatePicker from "../../general/CustomDatePicker";
 
 const vendorList = ["Vendor A", "Vendor B", "Vendor C"];
-const unitList = ["Box", "Bottle", "Packet"];
-const subUnitList = ["Piece", "Strip", "Tablet"];
 
 const AddPurchaseForm = () => {
   const [items, setItems] = useState([]);
@@ -27,31 +27,35 @@ const AddPurchaseForm = () => {
   };
 
   return (
-    <div className="p-6 max-w-full">
-      <h2 className="text-2xl font-bold text-[#035d67] mb-4">
+    <div className="px-4 py-6 ml-2">
+      <div>
+      <h2 className="text-2xl font-bold text-[#035d67] mb-6 bg-[var(--base-color)] p-2">
         ADD PURCHASE ENTRY
       </h2>
+      </div>
 
-      {/* Header Fields */}
-      <div className="grid grid-cols-6 gap-4 mb-6">
-        <div>
-          <label className="font-medium text-gray-700">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-12">
+        {/* Date Picker */}
+        <div className="w-full">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
             Date <span className="text-red-500">*</span>
           </label>
           <input
             type="datetime-local"
-            {...register("date", { required: true })}
-            className="w-full border rounded p-2"
+            readOnly
+            value={new Date().toISOString().slice(0, 16)} // default value
+            className="w-full border border-gray-300 rounded px-3 h-10 text-sm bg-gray-100 cursor-not-allowed"
           />
         </div>
 
-        <div>
-          <label className="font-medium text-gray-700">
+        {/* Vendor */}
+        <div className="w-full">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
             Vendor <span className="text-red-500">*</span>
           </label>
           <select
             {...register("vendor", { required: true })}
-            className="w-full border rounded p-2"
+            className="w-full border border-gray-300 rounded px-3 h-10 text-sm"
           >
             <option value="">Select Vendor</option>
             {vendorList.map((v) => (
@@ -62,25 +66,27 @@ const AddPurchaseForm = () => {
           </select>
         </div>
 
-        <div>
-          <label className="font-medium text-gray-700">
+        {/* Invoice No */}
+        <div className="w-full">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
             Invoice No <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             {...register("invoiceNo", { required: true })}
-            className="w-full border rounded p-2"
+            className="w-full border border-gray-300 rounded px-3 h-10 text-sm"
           />
         </div>
 
-        <div>
-          <label className="font-medium text-gray-700">
+        {/* Purchase Type */}
+        <div className="w-full">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">
             Purchase Type <span className="text-red-500">*</span>
           </label>
           <select
             {...register("purchaseType", { required: true })}
-            className="w-full border rounded p-2"
             onChange={(e) => setPurchaseType(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 h-10 text-sm"
           >
             <option value="">Select Type</option>
             <option value="Cash">Direct Purchase</option>
@@ -88,16 +94,17 @@ const AddPurchaseForm = () => {
           </select>
         </div>
 
+        {/* Purchase Order ID (Conditional) */}
         {purchaseType === "Credit" && (
-          <div>
-            <label className="font-medium text-gray-700">
+          <div className="w-full">
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
               Purchase Order ID <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               {...register("purchaseOrderId", { required: true })}
               placeholder="Enter PO ID"
-              className="w-full border rounded p-2"
+              className="w-full border border-gray-300 rounded px-3 h-10 text-sm"
             />
           </div>
         )}
@@ -105,221 +112,232 @@ const AddPurchaseForm = () => {
 
       {/* Table Header */}
       <div className="overflow-auto border rounded-md">
-        <table className="min-w-[1800px] w-full border-collapse text-sm">
-          <thead className="bg-[#2fe2fe] text-gray-900">
-            <tr>
-              {[
-                "Item *",
-                "Batch No",
-                "Exp. Date",
-                "Unit Qty",
-                "Unit",
-                "Sub Unit Qty",
-                "Sub Unit",
-                "Test QTY",
-                "MRP/QTY",
-                "Rate/QTY",
-                "Net Amt.",
-                "Dis(%)",
-                "Dis(₹)",
-                "CGST",
-                "SGST",
-                "IGST",
-                "Amount *",
-                "",
-              ].map((label, i) => (
-                <th
-                  key={i}
-                  className="border px-2 py-1 text-center whitespace-nowrap"
-                >
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border p-1">
-                <input
-                  {...register("item", { required: true })}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  {...register("batchNo")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="date"
-                  {...register("expDate")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("unitQty")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <select
-                  {...register("unit")}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {unitList.map((u) => (
-                    <option key={u} value={u}>
-                      {u}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("subUnitQty")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <select
-                  {...register("subUnit")}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">Select</option>
-                  {subUnitList.map((u) => (
-                    <option key={u} value={u}>
-                      {u}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("testQty")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("mrpQty")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("rateQty")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("netAmt")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("disPercent")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("disAmount")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("cgst")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("sgst")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("igst")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1">
-                <input
-                  type="number"
-                  {...register("amount")}
-                  className="w-full border rounded px-2 py-1"
-                />
-              </td>
-              <td className="border p-1 text-center">
-                <button
-                  type="button"
-                  onClick={addItem}
-                  className="bg-green-200 hover:bg-green-300 text-green-900 px-2 py-1 rounded shadow"
-                >
-                  <BiPlus size={20} />
-                </button>
-              </td>
-            </tr>
+  <table className="min-w-[2500px] w-full border-collapse text-sm">
+    <thead className="bg-[#2fe2fe] text-gray-900">
+      <tr>
+        {[
+          { label: "Item", required: true },
+          { label: "Batch No" },
+          { label: "Exp. Date" },
+          { label: "Unit Qty", required: true },
+          { label: "Unit", required: true },
+          { label: "Sub Unit Qty", required: true },
+          { label: "Sub Unit", required: true },
+          { label: "Test QTY" },
+          { label: "MRP/QTY", required: true },
+          { label: "Rate/QTY", required: true },
+          { label: "Net Amt.", required: true },
+          { label: "Dis(%)" },
+          { label: "Dis(₹)" },
+          { label: "CGST", required: true },
+          { label: "SGST", required: true },
+          { label: "IGST" },
+          { label: "Amount", required: true },
+          { label: "" },
+        ].map((col, i) => (
+          <th key={i} className="border px-2 py-1 text-center whitespace-nowrap">
+            {col.label} {col.required && <span className="text-red-500">*</span>}
+          </th>
+        ))}
+      </tr>
+    </thead>
 
-            {items.map((item, index) => (
-              <tr key={index} className="bg-gray-100">
-                <td className="border p-1 text-center">{item.item}</td>
-                <td className="border p-1 text-center">{item.batchNo}</td>
-                <td className="border p-1 text-center">{item.expDate}</td>
-                <td className="border p-1 text-center">{item.unitQty}</td>
-                <td className="border p-1 text-center">{item.unit}</td>
-                <td className="border p-1 text-center">{item.subUnitQty}</td>
-                <td className="border p-1 text-center">{item.subUnit}</td>
-                <td className="border p-1 text-center">{item.testQty}</td>
-                <td className="border p-1 text-center">{item.mrpQty}</td>
-                <td className="border p-1 text-center">{item.rateQty}</td>
-                <td className="border p-1 text-center">{item.netAmt}</td>
-                <td className="border p-1 text-center">{item.disPercent}</td>
-                <td className="border p-1 text-center">{item.disAmount}</td>
-                <td className="border p-1 text-center">{item.cgst}</td>
-                <td className="border p-1 text-center">{item.sgst}</td>
-                <td className="border p-1 text-center">{item.igst}</td>
-                <td className="border p-1 text-center">{item.amount}</td>
-                <td className="border p-1 text-center"></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <tbody>
+      <tr>
+        {/* Item */}
+        <td className="border p-1">
+          <input
+            {...register("item", { required: "Item is required" })}
+            className={`w-70 border rounded px-2 py-1 ${errors.item ? "border-red-500" : ""}`}
+          />
+          {errors.item?.message && <p className="text-red-500 text-xs">{errors.item.message as string}</p>}
+        </td>
+
+        {/* Batch No */}
+        <td className="border p-1">
+          <input {...register("batchNo")} className="w-50 border rounded px-2 py-1" />
+        </td>
+
+        {/* Exp Date */}
+        <td className="border p-1">
+          <CustomDatePicker />
+        </td>
+
+        {/* Unit Qty */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("unitQty", { required: "Unit Qty is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.unitQty ? "border-red-500" : ""}`}
+          />
+          {errors.unitQty?.message && <p className="text-red-500 text-xs">{errors.unitQty.message as string}</p>}
+        </td>
+
+        {/* Unit */}
+        <td className="border p-1">
+          <input
+            type="text"
+            {...register("unit", { required: "Unit is required" })}
+            readOnly
+            className={`w-full border rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.unit ? "border-red-500" : ""}`}
+          />
+          {errors.unit?.message && <p className="text-red-500 text-xs">{errors.unit.message as string}</p>}
+        </td>
+
+        {/* Sub Unit Qty */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("subUnitQty", { required: "Sub Unit Qty is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.subUnitQty ? "border-red-500" : ""}`}
+          />
+          {errors.subUnitQty?.message && <p className="text-red-500 text-xs">{errors.subUnitQty.message as string}</p>}
+        </td>
+
+        {/* Sub Unit */}
+        <td className="border p-1">
+          <input
+            type="text"
+            {...register("subUnit", { required: "Sub Unit is required" })}
+            readOnly
+            className={`w-full border rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.subUnit ? "border-red-500" : ""}`}
+          />
+          {errors.subUnit?.message && <p className="text-red-500 text-xs">{errors.subUnit.message as string}</p>}
+        </td>
+
+        {/* Test Qty */}
+        <td className="border p-1">
+          <input type="number" {...register("testQty")} className="w-24 border rounded px-2 py-1" />
+        </td>
+
+        {/* MRP */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("mrpQty", { required: "MRP is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.mrpQty ? "border-red-500" : ""}`}
+          />
+          {errors.mrpQty?.message && <p className="text-red-500 text-xs">{errors.mrpQty.message as string}</p>}
+        </td>
+
+        {/* Rate */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("rateQty", { required: "Rate is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.rateQty ? "border-red-500" : ""}`}
+          />
+          {errors.rateQty?.message && <p className="text-red-500 text-xs">{errors.rateQty.message as string}</p>}
+        </td>
+
+        {/* Net Amount */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("netAmt", { required: "Net Amount is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.netAmt ? "border-red-500" : ""}`}
+          />
+          {errors.netAmt?.message && <p className="text-red-500 text-xs">{errors.netAmt.message as string}</p>}
+        </td>
+
+        {/* Discount % */}
+        <td className="border p-1">
+          <input type="number" {...register("disPercent")} className="w-full border rounded px-2 py-1" />
+        </td>
+
+        {/* Discount ₹ */}
+        <td className="border p-1">
+          <input type="number" {...register("disAmount")} className="w-full border rounded px-2 py-1" />
+        </td>
+
+        {/* CGST */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("cgst", { required: "CGST is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.cgst ? "border-red-500" : ""}`}
+          />
+          {errors.cgst?.message && <p className="text-red-500 text-xs">{errors.cgst.message as string}</p>}
+        </td>
+
+        {/* SGST */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("sgst", { required: "SGST is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.sgst ? "border-red-500" : ""}`}
+          />
+          {errors.sgst?.message && <p className="text-red-500 text-xs">{errors.sgst.message as string}</p>}
+        </td>
+
+        {/* IGST */}
+        <td className="border p-1">
+          <input type="number" {...register("igst")} className="w-full border rounded px-2 py-1" />
+        </td>
+
+        {/* Amount */}
+        <td className="border p-1">
+          <input
+            type="number"
+            {...register("amount", { required: "Amount is required" })}
+            className={`w-full border rounded px-2 py-1 ${errors.amount ? "border-red-500" : ""}`}
+          />
+          {errors.amount?.message && <p className="text-red-500 text-xs">{errors.amount.message as string}</p>}
+        </td>
+
+        {/* Add Button */}
+        <td className="border p-1 text-center">
+          <Button
+            onClick={addItem}
+            bgcolor=""
+            border="border-3 border-[--var(--base-color)]"
+            textColor="text-black"
+            hover="hover:bg-green-300"
+            icon={<FaPlus />}
+          />
+        </td>
+      </tr>
+
+      {/* Render Added Items */}
+      {items.map((item, index) => (
+        <tr key={index} className="bg-gray-100">
+          {[
+            "item", "batchNo", "expDate", "unitQty", "unit", "subUnitQty",
+            "subUnit", "testQty", "mrpQty", "rateQty", "netAmt", "disPercent",
+            "disAmount", "cgst", "sgst", "igst", "amount"
+          ].map((key, i) => (
+            <td key={i} className="border p-1 text-center">{item[key]}</td>
+          ))}
+          <td className="border p-1 text-center"></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
       {/* Note & Payment */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
-        <textarea
-          {...register("note")}
-          placeholder="Note"
-          className="border rounded p-2 w-full h-20"
-        />
-        <select
-          {...register("paymentTerms")}
-          className="border rounded p-2 w-full h-10"
-        >
-          <option value="">Select Payment Term</option>
-          <option value="Cash">Cash</option>
-          <option value="Credit">Online</option>
-        </select>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        {/* Note Textarea */}
+        <div className="col-span-1">
+          <textarea
+            {...register("note")}
+            placeholder="Note"
+            className="border border-gray-300 rounded p-2 w-full h-20 text-sm"
+          />
+        </div>
+
+        {/* Payment Terms */}
+        <div className="col-span-1">
+          <select
+            {...register("paymentTerms")}
+            className="border border-gray-300 rounded p-2 w-full h-10 text-sm"
+          >
+            <option value="">Select Payment Term</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit">Online</option>
+          </select>
+        </div>
       </div>
 
       {/* Total Calculations */}

@@ -1,16 +1,10 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-
-export interface Item {
-  id: number;
-  name: string;
-  category: string;
-  unit: string;
-  subUnit: string;
-  relation: string;
-  hsn: string;
-  activated: boolean;
-}
+import React, { useState, useEffect } from "react";
+import type { Item } from "../../../pages/store/InventoryPage";
+import Button from "../../store/general/Button";
+import { X } from "lucide-react";
+import { BiSave } from "react-icons/bi";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import toast from "react-hot-toast";
 
 interface EditItemModalProps {
   editItem: Item;
@@ -23,114 +17,95 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
   setEditItem,
   onSave,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<Item>({
-    defaultValues: editItem,
-  });
+  const [formData, setFormData] = useState<Item>(editItem);
 
-  const onSubmit = (data: Item) => {
-    onSave({ ...editItem, ...data });
-    setEditItem(null);
-    reset();
+  useEffect(() => {
+    setFormData(editItem);
+  }, [editItem]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData);
+    toast.success("Updated successfully.")
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20 animate-fadeIn">
-      <div
-        className="bg-white p-6 rounded shadow-lg w-full max-w-lg transform transition-all duration-300 opacity-100 scale-100 relative"
-        style={{
-          animation: "fadeInScale 0.3s ease-out",
-          animationFillMode: "forwards",
-        }}
-      >
-        {/* ❌ Close button */}
+    <div className="fixed inset-0 bg-white/10 backdrop-blur-[3px] flex justify-center items-center z-50">
+      <div className="bg-gray-50 w-full max-w-7xl rounded-xl shadow-lg p-8 relative border-2">
         <button
           onClick={() => setEditItem(null)}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-600"
-          aria-label="Close modal"
+          className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X size={24} />
         </button>
 
-        <h2 className="text-xl font-semibold mb-4">Edit Item</h2>
+        <h2 className="text-2xl font-bold text-[#035d67] mb-6">ADD NEW ITEM</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
-          {/* Name */}
-          <div className="col-span-2 sm:col-span-1">
-            <label className="text-sm font-medium">Item Name <span className="text-red-500">*</span></label>
-            <input
-              {...register("name", { required: "Item Name is required" })}
-              className="border p-2 rounded w-full"
-            />
-            {errors.name && (
-              <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
-            )}
-          </div>
+        <form
+          className="p-6 grid grid-cols-4 gap-4 text-sm"
+          onSubmit={handleSubmit}
+        >
+          {[
+            { label: "Item Name", name: "itemName" },
+            { label: "Item Code", name: "itemCode" },
+            { label: "Item Type", name: "itemType" },
+            { label: "Item Category", name: "itemCategory" },
+            { label: "Item Sub-Category", name: "itemSubCategory" },
+            { label: "Low Level", name: "lowLevel", type: "number" },
+            { label: "High Level", name: "highLevel", type: "number" },
+            { label: "Company", name: "company" },
+            { label: "Stored", name: "stored" },
+            { label: "HSN", name: "hsn" },
+            { label: "Item Unit", name: "itemUnit" },
+            { label: "Sub Item Unit", name: "subItemUnit" },
+            { label: "Sub Unit Qty", name: "subUnitQty", type: "number" },
+            { label: "Rack No", name: "rackNo" },
+            { label: "Shelf No", name: "shelfNo" },
+          ].map(({ label, name, type }) => (
+            <div key={name} className="flex flex-col">
+              <label htmlFor={name} className="mb-1 font-medium">
+                {label}
+              </label>
+              <input
+                type={type || "text"}
+                name={name}
+                value={(formData as any)[name] ?? ""}
+                onChange={handleChange}
+                className="border px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+              />
+            </div>
+          ))}
 
-          {/* Category */}
-          <div className="col-span-2 sm:col-span-1">
-            <label className="text-sm font-medium">Category <span className="text-red-500">*</span></label>
-            <input
-              {...register("category", { required: "Category is required" })}
-              className="border p-2 rounded w-full"
-            />
-            {errors.category && (
-              <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>
-            )}
-          </div>
-
-          {/* Unit */}
-          <div>
-            <label className="text-sm font-medium">Unit</label>
-            <input {...register("unit")} className="border p-2 rounded w-full" />
-          </div>
-
-          {/* SubUnit */}
-          <div>
-            <label className="text-sm font-medium">Sub-Unit</label>
-            <input {...register("subUnit")} className="border p-2 rounded w-full" />
-          </div>
-
-          {/* Relation */}
-          <div className="col-span-2">
-            <label className="text-sm font-medium">Relation</label>
-            <input {...register("relation")} className="border p-2 rounded w-full" />
-          </div>
-
-          {/* HSN */}
-          <div className="col-span-2">
-            <label className="text-sm font-medium">HSN</label>
-            <input {...register("hsn")} className="border p-2 rounded w-full" />
-          </div>
-
-          {/* Buttons */}
-          <div className="col-span-2 flex justify-end gap-3 mt-4">
-            <button
-              type="button"
-              onClick={() => setEditItem(null)}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Save Changes
-            </button>
+          <div className="col-span-4 mt-8 flex justify-end">
+            <div className="mx-4">
+              <Button
+                name="Cancel"
+                onClick={() => setEditItem(null)}
+                bgcolor="bg-red-400"
+                border="border-3 border-[--var(--base-color)]"
+                textColor="text-black"
+                hover="hover:bg-red-300"
+                icon={<IoIosCloseCircleOutline />}
+              />
+            </div>
+            <div>
+              <Button
+                name="Update"
+                type="submit"
+                bgcolor="bg-green-400"
+                border="border-3 border-[--var(--base-color)]"
+                textColor="text-black"
+                hover="hover:bg-green-300"
+                icon={<BiSave />}
+              />
+            </div>
           </div>
         </form>
       </div>

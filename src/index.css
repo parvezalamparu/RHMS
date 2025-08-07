@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* index.css */
+body {
+  font-family:'Fira sans';
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -12,7 +15,8 @@
   --base-color : #2ef2ef;
   --dark-color : #035d67;
   
-}
+}   
+/* KINTU KAAJ KORCHE OK */
 
 @keyframes fadeInScale {
   0% {

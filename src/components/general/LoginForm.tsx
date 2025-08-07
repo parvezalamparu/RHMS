@@ -14,7 +14,7 @@ const LoginForm = () => {
     e.preventDefault();
     if (email && password) {
       // Simulate auth success
-      navigate("/store/dashboard");
+      navigate("/dashboard");
     } else {
       alert("Please enter both email and password");
     }
@@ -74,7 +74,7 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="text-black bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-xl px-8 py-2.5 text-center me-2 mb-2"
+          className="text-gray-800 uppercase bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none dark:focus:ring-green-800 font-medium rounded-lg text-xl px-8 py-2 text-center me-2 mb-2 cursor-pointer"
         >
           Log In
         </button>

@@ -1,26 +1,42 @@
 import { useRef } from "react";
-// import DatePicker from "react-datepicker";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import CustomDatePicker from "../../general/CustomDatePicker";
-import { DatePicker } from 'rsuite';
-// import "react-datepicker/dist/react-datepicker.css";
+import MonthSelect from "../../components/general/MonthSelect";
+import CircularProgressBar from "../../components/store/general/CircularProgressBar";
+import RichTextEditor from "../../components/general/RichTextEditor";
+import { useState } from "react";
 
 const Dashboard = () => {
   // const [selectedDate, setSelectedDate] = useState(new Date());
+  const [content, setContent] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const topItems = [
     {
       name: "Thermometer",
-      image: "/images/thermo.jpg",
+      image: "/src/assets/thermometer.jpeg",
       sold: 16,
       unit: "sets",
     },
-    { name: "Sweater", image: "/images/sweater.jpg", sold: 12, unit: "pcs" },
-    { name: "Pants", image: "/images/pants.jpg", sold: 2, unit: "pcs" },
-    { name: "Box", image: "/images/box.jpg", sold: 2, unit: "sets" },
-    { name: "Shoes", image: "/images/shoes.jpg", sold: 7, unit: "pcs" },
-    { name: "Gloves", image: "/images/gloves.jpg", sold: 4, unit: "pairs" },
+    { name: "Chair", image: "/src/assets/chair.jpeg", sold: 12, unit: "pcs" },
+    { name: "Gloves", image: "/src/assets/gloves.jpg", sold: 2, unit: "pcs" },
+    {
+      name: "Injection",
+      image: "/src/assets/injection.jpeg",
+      sold: 2,
+      unit: "sets",
+    },
+    {
+      name: "A4 Paper",
+      image: "/src/assets/a4paper.jpg",
+      sold: 7,
+      unit: "pcs",
+    },
+    {
+      name: "Prescription",
+      image: "/src/assets/prescription.png",
+      sold: 4,
+      unit: "pairs",
+    },
   ];
 
   const scroll = (direction: "left" | "right") => {
@@ -36,14 +52,17 @@ const Dashboard = () => {
     <div className="p-6 space-y-6">
       {/* Top Stats */}
       <div className="bg-blue-50 p-4 rounded grid grid-cols-1 lg:grid-cols-5 gap-4">
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:col-span-4 gap-4">
+        <div className="grid grid-cols-2  sm:grid-cols-4 lg:col-span-4 gap-4">
           {[
             { label: "To Be Packed", count: 25, unit: "Qty" },
             { label: "To Be Shipped", count: 1, unit: "Pkgs" },
             { label: "To Be Delivered", count: 3, unit: "Pkgs" },
             { label: "To Be Invoiced", count: 4, unit: "Qty" },
           ].map((item, idx) => (
-            <div key={idx} className="bg-white p-12 rounded shadow text-center">
+            <div
+              key={idx}
+              className="bg-white p-12 border-[1px] border-gray-400 rounded-xl shadow text-center"
+            >
               <p className="text-2xl text-blue-600 font-bold">{item.count}</p>
               <p className="text-xs text-gray-500">{item.unit}</p>
               <p className="text-sm mt-1 font-medium text-gray-700">
@@ -52,7 +71,7 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-        <div className="bg-white p-4 rounded shadow space-y-3">
+        <div className="bg-white p-4 shadow space-y-3  border-[1px] border-gray-400 rounded-xl">
           <h3 className="text-gray-600 font-medium">Inventory Summary</h3>
           <div className="text-sm">
             <p className="text-gray-600">Quantity In Hand</p>
@@ -66,52 +85,46 @@ const Dashboard = () => {
       </div>
 
       {/* Product Details & Top Items */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
         {/* Product Summary */}
-        <div className="bg-white p-4 rounded shadow flex">
-          <div className="w-1/2 border-r pr-4">
+        <div className="bg-white p-4 rounded shadow flex border-[1px] border-gray-400">
+          <div className="w-1/2 border-r pr-4 m-auto">
             <h4 className="font-semibold mb-2">Product Details</h4>
             <ul className="text-sm space-y-2">
               <li>
                 <span className="text-red-600 font-semibold">
                   Low Stock Items:
                 </span>{" "}
-                2
+                <span className="text-xl font-semibold text-red-500 ml-1">
+                  2
+                </span>
               </li>
-              <li>All Item Groups: 5</li>
-              <li>All Items: 16</li>
+              <li>
+                All Item Groups:{" "}
+                <span className="text-xl font-semibold text-blue-500 ml-1">
+                  5
+                </span>
+              </li>
+              <li>
+                All Items:{" "}
+                <span className="text-xl font-semibold text-blue-500 ml-1">
+                  16
+                </span>
+              </li>
             </ul>
           </div>
-          {/* <div className="w-1/2 pl-4 flex items-center justify-center">
-            <div className="text-center">
-              <div className="relative w-20 h-20">
-                <svg viewBox="0 0 36 36" className="w-full h-full">
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke="#e6e6e6"
-                    strokeWidth="3.8"
-                  />
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 12.76 25.132"
-                    fill="none"
-                    stroke="#00c292"
-                    strokeWidth="3.8"
-                    strokeDasharray="81, 100"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">81%</div>
-              </div>
-              <p className="text-sm mt-2">Active Items</p>
-            </div>
-          </div> */}
+          <div className="flex flex-col gap-3 justify-center items-center mx-auto ">
+            <span className="text-lg text-gray-600 font-semibold tracking-tight">
+              Active Items
+            </span>
+            <CircularProgressBar value={90} strokeWidth={15} />
+          </div>
         </div>
-
         {/* Top Selling Items with Scroll */}
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow border-[1px] border-gray-400">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-semibold">Top Selling Items</h4>
-            {/* <DatePicker
+            <h4 className="font-semibold">Most requisition item</h4>
+            {/* <DateRangePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date!)}
               className="border px-2 py-1 rounded text-sm"
@@ -119,7 +132,7 @@ const Dashboard = () => {
               showMonthYearPicker
             /> */}
 
-            <CustomDatePicker />
+            <MonthSelect />
           </div>
           <div className="relative">
             <button
@@ -164,10 +177,10 @@ const Dashboard = () => {
       {/* Purchase Order & Sales Order */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Purchase Order */}
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow border-[1px] border-gray-400">
           <div className="flex justify-between items-center mb-2">
             <h4 className="font-semibold">Purchase Order</h4>
-            <CustomDatePicker />
+            <MonthSelect />
           </div>
           <div className="text-center space-y-2">
             <p className="text-gray-600">Quantity Ordered</p>
@@ -178,57 +191,52 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Sales Order */}
-        <div className="bg-white p-4 rounded shadow overflow-auto">
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="font-semibold">Sales Order</h4>
-            < DatePicker />
+        {/* Pending Requisitions */}
+        <div className="bg-white p-4 rounded shadow overflow-auto border-[1px] border-gray-400">
+          <div className="flex justify-between items-center mb-2 ">
+            <h4 className="font-semibold">Pending Requisitions</h4>
+            <MonthSelect />
           </div>
           <table className="w-full text-sm text-left border-t">
             <thead className="text-gray-600">
               <tr>
-                <th className="py-1">Channel</th>
-                <th className="py-1">Draft</th>
-                <th className="py-1">Confirmed</th>
-                <th className="py-1">Packed</th>
-                <th className="py-1">Shipped</th>
-                <th className="py-1">Invoiced</th>
+                <th className="py-1">Department</th>
+                <th className="py-1">Item Name</th>
+                <th className="py-1">Date</th>
+                <th className="py-1">Unit Qty</th>
+                <th className="py-1">Sub Unit Qty</th>
               </tr>
             </thead>
             <tbody>
               {[
                 {
-                  name: "Others",
-                  draft: 0,
-                  confirmed: 42,
-                  packed: 5,
-                  shipped: 27,
-                  invoiced: 75,
+                  department: "Pharmacy",
+                  itemName: "Gloves",
+                  date: "06-08-2025",
+                  unitQty: 10,
+                  subUnitQty: 100,
                 },
                 {
-                  name: "Etsy",
-                  draft: 0,
-                  confirmed: 3,
-                  packed: 0,
-                  shipped: 6,
-                  invoiced: 6,
+                  department: "General",
+                  itemName: "Thermometer",
+                  date: "06-08-2025",
+                  unitQty: 2,
+                  subUnitQty: 2,
                 },
                 {
-                  name: "Shopify",
-                  draft: 0,
-                  confirmed: 12,
-                  packed: 0,
-                  shipped: 0,
-                  invoiced: 2,
+                  department: "OPD",
+                  itemName: "A4 Paper",
+                  date: "06-08-2025",
+                  unitQty: 3,
+                  subUnitQty: 150,
                 },
               ].map((row, idx) => (
                 <tr key={idx} className="border-t">
-                  <td className="py-1">{row.name}</td>
-                  <td className="py-1">{row.draft}</td>
-                  <td className="py-1">{row.confirmed}</td>
-                  <td className="py-1">{row.packed}</td>
-                  <td className="py-1">{row.shipped}</td>
-                  <td className="py-1">{row.invoiced}</td>
+                  <td className="py-1">{row.department}</td>
+                  <td className="py-1">{row.itemName}</td>
+                  <td className="py-1">{row.date}</td>
+                  <td className="py-1">{row.unitQty}</td>
+                  <td className="py-1">{row.subUnitQty}</td>
                 </tr>
               ))}
             </tbody>

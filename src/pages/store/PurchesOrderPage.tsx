@@ -1,43 +1,39 @@
 import React, { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../general/Button";
+import Button from "../../components/store/general/Button";
 import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
-import AddVendorModal from "../forms/AddVendorModal";
+import { useNavigate } from "react-router-dom";
 
-interface Vendor {
+interface PurchaseOrder {
   id: string;
-  name: string;
-  phone: string;
-  gst: string;
-  contactPerson: string;
-  address: string;
+  vendor: string;
+  generatedBy: string;
+  date: string;
 }
 
-const generateRandomVendors = (count: number): Vendor[] => {
-  const names = ["ABC Traders", "QuickMart", "SupplyCo", "Mega Distributors", "Nova Vendors"];
-  const contacts = ["Amit Sharma", "Rekha Verma", "Suresh Das", "Nisha Rai", "Dinesh Patel"];
-  const addresses = ["Kolkata", "Delhi", "Mumbai", "Chennai", "Hyderabad"];
+const generateRandomPOs = (count: number): PurchaseOrder[] => {
+  const vendors = ["ABC Suppliers", "XYZ Traders", "Delta Corp", "MegaMart", "QuickSupplies"];
+  const names = ["John Doe", "Jane Smith", "Robert Brown", "Alice Johnson", "Steve Adams"];
+
   return Array.from({ length: count }, (_, i) => ({
-    id: `V-${(i + 1).toString().padStart(3, "0")}`,
-    name: names[Math.floor(Math.random() * names.length)],
-    phone: `98${Math.floor(100000000 + Math.random() * 89999999)}`,
-    gst: `27ABCDE${i + 1000}Z5`,
-    contactPerson: contacts[Math.floor(Math.random() * contacts.length)],
-    address: addresses[Math.floor(Math.random() * addresses.length)],
+    id: `PO-${(i + 1).toString().padStart(3, "0")}`,
+    vendor: vendors[Math.floor(Math.random() * vendors.length)],
+    generatedBy: names[Math.floor(Math.random() * names.length)],
+    date: new Date(2025, 6, Math.floor(Math.random() * 30) + 1).toISOString().split("T")[0],
   }));
 };
 
-const VendorPage = () => {
-  const [vendors, setVendors] = useState<Vendor[]>(generateRandomVendors(20));
+const PurchaseOrderPage = () => {
+  const [purchaseOrders] = useState<PurchaseOrder[]>(generateRandomPOs(100));
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Vendor; direction: "asc" | "desc" } | null>(null);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof PurchaseOrder; direction: "asc" | "desc" } | null>(null);
+  const navigate = useNavigate(); // ✅ initialize navigate
 
-  const handleSort = (key: keyof Vendor) => {
+  const handleSort = (key: keyof PurchaseOrder) => {
     setSortConfig((prev) => {
       if (prev?.key === key) {
         return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
@@ -46,7 +42,7 @@ const VendorPage = () => {
     });
   };
 
-  const sortedVendors = [...vendors].sort((a, b) => {
+  const sortedOrders = [...purchaseOrders].sort((a, b) => {
     if (!sortConfig) return 0;
     const { key, direction } = sortConfig;
     const aVal = a[key]?.toString().toLowerCase() ?? "";
@@ -56,21 +52,26 @@ const VendorPage = () => {
     return 0;
   });
 
-  const filteredVendors = sortedVendors.filter((vendor) => {
+  const filteredOrders = sortedOrders.filter((order) => {
     const term = searchTerm.toLowerCase();
     return (
-      vendor.id.toLowerCase().includes(term) ||
-      vendor.name.toLowerCase().includes(term) ||
-      vendor.phone.toLowerCase().includes(term) ||
-      vendor.gst.toLowerCase().includes(term) ||
-      vendor.contactPerson.toLowerCase().includes(term) ||
-      vendor.address.toLowerCase().includes(term)
+      order.id.toLowerCase().includes(term) ||
+      order.vendor.toLowerCase().includes(term) ||
+      order.generatedBy.toLowerCase().includes(term) ||
+      order.date.toLowerCase().includes(term)
     );
   });
 
-  const totalPages = Math.ceil(filteredVendors.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentVendors = filteredVendors.slice(startIdx, startIdx + itemsPerPage);
+  const currentOrders = filteredOrders.slice(startIdx, startIdx + itemsPerPage);
+
+  const handleEdit = (id: string) => {
+    const order = purchaseOrders.find((o) => o.id === id);
+    if (order) {
+      alert(`Edit Order:\n\n${JSON.stringify(order, null, 2)}`);
+    }
+  };
 
   const changePage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -78,28 +79,21 @@ const VendorPage = () => {
     }
   };
 
-  const handleEdit = (id: string) => {
-    const vendor = vendors.find((v) => v.id === id);
-    if (vendor) {
-      alert(`Edit Vendor:\n\n${JSON.stringify(vendor, null, 2)}`);
-    }
-  };
-
   const startNumber = startIdx + 1;
-  const endNumber = startIdx + currentVendors.length;
+  const endNumber = startIdx + currentOrders.length;
 
   return (
     <div className="p-6 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Vendors</h1>
+      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
+        <h1 className="text-2xl font-bold text-[#035d67] uppercase">Purchase Orders</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"
           textColor="text-black"
-          name="Add Vendor"
+          name="Add Purchase Order"
           icon={<FaPlus />}
           hover="hover:bg-gray-200"
-          onClick={() => setShowAddModal(true)}
+          onClick={() => navigate("/store/purchase-orders/add-purchase-order")}
         />
       </div>
 
@@ -126,7 +120,7 @@ const VendorPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56"
+          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {
@@ -140,29 +134,23 @@ const VendorPage = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">Sl. No</th>
-              {["name", "phone", "gst", "contactPerson", "address"].map((key) => (
+              <th className="px-4 py-3 border-r border-gray-300">SN</th>
+              {["id", "vendor", "generatedBy", "date"].map((key) => (
                 <th
                   key={key}
                   className="px-4 py-3 border-r border-gray-300 cursor-pointer select-none"
-                  onClick={() => handleSort(key as keyof Vendor)}
+                  onClick={() => handleSort(key as keyof PurchaseOrder)}
                 >
-                  {(() => {
-                    switch (key) {
-                      case "name": return "Vendor Name";
-                      case "phone": return "Phone No";
-                      case "gst": return "Vendor GST";
-                      case "contactPerson": return "Contact Person Name";
-                      case "address": return "Address";
-                      default: return key;
-                    }
-                  })()}
+                  {key === "id"
+                    ? "Purchase Order No."
+                    : key.charAt(0).toUpperCase() + key.slice(1)}
+                  {" "}
                   <span>
                     {sortConfig?.key === key
                       ? sortConfig.direction === "asc"
-                        ? " ▲"
-                        : " ▼"
-                      : " ⇅"}
+                        ? "▲"
+                        : "▼"
+                      : "⇅"}
                   </span>
                 </th>
               ))}
@@ -170,19 +158,18 @@ const VendorPage = () => {
             </tr>
           </thead>
           <tbody>
-            {currentVendors.map((vendor, index) => (
+            {currentOrders.map((order, index) => (
               <tr
-                key={vendor.id}
+                key={order.id}
                 className="border-t border-gray-300 hover:bg-gray-50 transition duration-200"
               >
                 <td className="px-4 py-2 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">{vendor.name}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{vendor.phone}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{vendor.gst}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{vendor.contactPerson}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{vendor.address}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{order.id}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{order.vendor}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{order.generatedBy}</td>
+                <td className="px-4 py-2 border-r border-gray-200">{order.date}</td>
                 <td className="px-4 py-2">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
@@ -190,7 +177,7 @@ const VendorPage = () => {
                     border="border-2 border-gray-600"
                     textColor="text-blue-900"
                     hover="hover:bg-gray-200"
-                    onClick={() => handleEdit(vendor.id)}
+                    onClick={() => handleEdit(order.id)}
                   />
                 </td>
               </tr>
@@ -200,7 +187,7 @@ const VendorPage = () => {
 
         <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            Showing {startNumber} to {endNumber} of {filteredVendors.length} entries
+            Showing {startNumber} to {endNumber} of {filteredOrders.length} entries
           </div>
           <Stack spacing={2} direction="row" justifyContent="flex-end">
             <Pagination
@@ -213,10 +200,8 @@ const VendorPage = () => {
           </Stack>
         </div>
       </div>
-
-      <AddVendorModal open={showAddModal} handleClose={() => setShowAddModal(false)} />
     </div>
   );
 };
 
-export default VendorPage;
+export default PurchaseOrderPage;

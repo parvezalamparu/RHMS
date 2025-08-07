@@ -1,42 +1,26 @@
-import * as React from 'react';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { Dayjs } from 'dayjs';
+import { useState } from "react";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
-export default function CustomTimePicker() {
-  const [value, setValue] = React.useState<Dayjs | null>(null);
+const CustomTimePicker = () => {
+  const [time, setTime] = useState<Date>(new Date()); 
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['TimePicker']}>
-        <TimePicker
-          label="Pick a time"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-          slotProps={{
-            textField: {
-              sx: {
-                width: 200,
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '8px',
-                  '& fieldset': {
-                    borderColor: '#ccc',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#888',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#1976d2',
-                    boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.2)',
-                  },
-                },
-              },
-            },
-          }}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+    <div className="mb-4">
+      <label className="block mb-1 text-sm font-medium">Time Picker</label>
+      <Flatpickr
+        options={{
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "h:i K", 
+          time_24hr: false,   
+        }}
+        className="border px-3 rounded w-full"
+        value={time}
+        onChange={(selectedDates) => setTime(selectedDates[0])}
+      />
+    </div>
   );
-}
+};
+
+export default CustomTimePicker;

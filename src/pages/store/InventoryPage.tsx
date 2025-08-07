@@ -1,45 +1,64 @@
 import { useState, useEffect } from "react";
-import AddItemModal from "../forms/AddItemModal";
-import EditItemModal from "../forms/EditItemModal";
-import ToggleSwitch from "../general/ToggleSwitchProps";
-import Button from "../general/Button";
+import AddItemModal from "../../components/store/forms/AddItemModal";
+import EditItemModal from "../../components/store/forms/EditItemModal";
+import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
+import Button from "../../components/store/general/Button";
 import { FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { MdInfoOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-interface Item {
+export interface Item {
   id: number;
-  name: string;
-  category: string;
-  unit: string;
-  subUnit: string;
-  relation: string;
-  hsn: string;
+  itemName: string;
+  itemCode: string;
+  itemType: string;
+  itemCategory: string;
+  itemSubCategory?: string;
+  lowLevel: number;
+  highLevel: number;
+  company?: string;
+  stored?: string;
+  hsn?: string;
+  itemUnit: string;
+  subUnitQty: number;
+  subItemUnit: string;
+  rackNo: string;
+  shelfNo?: string;
+  image?: File | null;
   activated: boolean;
+  currentStock?: number;
 }
 
-interface NewItemData {
-  name: string;
-  category: string;
-  unit?: string;
-  subUnit?: string;
-  relation?: string;
-  hsn?: string;
-}
+export interface NewItemData
+  extends Omit<Item, "id" | "activated" | "currentStock"> {}
 
 const InventoryPage = () => {
+  const navigate = useNavigate();
+
   const [items, setItems] = useState<Item[]>(
     Array.from({ length: 92 }, (_, i) => ({
       id: i + 1,
-      name: `Item ${i + 1}`,
-      category: "Stationery",
-      unit: "PCS",
-      subUnit: "PCS",
-      relation: "1 PCS = 1 PCS",
+      itemName: `Item ${i + 1}`,
+      itemCode: `CODE${1000 + i}`,
+      itemType: "Consumable",
+      itemCategory: "Stationery",
+      itemSubCategory: "Pens",
+      lowLevel: 5,
+      highLevel: 50,
+      company: "BrandX",
+      stored: "Warehouse A",
       hsn: `HSN-${i + 1}`,
+      itemUnit: "PCS",
+      subUnitQty: 1,
+      subItemUnit: "PCS",
+      rackNo: `R${i + 1}`,
+      shelfNo: `S${i + 1}`,
+      image: null,
       activated: true,
-      currentStock: 2,
+      currentStock: 20,
     }))
   );
 
@@ -57,8 +76,10 @@ const InventoryPage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredItems = items.filter(
+    (item) =>
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.hsn?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSort = (key: keyof Item) => {
@@ -87,18 +108,8 @@ const InventoryPage = () => {
     startIndex + itemsPerPage
   );
 
-  const startNumber: number = (currentPage - 1) * itemsPerPage + 1;
-  const endNumber: number =
-    currentPage * itemsPerPage <= items.length
-      ? currentPage * itemsPerPage
-      : items.length;
-
-  const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setItemsPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
-  };
+  const startNumber = startIndex + 1;
+  const endNumber = startIndex + paginatedItems.length;
 
   const toggleActivation = (id: number) => {
     setItems((prev) =>
@@ -119,13 +130,9 @@ const InventoryPage = () => {
     const newId = items.length ? Math.max(...items.map((i) => i.id)) + 1 : 1;
     const newItem: Item = {
       id: newId,
-      name: data.name,
-      category: data.category,
-      unit: data.unit || "",
-      subUnit: data.subUnit || "",
-      relation: data.relation || "",
-      hsn: data.hsn || "",
+      ...data,
       activated: true,
+      currentStock: 0,
     };
     setItems((prev) => [...prev, newItem]);
     setCurrentPage(1);
@@ -135,8 +142,8 @@ const InventoryPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold pt-5">Items</h2>
+      <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
+        <h2 className="text-2xl font-bold text-[#035d67] uppercase">Items</h2>
         <Button
           bgcolor="bg-white"
           border="border-2 border-gray-800"
@@ -157,7 +164,10 @@ const InventoryPage = () => {
             id="pageSize"
             className="border rounded px-2 py-1 text-sm"
             value={itemsPerPage}
-            onChange={handleItemsPerPageChange}
+            onChange={(e) => {
+              setItemsPerPage(parseInt(e.target.value));
+              setCurrentPage(1);
+            }}
           >
             <option value="10">10</option>
             <option value="25">25</option>
@@ -168,7 +178,7 @@ const InventoryPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56"
+          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {
@@ -183,13 +193,22 @@ const InventoryPage = () => {
           <thead className="bg-[var(--base-color)] text-xs font-semibold">
             <tr>
               <th className="px-4 py-3 border border-gray-300 text-left">SN</th>
-              {["name", "category", "unit", "subUnit", "relation", "Hsn/Sac", "available"].map((key) => (
+              {[
+                "itemName",
+                "itemCategory",
+                "itemUnit",
+                "subItemUnit",
+                "hsn",
+                "available",
+              ].map((key) => (
                 <th
                   key={key}
                   className="px-4 py-3 border border-gray-300 text-left cursor-pointer select-none"
                   onClick={() => handleSort(key as keyof Item)}
                 >
-                  {key.charAt(0).toUpperCase() + key.slice(1)} {" "}
+                  {key === "hsn"
+                    ? "HSN/SAC"
+                    : key.charAt(0).toUpperCase() + key.slice(1)}{" "}
                   <span>
                     {sortConfig?.key === key
                       ? sortConfig.direction === "asc"
@@ -199,24 +218,46 @@ const InventoryPage = () => {
                   </span>
                 </th>
               ))}
-              <th className="px-4 py-3 border border-gray-300 text-left">Action</th>
+              <th className="px-4 py-3 border border-gray-300 text-left">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
+            {filteredItems.length === 0 && (
+              <tr>
+                <td
+                  colSpan={9}
+                  className="text-center py-4 text-red-400 text-lg"
+                >
+                  No items found
+                </td>
+              </tr>
+            )}
             {paginatedItems.map((item, index) => (
               <tr
                 key={item.id}
                 className={`transition duration-150 border border-gray-300 ${
-                  item.activated ? "hover:bg-gray-50" : "bg-red-50 text-gray-400"
+                  item.activated
+                    ? "hover:bg-gray-50"
+                    : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border border-gray-300">{startIndex + index + 1}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.name}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.category}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.unit}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.subUnit}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.relation}</td>
-                {/* <td className="px-4 py-2 border border-gray-300">{item.Current Stock}</td> */}
+                <td className="px-4 py-2 border border-gray-300">
+                  {startIndex + index + 1}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {item.itemName}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {item.itemCategory}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {item.itemUnit}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {item.subItemUnit}
+                </td>
                 <td className="px-4 py-2 border border-gray-300">{item.hsn}</td>
                 <td className="px-4 py-2 border border-gray-300">
                   <ToggleSwitch
@@ -224,7 +265,7 @@ const InventoryPage = () => {
                     onChange={() => toggleActivation(item.id)}
                   />
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 py-2 border border-gray-300 flex gap-2">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"
@@ -232,6 +273,18 @@ const InventoryPage = () => {
                     textColor="text-blue-900"
                     hover="hover:bg-gray-200"
                     onClick={() => setEditItem(item)}
+                    title="Edit Item"
+                  />
+                  <Button
+                    icon={<MdInfoOutline className="text-lg" />}
+                    bgcolor="bg-gray-100"
+                    border="border border-gray-500"
+                    textColor="text-blue-900"
+                    hover="hover:bg-gray-200"
+                    onClick={() =>
+                      navigate(`/store/all-items/${item.id}`, { state: item })
+                    }
+                    title="View Item"
                   />
                 </td>
               </tr>
@@ -242,7 +295,17 @@ const InventoryPage = () => {
 
       <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
         <div>
-          Showing {startNumber} to {endNumber} of {items.length} entries
+          {!searchTerm && (
+            <p>
+              Showing {startNumber} to {endNumber} of {items.length} entries
+            </p>
+          )}
+          {searchTerm && (
+            <p>
+              Showing {startNumber} to {endNumber} of {filteredItems.length}{" "}
+              items (Filtered from {items.length} items)
+            </p>
+          )}
         </div>
         <Stack spacing={2} direction="row" justifyContent="flex-end">
           <Pagination
@@ -256,14 +319,10 @@ const InventoryPage = () => {
       </div>
 
       <AddItemModal
-  open={showAddModal}
-  handleClose={() => setShowAddModal(false)}
-  handleAddItem={(data) => {
-    const newId = items.length ? Math.max(...items.map(i => i.id)) + 1 : 1;
-    const newItem = { id: newId, ...data, activated: true };
-    setItems(prev => [...prev, newItem]);
-  }}
-/>
+        open={showAddModal}
+        handleClose={() => setShowAddModal(false)}
+        handleAddItem={handleAddItem}
+      />
 
       {editItem && (
         <EditItemModal

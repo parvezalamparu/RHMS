@@ -1,12 +1,13 @@
+
 import Topbar from "../components/general/Topbar";
-import MainSidebar from "./MainSidebar"; // path as per your project
+import StoreSidebar from "./StoreSidebar"; 
 import { Outlet } from "react-router-dom";
 
-const MainLayout = () => {
+const StoreLayout = () => {
   return (
     <div className="flex">
-      <MainSidebar />
-      <div  className="mt-16 pl-12 w-full h-[calc(100vh-4rem)] bg-gray-100 overflow-y-auto">
+      <StoreSidebar />
+      <div className="mt-16 pl-12 w-full h-[calc(100vh-4rem)] bg-gray-100 overflow-y-auto">
         <Topbar />
         <main className="p-4">
           <Outlet />
@@ -16,4 +17,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default StoreLayout;

@@ -1,36 +1,74 @@
 import React from "react";
 import { X } from "lucide-react";
-import Button from "../general/Button";
 import { BiSave } from "react-icons/bi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useForm } from "react-hook-form";
+import Button from "../general/Button";
+import { useState } from "react";
+import ImageUploader from "../../general/ImageUploader";
+import toast from "react-hot-toast";
+
+interface NewItemData {
+  itemName: string;
+  itemCode: string;
+  itemType: string;
+  itemCategory: string;
+  itemSubCategory?: string;
+  lowLevel: number;
+  highLevel: number;
+  company?: string;
+  stored?: string;
+  hsn?: string;
+  itemUnit: string;
+  subUnitQty: number;
+  subItemUnit: string;
+  rackNo: string;
+  shelfNo?: string;
+  image?: File | null;
+}
 
 interface AddItemModalProps {
   open: boolean;
   handleClose: () => void;
+  handleAddItem: (data: NewItemData) => void;
 }
 
-const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
+const AddItemModal: React.FC<AddItemModalProps> = ({
+  open,
+  handleClose,
+  handleAddItem,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<NewItemData>();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   if (!open) return null;
-  
-  const onSubmit = (data: any) => {
-    console.log("Form Submitted:", data);
+
+  const onSubmit = (data: NewItemData) => {
+    const formDataWithImage = {
+      ...data,
+      image: selectedImage,
+    };
+    handleAddItem(formDataWithImage);
+    toast.success("Item Added Succesfully")
     handleClose();
     reset();
+    setSelectedImage(null);
   };
   
+
   return (
     <div className="fixed inset-0 bg-white/10 backdrop-blur-[3px] flex justify-center items-center z-50">
       <div className="bg-gray-50 w-full max-w-7xl rounded-xl shadow-lg p-8 relative border-2">
         <button
-          onClick={handleClose}
+          onClick={() => {
+            reset();
+            handleClose();
+          }}
           className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
         >
           <X size={24} />
@@ -38,16 +76,50 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
 
         <h2 className="text-2xl font-bold text-[#035d67] mb-6">ADD NEW ITEM</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-4 gap-6 text-sm" method="POST">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-4 gap-6 text-sm"
+          method="POST"
+        >
+          {/* Item Name */}
+          <div>
+            <label className="font-medium text-gray-700">
+              Item Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register("itemName", { required: "Item Name is required" })}
+              type="text"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.itemName && (
+              <p className="text-red-500">{errors.itemName.message}</p>
+            )}
+          </div>
+
+          {/* Item Code */}
+          <div>
+            <label className="font-medium text-gray-700">
+              Item Code <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register("itemCode", { required: "Item Code is required" })}
+              type="text"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.itemCode && (
+              <p className="text-red-500">{errors.itemCode.message}</p>
+            )}
+          </div>
+
+          {/* Item Type */}
           <div>
             <label className="font-medium text-gray-700">
               Item Type <span className="text-red-500">*</span>
             </label>
             <select
-              {...register("itemType", { required: true })}
-              aria-invalid={errors.itemType ? "true" : "false"}
+              {...register("itemType", { required: "Item Type is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-cyan-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -55,19 +127,22 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
               <option value="Food">Food</option>
               <option value="NonFood">Non-Food</option>
             </select>
-            {errors.itemType?.type === "required" && (
-              <p role="alert" className="text-red-500">Item Type is required</p>
+            {errors.itemType && (
+              <p className="text-red-500">{errors.itemType.message}</p>
             )}
           </div>
 
+          {/* Item Category */}
           <div>
             <label className="font-medium text-gray-700">
               Item Category <span className="text-red-500">*</span>
             </label>
             <select
-              {...register("itemCategory", { required: true })}
+              {...register("itemCategory", {
+                required: "Item Category is required",
+              })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -76,8 +151,12 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
               <option value="Liquid">Liquid</option>
               <option value="Other">Other</option>
             </select>
+            {errors.itemCategory && (
+              <p className="text-red-500">{errors.itemCategory.message}</p>
+            )}
           </div>
 
+          {/* Item Sub Category */}
           <div>
             <label className="font-medium text-gray-700">
               Item Sub Category
@@ -85,7 +164,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
             <select
               {...register("itemSubCategory")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -96,45 +175,49 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
             </select>
           </div>
 
-          <div>
-            <label className="font-medium text-gray-700">
-              Item Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              {...register("itemName", { required: true })}
-              type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
-            />
-          </div>
-
+          {/* Low Level */}
           <div>
             <label className="font-medium text-gray-700">
               Low Level <span className="text-red-500">*</span>
             </label>
             <input
-              {...register("lowLevel", { required: true })}
+              {...register("lowLevel", {
+                required: "Low Level is required",
+                min: { value: 0, message: "Minimum value is 0" },
+              })}
               type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
+            {errors.lowLevel && (
+              <p className="text-red-500">{errors.lowLevel.message}</p>
+            )}
           </div>
 
+          {/* High Level */}
           <div>
             <label className="font-medium text-gray-700">
               High Level <span className="text-red-500">*</span>
             </label>
             <input
-              {...register("lowLevel", { required: true })}
+              {...register("highLevel", {
+                required: "High Level is required",
+                min: { value: 1, message: "Minimum value is 1" },
+              })}
               type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
+            {errors.highLevel && (
+              <p className="text-red-500">{errors.highLevel.message}</p>
+            )}
           </div>
 
+          {/* Company */}
           <div>
             <label className="font-medium text-gray-700">Company</label>
             <select
               {...register("company")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -145,12 +228,13 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
             </select>
           </div>
 
+          {/* Stored */}
           <div>
             <label className="font-medium text-gray-700">Stored</label>
             <select
               {...register("stored")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -161,23 +245,25 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
             </select>
           </div>
 
+          {/* HSN */}
           <div>
             <label className="font-medium text-gray-700">HSN or SAC No</label>
             <input
               {...register("hsn")}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
           </div>
 
+          {/* Item Unit */}
           <div>
             <label className="font-medium text-gray-700">
               Item Unit <span className="text-red-500">*</span>
             </label>
             <select
-              {...register("itemUnit", { required: true })}
+              {...register("itemUnit", { required: "Item Unit is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select Unit
@@ -186,42 +272,20 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
               <option value="Gram">Gram</option>
               <option value="Litre">Litre</option>
             </select>
+            {errors.itemUnit && (
+              <p className="text-red-500">{errors.itemUnit.message}</p>
+            )}
           </div>
 
-          {/* <div className="col-span-2">
-            <div className="bg-gray-300 rounded-full px-10 py-4 flex justify-center items-center text-lg text-gray-800">
-              <label className="font-semibold text-red-700 flex items-center gap-4">
-                *1 Unit = How many Sub Unit?
-                <input
-                  {...register("subUnit", { required: true })}
-                  type="number"
-                  className="w-32 p-1 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm focus:shadow-lg transition duration-200"
-                  placeholder="?"
-                />
-              </label>
-            </div>
-          </div> */}
-
-          <div>
-            <label className="font-medium text-gray-700">
-              *1 Unit = How many Sub Unit?{" "}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              {...register("lowLevel", { required: true })}
-              type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
-            />
-          </div>
-
+          {/* Sub Unit */}
           <div>
             <label className="font-medium text-gray-700">
               Sub Unit <span className="text-red-500">*</span>
             </label>
             <select
-              {...register("subItemUnit", { required: true })}
+              {...register("subItemUnit", { required: "Sub Unit is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-3 focus:ring-green-200 shadow-sm focus:shadow-lg transition duration-200"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select Unit
@@ -230,88 +294,91 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, handleClose }) => {
               <option value="Gram">Gram</option>
               <option value="ML">ML</option>
             </select>
+            {errors.subItemUnit && (
+              <p className="text-red-500">{errors.subItemUnit.message}</p>
+            )}
+          </div>
+          {/* realtion */}
+          <div>
+            <label className="font-medium text-gray-700">
+              *1 Unit = How many Sub Unit?{" "}
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register("subUnitQty", {
+                required: "Sub Unit Qty is required",
+                min: { value: 1, message: "Must be at least 1" },
+              })}
+              type="number"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.subUnitQty && (
+              <p className="text-red-500">{errors.subUnitQty.message}</p>
+            )}
           </div>
 
-          <div className="col-span-1">
-            <label className="block mb-2 text-sm font-medium text-gray-700">
-              Item Image
+          {/* Rack No */}
+          <div>
+            <label className="font-medium text-gray-700">
+              Rack No. <span className="text-red-500">*</span>
             </label>
+            <input
+              {...register("rackNo", { required: "Rack No. is required" })}
+              type="text"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.rackNo && (
+              <p className="text-red-500">{errors.rackNo.message}</p>
+            )}
+          </div>
 
-            <div className="flex items-center justify-center w-full">
-              <label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-              >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg
-                    aria-hidden="true"
-                    className="w-10 h-10 mb-3 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16V4m0 0l-4 4m4-4l4 4M7 20h10a2 2 0 002-2V10a2 2 0 00-2-2H7v10z"
-                    />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag & drop
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    PNG, JPG, JPEG (MAX. 2MB)
-                  </p>
-                </div>
-                <input
-                  id="dropzone-file"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    console.log("Selected file:", file);
-                  }}
-                />
-              </label>
+          {/* Self No */}
+          <div>
+            <label className="font-medium text-gray-700">Shelf No.</label>
+            <input
+              {...register("shelfNo")}
+              type="text"
+              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+          </div>
+
+          {/* Image Upload (not connected to form) */}
+          <div className="col-span-1">
+            <ImageUploader onImageSelect={(file) => setSelectedImage(file)} />
+          </div>
+
+          {/* Buttons */}
+          <div className="col-span-4 mt-8 flex justify-end">
+            <div className="mx-4">
+              <Button
+                onClick={() => {
+                  reset();
+                  handleClose();
+                }}
+                bgcolor="bg-red-400"
+                border="border-3 border-[--var(--base-color)]"
+                textColor="text-black"
+                hover="hover:bg-red-300"
+                name="Close"
+                icon={<IoIosCloseCircleOutline />}
+              />
+            </div>
+            <div>
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                bgcolor="bg-green-400"
+                border="border-3 border-[--var(--base-color)]"
+                textColor="text-black"
+                hover="hover:bg-green-300"
+                name="Save"
+                icon={<BiSave />}
+              />
             </div>
           </div>
         </form>
-
-        {/* Save & Close Buttons */}
-        <div className="mt-8 flex justify-end">
-          <div className="mx-4">
-            <Button
-              onClick={handleClose}
-              bgcolor="bg-red-400"
-              border="border-3 border-[--var(--base-color)]"
-              textColor="text-black"
-              hover="hover:bg-red-300"
-              name="Close"
-              icon={<IoIosCloseCircleOutline />}
-            />
-          </div>
-          <div>
-            <Button
-              // onClick={}
-              bgcolor="bg-green-400"
-              border="border-3 border-[--var(--base-color)]"
-              textColor="text-black"
-              hover="hover:bg-green-300"
-              name="Save"
-              icon={<BiSave />}
-              
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
 };
 
 export default AddItemModal;
-
-

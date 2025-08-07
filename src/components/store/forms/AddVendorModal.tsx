@@ -46,9 +46,21 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
             <input
               {...register("vendorName", { required: true })}
               type="text"
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-300 shadow-sm"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.vendorName && <p className="text-red-500">Vendor name is required</p>}
+          </div>
+
+          <div>
+            <label className="font-medium text-gray-700">
+              Vendor Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register("vendorName", { required: true })}
+              type="email"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.vendorName && <p className="text-red-500">Vendor email is required</p>}
           </div>
 
           <div>
@@ -61,19 +73,31 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
                 pattern: /^[6-9]\d{9}$/,
               })}
               type="text"
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-300 shadow-sm"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.phone && <p className="text-red-500">Valid phone number is required</p>}
           </div>
 
           <div>
             <label className="font-medium text-gray-700">
-              Vendor GST <span className="text-red-500">*</span>
+              Pincode <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register("vendorName", { required: true })}
+              type="number"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            />
+            {errors.vendorName && <p className="text-red-500">Pincode is required</p>}
+          </div>
+
+          <div>
+            <label className="font-medium text-gray-700">
+              GSTIN <span className="text-red-500">*</span>
             </label>
             <input
               {...register("gst", { required: true })}
               type="text"
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-300 shadow-sm"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.gst && <p className="text-red-500">GST number is required</p>}
           </div>
@@ -85,7 +109,7 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
             <input
               {...register("contactPerson", { required: true })}
               type="text"
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-300 shadow-sm"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.contactPerson && <p className="text-red-500">Contact person is required</p>}
           </div>
@@ -97,7 +121,7 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
             <textarea
               {...register("address", { required: true })}
               rows={3}
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-300 shadow-sm"
+              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.address && <p className="text-red-500">Address is required</p>}
           </div>
