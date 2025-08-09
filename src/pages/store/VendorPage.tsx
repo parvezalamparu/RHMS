@@ -89,7 +89,7 @@ const VendorPage = () => {
   const endNumber = startIdx + currentVendors.length;
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="pl-2 min-h-screen bg-gray-50">
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold uppercase text-[#035d67]">Vendors</h1>
         <Button

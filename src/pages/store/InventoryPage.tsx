@@ -141,7 +141,7 @@ const InventoryPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-6">
+    <div className="flex flex-col min-h-screen pl-2">
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">Items</h2>
         <Button

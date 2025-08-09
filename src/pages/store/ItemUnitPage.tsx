@@ -90,10 +90,10 @@ const ItemUnitPage = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="pl-2 min-h-screen bg-gray-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
-        <h1 className="text-2xl font-bold text-[#035d67] uppercase">Item Units</h1>
+        <h1 className="text-2xl font-bold text-[#035d67] uppercase">Item Units/Sub-Units</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"

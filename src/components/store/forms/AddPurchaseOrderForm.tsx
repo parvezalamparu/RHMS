@@ -1,182 +1,252 @@
-
-import { useForm, useFieldArray } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
+import React, { useState } from "react";
 import Button from "../general/Button";
+import { FaPlus } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
-import CustomDateTimePicker from "../../general/CustomDateTimePicker";
 
+interface PurchaseOrderItem {
+  itemName: string;
+  unitQty: number;
+  unit: string;
+  subUnitQty: number;
+  subUnit: string;
+}
 
-type FormValues = {
-  date: string;
-  vendor: string;
-  items: {
-    itemName: string;
-    unitQty: number;
-    unit: string;
-    subUnitQty: number;
-    subUnit: string;
-  }[];
-  note: string;
-};
-
-const AddPurchaseOrderForm = () => {
-  const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues: {
-      date: new Date().toISOString().slice(0, 16),
-      vendor: "",
-      items: [
-        { itemName: "", unitQty: 0, unit: "", subUnitQty: 0, subUnit: "" },
-      ],
-      note: "",
-    },
+const AddPurchaseOrder: React.FC = () => {
+  const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 16));
+  const [vendor, setVendor] = useState("");
+  const [note, setNote] = useState("");
+  const [items, setItems] = useState<PurchaseOrderItem[]>([]);
+  const [formItem, setFormItem] = useState<PurchaseOrderItem>({
+    itemName: "",
+    unitQty: 0,
+    unit: "",
+    subUnitQty: 0,
+    subUnit: "",
   });
 
-  const { fields, append } = useFieldArray({
-    control,
-    name: "items",
-  });
+  const [errors, setErrors] = useState<Partial<Record<keyof PurchaseOrderItem, string>>>({});
 
-  const onSubmit = (data: FormValues) => {
-    alert("Form submitted!\n" + JSON.stringify(data, null, 2));
-    navigate("/purchase-orders");
+  const validateItem = (item: PurchaseOrderItem) => {
+    const error: Partial<Record<keyof PurchaseOrderItem, string>> = {};
+    if (!item.itemName) error.itemName = "Required";
+    if (!item.unitQty || item.unitQty <= 0) error.unitQty = "Required";
+    if (!item.unit) error.unit = "Required";
+    if (!item.subUnitQty || item.subUnitQty <= 0) error.subUnitQty = "Required";
+    if (!item.subUnit) error.subUnit = "Required";
+    return error;
+  };
+
+  const handleAddItem = () => {
+    const error = validateItem(formItem);
+    if (Object.keys(error).length > 0) {
+      setErrors(error);
+      return;
+    }
+    setItems([...items, formItem]);
+    setFormItem({ itemName: "", unitQty: 0, unit: "", subUnitQty: 0, subUnit: "" });
+    setErrors({});
+  };
+
+  const handleRemoveItem = (index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleFormItemChange = (field: keyof PurchaseOrderItem, value: string | number) => {
+    setFormItem({ ...formItem, [field]: value as never });
+    if (errors[field]) {
+      const newErrors = { ...errors };
+      delete newErrors[field];
+      setErrors(newErrors);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!vendor) {
+      alert("Please select a vendor before submitting.");
+      return;
+    }
+    if (items.length === 0) {
+      alert("Please add at least one item before submitting.");
+      return;
+    }
+
+    const purchaseOrderData = {
+      date,
+      vendor,
+      note,
+      items,
+    };
+
+    console.log("Purchase Order Submitted:", purchaseOrderData);
+    // Submit logic here
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase">Add Purchase Order</h1>
+    <div className="p-6 bg-white shadow rounded-md w-full mx-2">
+      <h2 className="text-xl font-semibold text-[#035d67] bg-[var(--base-color)] uppercase mb-4 p-3">
+        Add Purchase Order
+      </h2>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 bg-white p-6 rounded shadow-md"
-      >
-        {/* Date & Vendor */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <div>
-            <CustomDateTimePicker/>
-            {errors.date && <p className="text-red-500 text-sm">Date is required</p>}
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">
-              Vendor <span className="text-red-500">*</span>
-            </label>
-            <select
-              {...register("vendor", { required: true })}
-              className="w-full border px-3 py-2 rounded"
-            >
-              <option value="">Select One.....</option>
-              <option value="ABC Suppliers">ABC Suppliers</option>
-              <option value="XYZ Traders">XYZ Traders</option>
-              <option value="Delta Corp">Delta Corp</option>
-            </select>
-            {errors.vendor && <p className="text-red-500 text-sm">Vendor is required</p>}
-          </div>
-        </div>
-
-        {/* Items Header */}
-        <div className="bg-[#2ef2ef] text-gray-900 font-semibold p-2 rounded-t">
-          <div className="grid grid-cols-7 gap-2 text-sm">
-            <span className="col-span-2">Item Name *</span>
-            <span>Unit Qty *</span>
-            <span>Unit *</span>
-            <span>Sub Unit Qty *</span>
-            <span>Sub Unit *</span>
-            <span className="flex justify-end">+ Add</span>
-          </div>
-        </div>
-
-        {/* Items Rows */}
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="grid grid-cols-7 gap-2 border-b py-2 items-center"
-          >
-            <select
-              {...register(`items.${index}.itemName`, { required: true })}
-              className="col-span-2 border px-2 py-1 rounded"
-            >
-              <option value="">Select One.....</option>
-              <option value="Item A">Item A</option>
-              <option value="Item B">Item B</option>
-            </select>
-
-            <input
-              type="number"
-              {...register(`items.${index}.unitQty`, { required: true })}
-              className="border px-2 py-1 rounded"
-            />
-            <input
-              type="text"
-              {...register(`items.${index}.unit`, { required: true })}
-              className="border px-2 py-1 rounded"
-            />
-            <input
-              type="number"
-              {...register(`items.${index}.subUnitQty`, { required: true })}
-              className="border px-2 py-1 rounded"
-            />
-            <input
-              type="text"
-              {...register(`items.${index}.subUnit`, { required: true })}
-              className="border px-2 py-1 rounded"
-            />
-
-            {/* Add Button Only in Last Row */}
-            <div className="text-end">
-              {index === fields.length - 1 && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    append({
-                      itemName: "",
-                      unitQty: 0,
-                      unit: "",
-                      subUnitQty: 0,
-                      subUnit: "",
-                    })
-                  }
-                  className="text-green-700 hover:text-green-900 p-2"
-                  title="Add Item"
-                >
-                  <FaPlus />
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-
-        {/* Note */}
-        <div>
-          <label className="block font-medium mb-1">Note</label>
-          <textarea
-            {...register("note")}
-            rows={4}
-            className="w-1/2 border px-3 py-2 rounded"
+      {/* Header Section */}
+      <div className="flex gap-4 my-4">
+        <div className="w-1/4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label>
+          <input
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full px-3 py-2 border rounded"
           />
         </div>
 
-        {/* Save */}
-        <div className="mt-8 flex justify-center">
+        <div className="w-1/4">
+          <label className="block text-sm font-medium text-gray-700 mb-1 ">Vendor</label>
+          <select
+            value={vendor}
+            onChange={(e) => setVendor(e.target.value)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          >
+            <option value="">Select Vendor...</option>
+            <option value="Vendor A">Vendor A</option>
+            <option value="Vendor B">Vendor B</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Table Head */}
+      <div className="grid grid-cols-12 gap-2 font-semibold text-[#035d67] bg-[var(--base-color)] px-2 py-2 rounded">
+        <div className="col-span-4">Item Name <span className="text-red-500">*</span></div>
+        <div className="col-span-1">Unit Qty <span className="text-red-500">*</span></div>
+        <div className="col-span-2">Unit <span className="text-red-500">*</span></div>
+        <div className="col-span-2">Sub Unit Qty <span className="text-red-500">*</span></div>
+        <div className="col-span-2">Sub Unit <span className="text-red-500">*</span></div>
+        <div className="col-span-1 text-center">Action</div>
+      </div>
+
+      {/* Form Row */}
+      <div className="grid grid-cols-12 gap-2 items-start border border-gray-200 rounded px-2 py-2 mt-2 bg-white">
+        <div className="col-span-4">
+          <input
+            type="text"
+            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
+            placeholder="Item Name"
+            value={formItem.itemName}
+            onChange={(e) => handleFormItemChange("itemName", e.target.value)}
+          />
+          {errors.itemName && <p className="text-xs text-red-500">{errors.itemName}</p>}
+        </div>
+
+        <div className="col-span-1">
+          <input
+            type="number"
+            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
+            placeholder="Qty"
+            value={formItem.unitQty}
+            onChange={(e) => handleFormItemChange("unitQty", parseInt(e.target.value))}
+          />
+          {errors.unitQty && <p className="text-xs text-red-500">{errors.unitQty}</p>}
+        </div>
+
+        <div className="col-span-2">
+          <input
+            type="text"
+            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
+            placeholder="Unit"
+            value={formItem.unit}
+            onChange={(e) => handleFormItemChange("unit", e.target.value)}
+          />
+          {errors.unit && <p className="text-xs text-red-500">{errors.unit}</p>}
+        </div>
+
+        <div className="col-span-2">
+          <input
+            type="number"
+            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
+            placeholder="Sub Qty"
+            value={formItem.subUnitQty}
+            onChange={(e) => handleFormItemChange("subUnitQty", parseInt(e.target.value))}
+          />
+          {errors.subUnitQty && <p className="text-xs text-red-500">{errors.subUnitQty}</p>}
+        </div>
+
+        <div className="col-span-2">
+          <input
+            type="text"
+            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
+            placeholder="Sub Unit"
+            value={formItem.subUnit}
+            onChange={(e) => handleFormItemChange("subUnit", e.target.value)}
+          />
+          {errors.subUnit && <p className="text-xs text-red-500">{errors.subUnit}</p>}
+        </div>
+
+        <div className="col-span-1 flex justify-center">
           <Button
-            bgcolor="bg-green-400"
+            onClick={handleAddItem}
+            bgcolor=""
             border="border-3 border-[--var(--base-color)]"
             textColor="text-black"
             hover="hover:bg-green-300"
-            name="Save and Update Stock"
-            icon={<BiSave />}
+            icon={<FaPlus />}
           />
         </div>
-      </form>
+      </div>
+
+      {/* Added Items */}
+      <div className="space-y-2 mt-4">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-12 gap-2 items-center border border-gray-200 rounded px-2 py-2 bg-gray-50"
+          >
+            <div className="col-span-4">{item.itemName}</div>
+            <div className="col-span-1">{item.unitQty}</div>
+            <div className="col-span-2">{item.unit}</div>
+            <div className="col-span-2">{item.subUnitQty}</div>
+            <div className="col-span-2">{item.subUnit}</div>
+            <div className="col-span-1 flex justify-center">
+              <Button
+                onClick={() => handleRemoveItem(index)}
+                bgcolor=""
+                border="border-3 border-[--var(--base-color)]"
+                textColor="text-black"
+                hover="hover:bg-red-300"
+                icon={<MdOutlineDeleteForever />}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer Note */}
+      <div className="mt-6">
+        <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-1">
+          Note
+        </label>
+        <textarea
+          id="note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="w-full md:w-1/2 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+          rows={3}
+        />
+      </div>
+
+      {/* Submit Button */}
+      <div className="mt-6 flex justify-center">
+        <Button
+          onClick={handleSubmit}
+          bgcolor="bg-green-400"
+          border="border-3 border"
+          textColor="text-black"
+          hover="hover:bg-green-300"
+          name="Submit"
+          icon={<BiSave />}
+        />
+      </div>
     </div>
   );
 };
 
-export default AddPurchaseOrderForm;
+export default AddPurchaseOrder;

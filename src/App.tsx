@@ -12,7 +12,12 @@ import MainLayout from "./layouts/MainLayout";
 // General Pages
 import LoginPage from "./pages/general/LoginPage";
 import { MainDashboard } from "./pages/general/MainDashboard";
-// import Users from "./pages/general/admin/UsersPage";
+import Users from "./pages/admin/UsersPage";
+import AddUserForm from "./pages/forms/AddUserForm";
+import ViewUser from "./pages/admin/ViewUserPage";
+import RoleList from "./pages/admin/RollList";
+import PermissionList from "./pages/admin/PermissionList";
+import AssignPermissionPage from "./pages/admin/AssignPermissionPage";
 
 // Store Pages
 import Dashboard from "./pages/store/StoreDashboard";
@@ -37,6 +42,7 @@ import ItemIssue from "./pages/store/ItemIssuePage";
 import Invoice from "./pages/store/InvoicePage"
 import ViewItemDetails from "./pages/store/ViewItemDetails";
 
+
 // React hot toast
 import { Toaster } from "react-hot-toast";
 
@@ -52,7 +58,12 @@ function App() {
         {/* Main Dashboard (MainSidebar + Topbar) */}
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<MainDashboard />} />
-          {/* <Route path="/admin/users" element={<Users />} /> */}
+          <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/users/add-user" element={<AddUserForm />} />
+          <Route path="/admin/users/:id" element={<ViewUser />} />
+          <Route path="/admin/roles" element={<RoleList />} />
+          <Route path="/admin/permissions" element={<PermissionList />} />
+          <Route path="/role/assign-permission" element={<AssignPermissionPage />} />
 
 
         </Route>

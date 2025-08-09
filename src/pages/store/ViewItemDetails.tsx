@@ -290,17 +290,17 @@ const ViewItemDetails: React.FC = () => {
   };
 
   return (
-    <div className="ml-2 p-5 bg-white shadow-lg rounded-lg border-2 border-gray-300 w-auto">
+    <div className="ml-2 p-4 bg-white shadow-lg rounded-lg border-2 border-gray-300 w-auto">
       <div className="bg-[var(--base-color)] text-[#035d67] px-4 py-2 rounded-t flex justify-between">
-        <h2 className="text-lg font-semibold">Item Details</h2>
+        <h2 className="text-lg font-semibold uppercase">Item Details</h2>
 
         <Button
           name="Back to Items"
           onClick={() => navigate(-1)}
-          bgcolor="bg-red-400"
+          bgcolor="bg-white"
           border="border-3 border-[--var(--base-color)]"
-          textColor="text-black"
-          hover="hover:bg-red-300"
+          textColor="text-blue-600"
+          hover="hover:bg-gray-100"
           icon={<TiArrowBackOutline />}
         />
       </div>

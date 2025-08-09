@@ -6,7 +6,6 @@ import { FaWarehouse } from "react-icons/fa";
 import { useState } from "react";
 import { GiHumanPyramid } from "react-icons/gi";
 import { MdOutlineMan } from "react-icons/md";
-import { FaUserDoctor } from "react-icons/fa6";
 import { TbEmergencyBed } from "react-icons/tb";
 import { RiHotelBedLine } from "react-icons/ri";
 import { FaBedPulse } from "react-icons/fa6";
@@ -16,6 +15,8 @@ import { RiAdminFill } from "react-icons/ri";
 import { MdReportGmailerrorred } from "react-icons/md";
 import { LuUtilityPole } from "react-icons/lu";
 import { MdFileCopy } from "react-icons/md";
+import { FaStethoscope } from "react-icons/fa";
+import { BsCurrencyRupee } from "react-icons/bs";
 
 const MainSidebar = () => {
   const location = useLocation();
@@ -83,7 +84,7 @@ const MainSidebar = () => {
               }`}
             >
               <span className="text-xl">
-                <RiAdminFill  />
+                <RiAdminFill />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
                 Admin
@@ -103,6 +104,54 @@ const MainSidebar = () => {
               }`}
             >
               {/* Normal Admin links */}
+              <li>
+                <Link
+                  to="/admin/doctors"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/doctors")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Doctors
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/departments"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/admin/deparments")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Departments
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/notices"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/admin/notices")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Notices
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/marketed-by"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/admin/marketed-by")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Marketed By
+                </Link>
+              </li>
               <li>
                 <Link
                   to="/admin/users"
@@ -133,14 +182,16 @@ const MainSidebar = () => {
                 {/* Nested submenu */}
                 <ul
                   className={`ml-4 mt-1 space-y-1 transition-all duration-300 ease-in-out overflow-hidden ${
-                    openSubMenu === "Role & Permissions" ? "max-h-40" : "max-h-0"
+                    openSubMenu === "Role & Permissions"
+                      ? "max-h-40"
+                      : "max-h-0"
                   }`}
                 >
                   <li>
                     <Link
                       to="/admin/roles"
                       className={`block px-2 py-2 rounded-md text-sm ${
-                        isActive("/permission/roles")
+                        isActive("/admin/roles")
                           ? "bg-gray-700 text-yellow-300"
                           : "text-white hover:bg-gray-700 hover:text-yellow-300"
                       }`}
@@ -152,7 +203,7 @@ const MainSidebar = () => {
                     <Link
                       to="/admin/permissions"
                       className={`block px-2 py-2 rounded-md text-sm ${
-                        isActive("/permission/access")
+                        isActive("/admin/permisssions")
                           ? "bg-gray-700 text-yellow-300"
                           : "text-white hover:bg-gray-700 hover:text-yellow-300"
                       }`}
@@ -165,7 +216,6 @@ const MainSidebar = () => {
             </ul>
           </li>
 
-
           {/* Finance and Accounts */}
           <li>
             <Link
@@ -177,7 +227,7 @@ const MainSidebar = () => {
               }`}
             >
               <span className="text-xl">
-                <MdFileCopy  />
+                <MdFileCopy />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
                 Finance & Accounts
@@ -185,14 +235,13 @@ const MainSidebar = () => {
             </Link>
           </li>
 
-          {/* Items (no navigation, just toggle) */}
           <li>
-            <button
-              onClick={() => toggleSubMenu("HR")}
-              className={`flex w-full text-white items-center px-4 py-3 space-x-4 rounded-md ${
-                openMenu === "HR"
+            <Link
+              to="/hrms"
+              className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
+                isActive("/hrms")
                   ? "bg-gray-700 text-yellow-300"
-                  : "hover:bg-gray-700 hover:text-yellow-300"
+                  : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
@@ -201,89 +250,28 @@ const MainSidebar = () => {
               <span className="text-sm font-medium hidden group-hover:inline">
                 HRMS
               </span>
-              <span className="hidden group-hover:inline ml-auto">
-                {openMenu === "HR" ? <FaChevronDown /> : <FaChevronRight />}
-              </span>
-            </button>
-
-            {/* HR Submenu */}
-            <ul
-              className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
-              ${
-                openMenu === "HR"
-                  ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
-                  : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
-              }`}
-            >
-              {/* Normal HR links */}
-              <li>
-                <Link
-                  to="/doctors"
-                  className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/doctors")
-                      ? "bg-gray-700 text-yellow-300"
-                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
-                  }`}
-                >
-                  Doctors
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/nursery"
-                  className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/nursery")
-                      ? "bg-gray-700 text-yellow-300"
-                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
-                  }`}
-                >
-                  Nursery
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/departments"
-                  className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/departments")
-                      ? "bg-gray-700 text-yellow-300"
-                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
-                  }`}
-                >
-                  Departments
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/notices"
-                  className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/notices")
-                      ? "bg-gray-700 text-yellow-300"
-                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
-                  }`}
-                >
-                  Notices
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/marketed-by"
-                  className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/marketed-by")
-                      ? "bg-gray-700 text-yellow-300"
-                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
-                  }`}
-                >
-                  Marketed By
-                </Link>
-              </li>
-            </ul>
+            </Link>
           </li>
 
           {/* Other menu items */}
+
+          <li>
+            <Link
+              to="/doctor-and-provider"
+              className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
+                isActive("//doctor-and-provider")
+                  ? "bg-gray-700 text-yellow-300"
+                  : "text-white hover:bg-gray-700 hover:text-yellow-300"
+              }`}
+            >
+              <span className="text-xl">
+                <FaStethoscope />
+              </span>
+              <span className="text-sm font-medium hidden group-hover:inline">
+                Doctor & Provider
+              </span>
+            </Link>
+          </li>
 
           <li>
             <Link
@@ -396,7 +384,7 @@ const MainSidebar = () => {
               }`}
             >
               <span className="text-xl">
-                <RiAdminFill  />
+                <RiAdminFill />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
                 IPD/Day Care
@@ -406,7 +394,7 @@ const MainSidebar = () => {
               </span>
             </button>
 
-            {/* Admin Submenu */}
+            {/* ipd Submenu */}
             <ul
               className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
               ${
@@ -415,10 +403,10 @@ const MainSidebar = () => {
                   : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
               }`}
             >
-              {/* Normal Admin links */}
+              {/* Normal ipd links */}
               <li>
                 <Link
-                  to="/admission-registration"
+                  to="/ipd/admission-registration"
                   className={`block px-2 py-2 rounded-md text-sm ${
                     isActive("/admission-registration")
                       ? "bg-gray-700 text-yellow-300"
@@ -426,6 +414,18 @@ const MainSidebar = () => {
                   }`}
                 >
                   Admission Registration
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/ipd/nursery"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/nursery")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Nursery
                 </Link>
               </li>
             </ul>
@@ -467,6 +467,82 @@ const MainSidebar = () => {
             </Link>
           </li>
 
+          {/*Rate Query*/}
+          <li>
+            <button
+              onClick={() => toggleSubMenu("Rate Query")}
+              className={`flex w-full text-white items-center px-4 py-3 space-x-4 rounded-md ${
+                openMenu === "Rate Query"
+                  ? "bg-gray-700 text-yellow-300"
+                  : "hover:bg-gray-700 hover:text-yellow-300"
+              }`}
+            >
+              <span className="text-xl">
+                <BsCurrencyRupee />
+              </span>
+              <span className="text-sm font-medium hidden group-hover:inline">
+                Rate Query
+              </span>
+              <span className="hidden group-hover:inline ml-auto">
+                {openMenu === "Rate Query" ? (
+                  <FaChevronDown />
+                ) : (
+                  <FaChevronRight />
+                )}
+              </span>
+            </button>
+
+            {/* Rate Query Submenu */}
+            <ul
+              className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
+              ${
+                openMenu === "Rate Query"
+                  ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
+                  : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+              }`}
+            >
+              {/* Normal Rate Queary links */}
+              <li>
+                <Link
+                  to="/rate-query/opd-rate"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/rate-query/opd-rate")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  OPD Rate
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/rate-query/ipd-rate"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/rate-query/ipd-rate")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  IPD Rate
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/rate-query/inv-rate"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("//rate-query/inv-rate")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Investigation Rate
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          {/* store */}
           <li>
             <Link
               to="/store/dashboard"
@@ -513,7 +589,7 @@ const MainSidebar = () => {
               }`}
             >
               <span className="text-xl">
-                <MdReportGmailerrorred  />
+                <MdReportGmailerrorred />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
                 Investigation
@@ -749,22 +825,103 @@ const MainSidebar = () => {
             </ul>
           </li>
 
+          {/*Utility*/}
           <li>
-            <Link
-              to="/utility"
-              className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/utility")
+            <button
+              onClick={() => toggleSubMenu("Utility")}
+              className={`flex w-full text-white items-center px-4 py-3 space-x-4 rounded-md ${
+                openMenu === "Utility"
                   ? "bg-gray-700 text-yellow-300"
-                  : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  : "hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
-                <LuUtilityPole  />
+                <LuUtilityPole />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
                 Utility
               </span>
-            </Link>
+              <span className="hidden group-hover:inline ml-auto">
+                {openMenu === "Utility" ? (
+                  <FaChevronDown />
+                ) : (
+                  <FaChevronRight />
+                )}
+              </span>
+            </button>
+
+            {/* Utility Submenu */}
+            <ul
+              className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
+              ${
+                openMenu === "Utility"
+                  ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
+                  : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+              }`}
+            >
+              {/* Normal Utility links */}
+              <li>
+                <Link
+                  to="/utility/change-password"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/utility/change-password")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Change Password
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/utility/sms-scheduler"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/utility/sms-scheduler")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  SMS Scheduler
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/utility/telephone-directory"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/utility/telephone-directory")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Telephone Directory
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/utility/landline"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/utility/landline")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Landline
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/utility/reception-notes"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/utility/reception-notes")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Reception Notes
+                </Link>
+              </li>
+            </ul>
           </li>
 
           <li>

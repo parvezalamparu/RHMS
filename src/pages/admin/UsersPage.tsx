@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import ToggleSwitch from "../../../components/store/general/ToggleSwitchProps";
-import Button from "../../../components/store/general/Button";
+import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
+import Button from "../../components/store/general/Button";
 import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
@@ -94,7 +94,7 @@ const Users = () => {
   const endNumber = startIndex + paginatedUsers.length;
 
   return (
-    <div className="flex flex-col min-h-screen p-6">
+    <div className="flex flex-col min-h-screen pl-2">
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">Users</h2>
         <Button
@@ -104,7 +104,7 @@ const Users = () => {
           name="Add User"
           icon={<FaPlus className="text-lg" />}
           hover="hover:bg-gray-100"
-          onClick={() => alert("Open AddUserModal")}
+          onClick={() => navigate("/admin/users/add-user")}
         />
       </div>
 
