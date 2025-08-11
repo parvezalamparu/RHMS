@@ -3,6 +3,7 @@ import Button from "../general/Button";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiSave } from "react-icons/bi";
+import CustomDateTimePicker from "../../general/CustomDateTimePicker";
 
 interface PurchaseOrderItem {
   itemName: string;
@@ -91,12 +92,11 @@ const AddPurchaseOrder: React.FC = () => {
       {/* Header Section */}
       <div className="flex gap-4 my-4">
         <div className="w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label>
-          <input
-            type="datetime-local"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
+          {/* <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label> */}
+          <CustomDateTimePicker
+          width="w-[22rem]"
+          height="h-[2.4rem]"
+          isDisable= {true}
           />
         </div>
 
@@ -105,7 +105,7 @@ const AddPurchaseOrder: React.FC = () => {
           <select
             value={vendor}
             onChange={(e) => setVendor(e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           >
             <option value="">Select Vendor...</option>
             <option value="Vendor A">Vendor A</option>
@@ -129,7 +129,7 @@ const AddPurchaseOrder: React.FC = () => {
         <div className="col-span-4">
           <input
             type="text"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
             placeholder="Item Name"
             value={formItem.itemName}
             onChange={(e) => handleFormItemChange("itemName", e.target.value)}
@@ -140,7 +140,7 @@ const AddPurchaseOrder: React.FC = () => {
         <div className="col-span-1">
           <input
             type="number"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
             placeholder="Qty"
             value={formItem.unitQty}
             onChange={(e) => handleFormItemChange("unitQty", parseInt(e.target.value))}
@@ -151,7 +151,7 @@ const AddPurchaseOrder: React.FC = () => {
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
             placeholder="Unit"
             value={formItem.unit}
             onChange={(e) => handleFormItemChange("unit", e.target.value)}
@@ -162,7 +162,7 @@ const AddPurchaseOrder: React.FC = () => {
         <div className="col-span-2">
           <input
             type="number"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
             placeholder="Sub Qty"
             value={formItem.subUnitQty}
             onChange={(e) => handleFormItemChange("subUnitQty", parseInt(e.target.value))}
@@ -173,7 +173,7 @@ const AddPurchaseOrder: React.FC = () => {
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
             placeholder="Sub Unit"
             value={formItem.subUnit}
             onChange={(e) => handleFormItemChange("subUnit", e.target.value)}
@@ -228,7 +228,7 @@ const AddPurchaseOrder: React.FC = () => {
           id="note"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="w-full md:w-1/2 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+          className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
           rows={3}
         />
       </div>

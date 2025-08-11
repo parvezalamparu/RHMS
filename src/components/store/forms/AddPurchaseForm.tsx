@@ -41,10 +41,10 @@ const AddPurchaseForm = () => {
             Date <span className="text-red-500">*</span>
           </label>
           <input
-            type="datetime-local"
-            readOnly
-            value={new Date().toISOString().slice(0, 16)} // default value
-            className="w-full border border-gray-300 rounded px-3 h-10 text-sm bg-gray-100 cursor-not-allowed"
+            type="text"
+            value={new Date().toLocaleString()}
+            disabled
+            className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
           />
         </div>
 
@@ -111,7 +111,7 @@ const AddPurchaseForm = () => {
       </div>
 
       {/* Table Header */}
-      <div className="overflow-auto border rounded-md">
+      <div className="overflow-auto border rounded">
   <table className="min-w-[2500px] w-full border-collapse text-sm">
     <thead className="bg-[#2fe2fe] text-gray-900">
       <tr>
@@ -148,18 +148,18 @@ const AddPurchaseForm = () => {
         <td className="border p-1">
           <input
             {...register("item", { required: "Item is required" })}
-            className={`w-70 border rounded px-2 py-1 ${errors.item ? "border-red-500" : ""}`}
+            className={`w-70 border border-gray-300 rounded px-2 py-1 ${errors.item ? "border-red-500" : ""}`}
           />
           {errors.item?.message && <p className="text-red-500 text-xs">{errors.item.message as string}</p>}
         </td>
 
         {/* Batch No */}
         <td className="border p-1">
-          <input {...register("batchNo")} className="w-50 border rounded px-2 py-1" />
+          <input {...register("batchNo")} className="w-50 border border-gray-300 rounded px-2 py-1" />
         </td>
 
         {/* Exp Date */}
-        <td className="border p-1">
+        <td className="border border-gray-300 p-1">
           <CustomDatePicker />
         </td>
 
@@ -168,7 +168,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("unitQty", { required: "Unit Qty is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.unitQty ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.unitQty ? "border-red-500" : ""}`}
           />
           {errors.unitQty?.message && <p className="text-red-500 text-xs">{errors.unitQty.message as string}</p>}
         </td>
@@ -179,7 +179,7 @@ const AddPurchaseForm = () => {
             type="text"
             {...register("unit", { required: "Unit is required" })}
             readOnly
-            className={`w-full border rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.unit ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.unit ? "border-red-500" : ""}`}
           />
           {errors.unit?.message && <p className="text-red-500 text-xs">{errors.unit.message as string}</p>}
         </td>
@@ -189,7 +189,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("subUnitQty", { required: "Sub Unit Qty is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.subUnitQty ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.subUnitQty ? "border-red-500" : ""}`}
           />
           {errors.subUnitQty?.message && <p className="text-red-500 text-xs">{errors.subUnitQty.message as string}</p>}
         </td>
@@ -200,14 +200,14 @@ const AddPurchaseForm = () => {
             type="text"
             {...register("subUnit", { required: "Sub Unit is required" })}
             readOnly
-            className={`w-full border rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.subUnit ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 bg-gray-100 cursor-not-allowed ${errors.subUnit ? "border-red-500" : ""}`}
           />
           {errors.subUnit?.message && <p className="text-red-500 text-xs">{errors.subUnit.message as string}</p>}
         </td>
 
         {/* Test Qty */}
         <td className="border p-1">
-          <input type="number" {...register("testQty")} className="w-24 border rounded px-2 py-1" />
+          <input type="number" {...register("testQty")} className="w-24 border border-gray-300 rounded px-2 py-1" />
         </td>
 
         {/* MRP */}
@@ -215,7 +215,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("mrpQty", { required: "MRP is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.mrpQty ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.mrpQty ? "border-red-500" : ""}`}
           />
           {errors.mrpQty?.message && <p className="text-red-500 text-xs">{errors.mrpQty.message as string}</p>}
         </td>
@@ -225,7 +225,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("rateQty", { required: "Rate is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.rateQty ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.rateQty ? "border-red-500" : ""}`}
           />
           {errors.rateQty?.message && <p className="text-red-500 text-xs">{errors.rateQty.message as string}</p>}
         </td>
@@ -235,19 +235,19 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("netAmt", { required: "Net Amount is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.netAmt ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.netAmt ? "border-red-500" : ""}`}
           />
           {errors.netAmt?.message && <p className="text-red-500 text-xs">{errors.netAmt.message as string}</p>}
         </td>
 
         {/* Discount % */}
         <td className="border p-1">
-          <input type="number" {...register("disPercent")} className="w-full border rounded px-2 py-1" />
+          <input type="number" {...register("disPercent")} className="w-full border border-gray-300 rounded px-2 py-1" />
         </td>
 
         {/* Discount ₹ */}
         <td className="border p-1">
-          <input type="number" {...register("disAmount")} className="w-full border rounded px-2 py-1" />
+          <input type="number" {...register("disAmount")} className="w-full border border-gray-300 rounded px-2 py-1" />
         </td>
 
         {/* CGST */}
@@ -255,7 +255,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("cgst", { required: "CGST is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.cgst ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.cgst ? "border-red-500" : ""}`}
           />
           {errors.cgst?.message && <p className="text-red-500 text-xs">{errors.cgst.message as string}</p>}
         </td>
@@ -265,14 +265,14 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("sgst", { required: "SGST is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.sgst ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.sgst ? "border-red-500" : ""}`}
           />
           {errors.sgst?.message && <p className="text-red-500 text-xs">{errors.sgst.message as string}</p>}
         </td>
 
         {/* IGST */}
         <td className="border p-1">
-          <input type="number" {...register("igst")} className="w-full border rounded px-2 py-1" />
+          <input type="number" {...register("igst")} className="w-full border border-gray-300 rounded px-2 py-1" />
         </td>
 
         {/* Amount */}
@@ -280,7 +280,7 @@ const AddPurchaseForm = () => {
           <input
             type="number"
             {...register("amount", { required: "Amount is required" })}
-            className={`w-full border rounded px-2 py-1 ${errors.amount ? "border-red-500" : ""}`}
+            className={`w-full border border-gray-300 rounded px-2 py-1 ${errors.amount ? "border-red-500" : ""}`}
           />
           {errors.amount?.message && <p className="text-red-500 text-xs">{errors.amount.message as string}</p>}
         </td>

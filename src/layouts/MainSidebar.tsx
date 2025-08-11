@@ -5,7 +5,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { FaWarehouse } from "react-icons/fa";
 import { useState } from "react";
 import { GiHumanPyramid } from "react-icons/gi";
-import { MdOutlineMan } from "react-icons/md";
+import { FaCashRegister } from "react-icons/fa";
 import { TbEmergencyBed } from "react-icons/tb";
 import { RiHotelBedLine } from "react-icons/ri";
 import { FaBedPulse } from "react-icons/fa6";
@@ -108,7 +108,7 @@ const MainSidebar = () => {
                 <Link
                   to="/admin/doctors"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/doctors")
+                    isActive("/admin/doctors")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -219,9 +219,9 @@ const MainSidebar = () => {
           {/* Finance and Accounts */}
           <li>
             <Link
-              to="/finance-accounts"
+              to="/admin/finance-accounts"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/finance-accounts")
+                isActive("/admin/finance-accounts")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -275,18 +275,18 @@ const MainSidebar = () => {
 
           <li>
             <Link
-              to="/patients"
+              to="/ipd-daycare"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/patients")
+                isActive("/ipd-daycare")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
-                <MdOutlineMan />
+                <RiAdminFill />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
-                Patients
+                IPD/Daycare
               </span>
             </Link>
           </li>
@@ -372,33 +372,33 @@ const MainSidebar = () => {
             </ul>
           </li>
 
-          {/*ipd daycare */}
+          {/*Registration*/}
 
           <li>
             <button
-              onClick={() => toggleSubMenu("IPD")}
+              onClick={() => toggleSubMenu("Registration")}
               className={`flex w-full text-white items-center px-4 py-3 space-x-4 rounded-md ${
-                openMenu === "IPD"
+                openMenu === "Registration"
                   ? "bg-gray-700 text-yellow-300"
                   : "hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
-                <RiAdminFill />
+                <FaCashRegister  />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
-                IPD/Day Care
+                Registration
               </span>
               <span className="hidden group-hover:inline ml-auto">
-                {openMenu === "IPD" ? <FaChevronDown /> : <FaChevronRight />}
+                {openMenu === "Registration" ? <FaChevronDown /> : <FaChevronRight />}
               </span>
             </button>
 
-            {/* ipd Submenu */}
+            {/* Registration Submenu */}
             <ul
               className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
               ${
-                openMenu === "IPD"
+                openMenu === "Registration"
                   ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
                   : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
               }`}
@@ -406,7 +406,7 @@ const MainSidebar = () => {
               {/* Normal ipd links */}
               <li>
                 <Link
-                  to="/ipd/admission-registration"
+                  to="/registration/admission-registration"
                   className={`block px-2 py-2 rounded-md text-sm ${
                     isActive("/admission-registration")
                       ? "bg-gray-700 text-yellow-300"
@@ -418,7 +418,19 @@ const MainSidebar = () => {
               </li>
               <li>
                 <Link
-                  to="/ipd/nursery"
+                  to="/registration/patient-registration"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/admission-registration")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Patient Registration
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/registration/nursery"
                   className={`block px-2 py-2 rounded-md text-sm ${
                     isActive("/nursery")
                       ? "bg-gray-700 text-yellow-300"
@@ -504,39 +516,39 @@ const MainSidebar = () => {
               {/* Normal Rate Queary links */}
               <li>
                 <Link
-                  to="/rate-query/opd-rate"
+                  to="/rate-query/opd-rate-query"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/rate-query/opd-rate")
+                    isActive("/rate-query/opd-rate-query")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  OPD Rate
+                  OPD Rate Query
                 </Link>
               </li>
 
               <li>
                 <Link
-                  to="/rate-query/ipd-rate"
+                  to="/rate-query/ipd-rate-query"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/rate-query/ipd-rate")
+                    isActive("/rate-query/ipd-rate-query")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  IPD Rate
+                  IPD Rate Query
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/rate-query/inv-rate"
+                  to="/rate-query/inv-rate-query"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("//rate-query/inv-rate")
+                    isActive("/rate-query/inv-rate-query")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  Investigation Rate
+                  Inv Rate Query
                 </Link>
               </li>
             </ul>

@@ -1,6 +1,9 @@
+
+
 export const MainDashboard = () => {
   return (
-    <div className='pl-5 py-3 min-h-full w-full grid grid-cols-12'>
+   
+    <div className='pl-2 min-h-full w-full grid grid-cols-12'>
       <div className='col-span-9'>
          <div className='grid w-full grid-cols-8 gap-2'>
             <div className='col-span-2 bg-cyan-200 min-h-60 rounded-3xl p-3  uppercase'>
@@ -61,6 +64,5 @@ export const MainDashboard = () => {
         
 
         </div>
-
   )
 }

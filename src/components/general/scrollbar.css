@@ -1,0 +1,29 @@
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 2px rgb(10, 233, 155);  */
+  /* border-radius: 5px; */
+  width: auto;
+  background-color: #c1d5f4;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #035d67 
+  
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0979ea; 
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* makes both vertical & horizontal thin */
+  /* scrollbar-color: rgba(157, 2, 234, 0.719) rgb(115, 232, 191); */
+}

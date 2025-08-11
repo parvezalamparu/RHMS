@@ -46,7 +46,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
           <X size={24} />
         </button>
 
-        <h2 className="text-2xl font-bold text-[#035d67] mb-6">ADD NEW ITEM</h2>
+        <h2 className="text-2xl font-bold text-[#035d67] mb-6">EDIT ITEM</h2>
 
         <form
           className="p-6 grid grid-cols-4 gap-4 text-sm"
@@ -78,7 +78,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
                 name={name}
                 value={(formData as any)[name] ?? ""}
                 onChange={handleChange}
-                className="border px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+                className="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
               />
             </div>
           ))}

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../components/store/general/Button";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { a4 } from "../../assets/assets";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 interface ItemDetails {
   id: number;
@@ -63,12 +65,38 @@ const tableTabs = [
   "Item Damage Details",
 ];
 
+// Dummy data per tab
+const tabData: Record<number, string[][]> = {
+  0: [["B-001", "₹50", "2026-01-01", "100"]],
+  1: [["1", "2025-08-04", "B-001", "2026-01-01", "Vendor A", "Admin", "100", "5", "₹50", "₹60", "5%", "5%", "0%", "₹5000", "₹5500"]],
+  2: [["1", "ISS-101", "REQ-55", "Admin", "Lab", "2025-08-04", "B-001", "10", "₹50", "5%", "5%", "0%", "₹500", "₹550"]],
+  3: [["1", "Admin", "Pharmacy", "2025-08-04", "B-002", "3", "₹150"]],
+  4: [["1", "Admin", "Ward 1", "2025-08-04", "B-003", "2"]],
+};
+
+const tableHeaders: Record<number, string[]> = {
+  0: ["Batch No.", "Rate/Unit", "Exp. Date", "Qty"],
+  1: ["SN", "Date", "Batch No.", "Exp. Date", "Vendor", "Purchased By", "Buy Qty", "Return Qty", "Rate/Unit", "MRP/Unit", "CGST", "SGST", "IGST", "Sub Total", "Total"],
+  2: ["SN", "Issue No.", "Req No.", "Issued By", "Department", "Date", "Batch No.", "Qty", "Rate/Unit", "CGST", "SGST", "IGST", "Sub Total", "Total"],
+  3: ["SN", "Approved By", "Department", "Date", "Batch No.", "Qty", "Total"],
+  4: ["SN", "Approved By", "Department", "Date", "Batch No.", "Qty"],
+};
+
 const ViewItemDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const item = dummyItems.find((item) => item.id === Number(id));
+
   const [activeTab, setActiveTab] = useState(0);
-  const profileName = "Admin"; // replace with actual logged-in profile name
+
+  // One state per tab
+  const [tabStates, setTabStates] = useState(
+    tableTabs.map(() => ({
+      itemsPerPage: 5,
+      currentPage: 1,
+      searchTerm: "",
+    }))
+  );
 
   if (!item) {
     return (
@@ -84,227 +112,128 @@ const ViewItemDetails: React.FC = () => {
     );
   }
 
-  const renderTable = () => {
-    const baseTableClass = "min-w-full mt-4 text-sm border border-gray-300";
-    const thTdClass = "px-3 py-2 border border-gray-300 text-left";
+  const updateTabState = (index: number, changes: Partial<typeof tabStates[number]>) => {
+    setTabStates((prev) =>
+      prev.map((state, i) =>
+        i === index ? { ...state, ...changes } : state
+      )
+    );
+  };
 
-    switch (activeTab) {
-      case 0:
-        return (
-          <table className={baseTableClass}>
+  const renderTable = () => {
+    const headers = tableHeaders[activeTab];
+    const rows = tabData[activeTab];
+
+    const { itemsPerPage, currentPage, searchTerm } = tabStates[activeTab];
+
+    // Filter rows by search term
+    const filteredRows = rows.filter((row) =>
+      row.some((cell) =>
+        cell.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+
+    const totalPages = Math.ceil(filteredRows.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedRows = filteredRows.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
+
+    const startNumber = startIndex + 1;
+    const endNumber = startIndex + paginatedRows.length;
+
+    return (
+      <div>
+        {/* Controls */}
+        <div className="flex justify-between items-center mb-3 flex-wrap gap-4">
+          <div className="flex items-center space-x-2">
+            <label className="text-sm">Show</label>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => updateTabState(activeTab, { itemsPerPage: parseInt(e.target.value), currentPage: 1 })}
+              className="border border-gray-300 cursor-pointer px-2 py-1 text-sm rounded"
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+            </select>
+            <span className="text-sm">entries</span>
+          </div>
+
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={(e) => updateTabState(activeTab, { searchTerm: e.target.value, currentPage: 1 })}
+            placeholder="Search..."
+            className="border border-gray-300 px-3 py-1 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          />
+        </div>
+
+        {/* Table */}
+        <div className="overflow-auto border border-gray-300 rounded">
+          <table className="min-w-full text-sm border-collapse">
             <thead className="bg-[var(--base-color)]">
               <tr>
-                <th className={thTdClass}>Batch No.</th>
-                <th className={thTdClass}>Rate/Unit</th>
-                <th className={thTdClass}>Exp. Date</th>
-                <th className={thTdClass}>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className={thTdClass}>B-001</td>
-                <td className={thTdClass}>₹50</td>
-                <td className={thTdClass}>2026-01-01</td>
-                <td className={thTdClass}>100</td>
-              </tr>
-            </tbody>
-          </table>
-        );
-      case 1:
-        return (
-          <table className={baseTableClass}>
-            <thead className="bg-[var(--base-color)]">
-              <tr>
-                {[
-                  "SN",
-                  "Date",
-                  "Batch No.",
-                  "Exp. Date",
-                  "Vendor",
-                  "Purchased By",
-                  "Buy Qty",
-                  "Return Qty",
-                  "Rate/Unit",
-                  "MRP/Unit",
-                  "CGST",
-                  "SGST",
-                  "IGST",
-                  "Sub Total",
-                  "Total",
-                ].map((col) => (
-                  <th key={col} className={thTdClass}>
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {[
-                  "1",
-                  "2025-08-04",
-                  "B-001",
-                  "2026-01-01",
-                  "Vendor A",
-                  profileName,
-                  "100",
-                  "5",
-                  "₹50",
-                  "₹60",
-                  "5%",
-                  "5%",
-                  "0%",
-                  "₹5000",
-                  "₹5500",
-                ].map((val, i) => (
-                  <td key={i} className={thTdClass}>
-                    {val}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        );
-      case 2:
-        return (
-          <table className={baseTableClass}>
-            <thead className="bg-[var(--base-color)]">
-              <tr>
-                {[
-                  "SN",
-                  "Issue No.",
-                  "Req No.",
-                  "Issued By",
-                  "Where",
-                  "Date",
-                  "Batch No.",
-                  "Qty",
-                  "Rate/Unit",
-                  "CGST",
-                  "SGST",
-                  "IGST",
-                  "Sub Total",
-                  "Total",
-                ].map((col) => (
-                  <th key={col} className={thTdClass}>
-                    {col}
-                  </th>
+                {headers.map((col) => (
+                  <th key={col} className="px-3 py-2 border border-gray-300 text-left">{col}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              <tr>
-                {[
-                  "1",
-                  "ISS-101",
-                  "REQ-55",
-                  profileName,
-                  "Lab",
-                  "2025-08-04",
-                  "B-001",
-                  "10",
-                  "₹50",
-                  "5%",
-                  "5%",
-                  "0%",
-                  "₹500",
-                  "₹550",
-                ].map((val, i) => (
-                  <td key={i} className={thTdClass}>
-                    {val}
-                  </td>
-                ))}
-              </tr>
+              {paginatedRows.length === 0 ? (
+                <tr>
+                  <td colSpan={headers.length} className="text-center py-3 text-red-500">No data found</td>
+                </tr>
+              ) : (
+                paginatedRows.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((cell, j) => (
+                      <td key={j} className="px-3 py-2 border border-gray-300">{cell}</td>
+                    ))}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
-        );
-      case 3:
-        return (
-          <table className={baseTableClass}>
-            <thead className="bg-[var(--base-color)]">
-              <tr>
-                {[
-                  "SN",
-                  "Approved By",
-                  "Where",
-                  "Date",
-                  "Batch No.",
-                  "Qty",
-                  "Total",
-                ].map((col) => (
-                  <th key={col} className={thTdClass}>
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {[
-                  "1",
-                  profileName,
-                  "Pharmacy",
-                  "2025-08-04",
-                  "B-002",
-                  "3",
-                  "₹150",
-                ].map((val, i) => (
-                  <td key={i} className={thTdClass}>
-                    {val}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        );
-      case 4:
-        return (
-          <table className={baseTableClass}>
-            <thead className="bg-[var(--base-color)]">
-              <tr>
-                {["SN", "Approved By", "Where", "Date", "Batch No.", "Qty"].map(
-                  (col) => (
-                    <th key={col} className={thTdClass}>
-                      {col}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {["1", profileName, "Ward 1", "2025-08-04", "B-003", "2"].map(
-                  (val, i) => (
-                    <td key={i} className={thTdClass}>
-                      {val}
-                    </td>
-                  )
-                )}
-              </tr>
-            </tbody>
-          </table>
-        );
-      default:
-        return null;
-    }
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-between items-center p-2 bg-gray-50 border border-t-0 border-gray-300 text-sm mt-2">
+          <div>
+            Showing {filteredRows.length === 0 ? 0 : startNumber} to {endNumber} of {filteredRows.length} entries
+          </div>
+          <Stack direction="row" spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(_, page) => updateTabState(activeTab, { currentPage: page })}
+              variant="outlined"
+              size="small"
+              color="primary"
+            />
+          </Stack>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div className="ml-2 p-4 bg-white shadow-lg rounded-lg border-2 border-gray-300 w-auto">
       <div className="bg-[var(--base-color)] text-[#035d67] px-4 py-2 rounded-t flex justify-between">
         <h2 className="text-lg font-semibold uppercase">Item Details</h2>
-
         <Button
           name="Back to Items"
           onClick={() => navigate(-1)}
           bgcolor="bg-white"
-          border="border-3 border-[--var(--base-color)]"
+          border="border border-gray-400"
           textColor="text-blue-600"
           hover="hover:bg-gray-100"
           icon={<TiArrowBackOutline />}
         />
       </div>
 
+      {/* Item Info */}
       <div className="grid grid-cols-4 gap-x-10 gap-y-2 p-6 text-sm">
         <div>
           <Row label="Item Name" value={item.itemName} />
@@ -323,32 +252,20 @@ const ViewItemDetails: React.FC = () => {
         <div>
           <Row label="Item Unit" value={item.itemUnit} />
           <Row label="Sub Item Unit" value={item.subItemUnit} />
-          <Row
-            label="1 Unit = (Sub Unit)"
-            value={`1 ${item.itemUnit} = ${item.subUnitQty} ${item.subItemUnit}`}
-          />
+          <Row label="1 Unit = (Sub Unit)" value={`1 ${item.itemUnit} = ${item.subUnitQty} ${item.subItemUnit}`} />
           <Row label="Rack No" value={item.rackNo} />
           <Row label="Shelf No" value={item.shelfNo} />
         </div>
         <div>
           {item.imageUrl && (
-            <div className="col-span-2 flex items-start mt-2">
-              
-              <div>
-                
-                <img
-                  src={a4}
-                  alt="Item"
-                  className="mt-1 w-24 h-24 object-cover rounded border"
-                />
-              </div>
-            </div>
+            <img src={a4} alt="Item" className="mt-1 w-24 h-24 object-cover rounded border-2 border-gray-300" />
           )}
         </div>
       </div>
 
+      {/* Tabs */}
       <div className="pt-4">
-        <div className="flex text-sm font-medium">
+        <div className="flex text-sm font-medium mb-3">
           {tableTabs.map((tab, index) => (
             <button
               key={index}
@@ -363,6 +280,7 @@ const ViewItemDetails: React.FC = () => {
             </button>
           ))}
         </div>
+
         {renderTable()}
       </div>
     </div>

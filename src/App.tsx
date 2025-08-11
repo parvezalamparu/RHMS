@@ -15,7 +15,7 @@ import { MainDashboard } from "./pages/general/MainDashboard";
 import Users from "./pages/admin/UsersPage";
 import AddUserForm from "./pages/forms/AddUserForm";
 import ViewUser from "./pages/admin/ViewUserPage";
-import RoleList from "./pages/admin/RollList";
+import RoleList from "./pages/admin/RoleList";
 import PermissionList from "./pages/admin/PermissionList";
 import AssignPermissionPage from "./pages/admin/AssignPermissionPage";
 
@@ -41,6 +41,7 @@ import Reports from "./pages/store/ReportsPage";
 import ItemIssue from "./pages/store/ItemIssuePage";
 import Invoice from "./pages/store/InvoicePage"
 import ViewItemDetails from "./pages/store/ViewItemDetails";
+import IssueItemForm from "./components/store/forms/IssueItemForm";
 
 
 // React hot toast
@@ -91,6 +92,8 @@ function App() {
           <Route path="/store/item-issue" element={<ItemIssue />} />
           <Route path="/store/invoice" element={<Invoice />} />
           <Route path="/store/all-items/:id" element={<ViewItemDetails />} />
+          <Route path="/store/issue/add-issue-form" element={<IssueItemForm />} />
+
 
         </Route>
       </Routes>

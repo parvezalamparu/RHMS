@@ -249,7 +249,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/item-issue"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/item-issue")
+                isActive("/store/item-issue")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}

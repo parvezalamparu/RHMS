@@ -6,10 +6,13 @@ import "flatpickr/dist/themes/material_blue.css";
 type customeSize = {
    height?: string,
    width?: string,
+   border?: string;
+  rounded?: string;
+  focus?: string;
    isDisable? : boolean
 }
 
-const CustomDateTimePicker : React.FC <customeSize> = ({height = 'py-2', width = 'w-50',isDisable})   => {
+const CustomDateTimePicker : React.FC <customeSize> = ({border='border border-gray-300', rounded='rounded', height = 'py-2', width = 'w-50',isDisable})   => {
   const [dateTime, setDateTime] = useState<Date>(new Date()); 
 
   return (
@@ -21,7 +24,7 @@ const CustomDateTimePicker : React.FC <customeSize> = ({height = 'py-2', width =
           dateFormat: "d-m-Y h:i K",
           time_24hr: false,
         }}
-        className= {`border ${height} ${width} px-2 rounded w-6/9`}
+        className= {`${border} ${height} ${width} ${rounded} px-2 w-6/9`}
         value={dateTime}
         disabled = {isDisable}
         onChange={(selectedDates) => setDateTime(selectedDates[0])}

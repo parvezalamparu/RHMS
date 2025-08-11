@@ -12,7 +12,7 @@ const CustomDatePicker = () => {
         options={{
           dateFormat: "d-m-Y",
         }}
-        className="border px-3 py-1 rounded-xl w-full"
+        className="border px-3 py-1 w-full border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
         value={date}
         onChange={(selectedDates) => setDate(selectedDates[0])}
       />

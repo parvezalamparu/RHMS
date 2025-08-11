@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import { BiSave } from "react-icons/bi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import toast from "react-hot-toast";
+import { useCustomTitle } from "../../hooks/useCustomTitle";
 
 interface ItemCategory {
   id: number;
@@ -33,6 +34,9 @@ const generateRandomCategories = (count: number): ItemCategory[] => {
 };
 
 const ItemCategoryPage = () => {
+
+  useCustomTitle('Item Category');
+  
   const [categories, setCategories] = useState<ItemCategory[]>(
     generateRandomCategories(47)
   );
@@ -126,7 +130,7 @@ const ItemCategoryPage = () => {
           </label>
           <select
             id="pageSize"
-            className="border rounded px-2 py-1 text-sm"
+            className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(parseInt(e.target.value));
@@ -142,7 +146,7 @@ const ItemCategoryPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          className="border border-gray-300 px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search category..."
           value={searchTerm}
           onChange={(e) => {

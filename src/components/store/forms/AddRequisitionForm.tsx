@@ -91,7 +91,7 @@ const AddRequisitionForm: React.FC = () => {
             type="text"
             value={new Date().toLocaleString()}
             disabled
-            className="w-full px-3 py-2 border rounded bg-gray-100"
+            className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
           />
         </div>
 
@@ -99,7 +99,7 @@ const AddRequisitionForm: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1 ">Department</label>
           <input
             type="text"
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ const AddRequisitionForm: React.FC = () => {
       <div className="grid grid-cols-12 gap-2 items-start border border-gray-200 rounded px-2 py-2 mt-2 bg-white">
         <div className="col-span-4">
           <select
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
             value={formItem.itemName}
             onChange={(e) => handleFormItemChange("itemName", e.target.value)}
           >
@@ -132,7 +132,7 @@ const AddRequisitionForm: React.FC = () => {
         <div className="col-span-1">
           <input
             type="number"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
             placeholder="Qty"
             value={formItem.unitQty}
             onChange={(e) => handleFormItemChange("unitQty", parseInt(e.target.value))}
@@ -143,7 +143,7 @@ const AddRequisitionForm: React.FC = () => {
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
             placeholder="Unit"
             value={formItem.unit}
             onChange={(e) => handleFormItemChange("unit", e.target.value)}
@@ -154,7 +154,7 @@ const AddRequisitionForm: React.FC = () => {
         <div className="col-span-2">
           <input
             type="number"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
             placeholder="Sub Qty"
             value={formItem.subUnitQty}
             onChange={(e) => handleFormItemChange("subUnitQty", parseInt(e.target.value))}
@@ -165,7 +165,7 @@ const AddRequisitionForm: React.FC = () => {
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
             placeholder="Sub Unit"
             value={formItem.subUnit}
             onChange={(e) => handleFormItemChange("subUnit", e.target.value)}
@@ -219,7 +219,7 @@ const AddRequisitionForm: React.FC = () => {
           id="note"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="w-full md:w-1/2 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+          className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
           rows={3}
         />
       </div>

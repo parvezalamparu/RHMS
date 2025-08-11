@@ -116,7 +116,7 @@ const ItemCompanyPage = () => {
           <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
           <select
             id="pageSize"
-            className="border rounded px-2 py-1 text-sm"
+            className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(parseInt(e.target.value));
@@ -131,7 +131,7 @@ const ItemCompanyPage = () => {
         </div>
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          className="border border-gray-300 px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search company..."
           value={searchTerm}
           onChange={(e) => {

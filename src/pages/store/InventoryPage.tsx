@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import AddItemModal from "../../components/store/forms/AddItemModal";
 import EditItemModal from "../../components/store/forms/EditItemModal";
 import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
@@ -37,6 +37,9 @@ export interface NewItemData
 
 const InventoryPage = () => {
   const navigate = useNavigate();
+
+useEffect(() => {document.title = "Rhds | Items"});
+
 
   const [items, setItems] = useState<Item[]>(
     Array.from({ length: 92 }, (_, i) => ({
@@ -162,7 +165,7 @@ const InventoryPage = () => {
           </label>
           <select
             id="pageSize"
-            className="border rounded px-2 py-1 text-sm"
+            className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(parseInt(e.target.value));
@@ -178,7 +181,7 @@ const InventoryPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          className="border px-3 py-2 rounded border-gray-300 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {
@@ -265,7 +268,7 @@ const InventoryPage = () => {
                     onChange={() => toggleActivation(item.id)}
                   />
                 </td>
-                <td className="px-4 py-2 border border-gray-300 flex gap-2">
+                <td className="px-4 py-2 border-gray-300 flex gap-2">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"

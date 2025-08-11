@@ -5,6 +5,7 @@ import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import { User, LogOut, KeyRound } from "lucide-react";
 import Badge from "./Badge";
+import { FaRegBell } from "react-icons/fa";
 
 const Topbar = () => {
   const navigate = useNavigate();
@@ -41,7 +42,14 @@ const Topbar = () => {
       <DigitalClock />
 
       {/* Right: Profile Picture Only */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative flex items-center gap-6" ref={dropdownRef}>
+        <div className="relative flex justify-center items-center bg-gray-300 rounded h-[2rem] w-[2rem] cursor-pointer">
+          <FaRegBell className="text-xl text-purple-600" />
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            2
+          </span>
+        </div>
+
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="focus:outline-none cursor-pointer"
@@ -54,7 +62,7 @@ const Topbar = () => {
         </button>
 
         {isDropdownOpen && (
-          <div className="absolute right-0 w-85 mt-3 h-90 bg-[#3f4d5d] border-3 rounded-3xl z-50 p-7">
+          <div className="absolute right-0 top-full w-85 mt-3 h-90 bg-[#90a5d7fd] border-3 border-gray-300 rounded-2xl z-50 p-7">
             <div className="flex justify-center space-x-3 mb-4">
               <img
                 src="https://i.pravatar.cc/36"
@@ -66,19 +74,25 @@ const Topbar = () => {
               <h1 className="text-white text-xl">Parvez Alam</h1>
             </div>
             <div className="flex justify-center space-x-3 mb-4">
-              <p className="mt-1"><Badge label="Admin" color="bg-green-100" text="text-[#035d67]"/></p>
+              <p className="mt-1">
+                <Badge
+                  label="Admin"
+                  color="bg-green-100"
+                  text="text-[#035d67]"
+                />
+              </p>
             </div>
 
             <div className="flex justify-center items-center gap-2">
               <button
-                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 bg-gray-200 hover:bg-gray-100 transition"
+                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 bg-gray-200 hover:bg-gray-100 transition cursor-pointer"
                 onClick={() => navigate("")}
               >
                 <User size={16} />
                 View Profile
               </button>
               <button
-                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 bg-gray-200 hover:bg-gray-100 transition duration-100"
+                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 bg-gray-200 hover:bg-gray-100 transition duration-100 cursor-pointer"
                 onClick={() => navigate("")}
               >
                 <KeyRound size={16} />
@@ -87,14 +101,13 @@ const Topbar = () => {
             </div>
             <div className="flex justify-center mt-2">
               <button
-                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 px-4 bg-gray-200 hover:bg-gray-100 transition duration-100 max-w-50"
+                className="h-10 flex items-center justify-center gap-2 flex-1 text-sm tracking-tight text-[#035d67] border border-gray-300 rounded-full py-2 px-4 bg-gray-200 hover:bg-gray-100 transition duration-100 max-w-50 cursor-pointer"
                 onClick={() => navigate("/")}
               >
                 <LogOut size={16} />
                 Log Out
               </button>
             </div>
-
           </div>
         )}
       </div>

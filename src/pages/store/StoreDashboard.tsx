@@ -49,7 +49,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="pl-4 space-y-6">
       {/* Top Stats */}
       <div className="bg-blue-50 p-4 rounded grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="grid grid-cols-2  sm:grid-cols-4 lg:col-span-4 gap-4">
@@ -191,52 +191,62 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Pending Requisitions */}
+        {/* Requisitions */}
         <div className="bg-white p-4 rounded shadow overflow-auto border-[1px] border-gray-400">
           <div className="flex justify-between items-center mb-2 ">
-            <h4 className="font-semibold">Pending Requisitions</h4>
-            <MonthSelect />
+            <h4 className="font-semibold">Requisitions</h4>
+            {/* <MonthSelect /> */}
           </div>
-          <table className="w-full text-sm text-left border-t">
+          <table className="w-full text-sm text-left border-t border-collapse">
             <thead className="text-gray-600">
               <tr>
-                <th className="py-1">Department</th>
-                <th className="py-1">Item Name</th>
-                <th className="py-1">Date</th>
-                <th className="py-1">Unit Qty</th>
-                <th className="py-1">Sub Unit Qty</th>
+                <th className="py-1 px-2">Req. ID</th>
+                <th className="py-1 px-2">Department</th>
+                <th className="py-1 px-2">Date</th>
+                <th className="py-1 px-2">Issued By</th>
+                <th className="py-1 px-2">Status</th>
               </tr>
             </thead>
             <tbody>
               {[
                 {
-                  department: "Pharmacy",
-                  itemName: "Gloves",
-                  date: "06-08-2025",
-                  unitQty: 10,
-                  subUnitQty: 100,
-                },
-                {
-                  department: "General",
-                  itemName: "Thermometer",
-                  date: "06-08-2025",
-                  unitQty: 2,
-                  subUnitQty: 2,
-                },
-                {
+                  reqId: "3",
                   department: "OPD",
-                  itemName: "A4 Paper",
                   date: "06-08-2025",
-                  unitQty: 3,
-                  subUnitQty: 150,
+                  issuedBy: "",
+                  status: "Pending",
+                },
+                {
+                  reqId: "2",
+                  department: "OT",
+                  date: "06-08-2025",
+                  issuedBy: "Parvez Alam",
+                  status: "Approved",
+                },
+                {
+                  reqId: "1",
+                  department: "Reception",
+                  date: "06-08-2025",
+                  issuedBy: "Parvez Alam",
+                  status: "Approved",
                 },
               ].map((row, idx) => (
-                <tr key={idx} className="border-t">
-                  <td className="py-1">{row.department}</td>
-                  <td className="py-1">{row.itemName}</td>
-                  <td className="py-1">{row.date}</td>
-                  <td className="py-1">{row.unitQty}</td>
-                  <td className="py-1">{row.subUnitQty}</td>
+                <tr key={idx} className="border-t border-gray-300">
+                  <td className="py-1 px-2">
+                    {row.reqId}
+                  </td>
+                  <td className="py-1 px-2">
+                    {row.department}
+                  </td>
+                  <td className="py-1 px-2">
+                    {row.date}
+                  </td>
+                  <td className="py-1 px-2">
+                    {row.issuedBy}
+                  </td>
+                  <td className="py-1 px-2">
+                    {row.status}
+                  </td>
                 </tr>
               ))}
             </tbody>

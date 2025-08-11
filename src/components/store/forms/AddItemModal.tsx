@@ -63,7 +63,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-white/10 backdrop-blur-[3px] flex justify-center items-center z-50">
-      <div className="bg-gray-50 w-full max-w-7xl rounded-xl shadow-lg p-8 relative border-2">
+      <div className="bg-gray-50 w-full max-w-7xl rounded-xl border-gray-300-xl shadow-lg p-8 relative border-2">
         <button
           onClick={() => {
             reset();
@@ -89,7 +89,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <input
               {...register("itemName", { required: "Item Name is required" })}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.itemName && (
               <p className="text-red-500">{errors.itemName.message}</p>
@@ -104,7 +104,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <input
               {...register("itemCode", { required: "Item Code is required" })}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.itemCode && (
               <p className="text-red-500">{errors.itemCode.message}</p>
@@ -119,7 +119,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("itemType", { required: "Item Type is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -142,7 +142,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
                 required: "Item Category is required",
               })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -164,7 +164,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("itemSubCategory")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -186,7 +186,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
                 min: { value: 0, message: "Minimum value is 0" },
               })}
               type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.lowLevel && (
               <p className="text-red-500">{errors.lowLevel.message}</p>
@@ -204,7 +204,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
                 min: { value: 1, message: "Minimum value is 1" },
               })}
               type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.highLevel && (
               <p className="text-red-500">{errors.highLevel.message}</p>
@@ -217,7 +217,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("company")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -234,7 +234,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("stored")}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select One
@@ -251,7 +251,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <input
               {...register("hsn")}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
           </div>
 
@@ -263,7 +263,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("itemUnit", { required: "Item Unit is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select Unit
@@ -285,7 +285,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <select
               {...register("subItemUnit", { required: "Sub Unit is required" })}
               defaultValue=""
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             >
               <option value="" disabled>
                 Select Unit
@@ -310,7 +310,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
                 min: { value: 1, message: "Must be at least 1" },
               })}
               type="number"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.subUnitQty && (
               <p className="text-red-500">{errors.subUnitQty.message}</p>
@@ -325,7 +325,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <input
               {...register("rackNo", { required: "Rack No. is required" })}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
             {errors.rackNo && (
               <p className="text-red-500">{errors.rackNo.message}</p>
@@ -338,7 +338,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <input
               {...register("shelfNo")}
               type="text"
-              className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              className="w-full border rounded border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
             />
           </div>
 

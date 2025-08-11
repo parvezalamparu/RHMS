@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -76,7 +76,7 @@ const RequisitionPage = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="pl-2 min-h-screen bg-gray-50">
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] px-4 max-h-14">
         <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase pt-5">Requisitions</h1>
         <Button
@@ -95,7 +95,7 @@ const RequisitionPage = () => {
           <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
           <select
             id="pageSize"
-            className="border rounded px-2 py-1 text-sm"
+            className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(parseInt(e.target.value));
@@ -111,7 +111,7 @@ const RequisitionPage = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          className="border border-gray-300 px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => {

@@ -1,6 +1,8 @@
 import LoginForm from "../../components/general/LoginForm";
+import { useCustomTitle } from "../../hooks/useCustomTitle";
 
 const LoginPage = () => {
+  useCustomTitle('Rainbow | Login');
   return (
     <div className="flex h-screen items-center justify-center bg-[url('/src/assets/login-bg.jpg')] bg-cover bg-center backdrop-blur-[2px] opacity-100 px-4">
       <div className="flex h-[500px] w-[800px] rounded-2xl overflow-hidden shadow-2xl  bg-white/20 border-6 border-[#035d67]">

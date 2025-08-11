@@ -115,7 +115,7 @@ const Users = () => {
           </label>
           <select
             id="pageSize"
-            className="border rounded px-2 py-1 text-sm"
+            className="border border-gray-300 rounded px-2 py-1 text-sm cursor-pointer"
             value={usersPerPage}
             onChange={(e) => {
               setUsersPerPage(parseInt(e.target.value));
@@ -131,7 +131,7 @@ const Users = () => {
 
         <input
           type="search"
-          className="border px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          className="border border-gray-300 px-3 py-2 rounded text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           placeholder="Search by Name or ID..."
           value={searchTerm}
           onChange={(e) => {

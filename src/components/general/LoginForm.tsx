@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa6";
+import toast, { Toaster } from "react-hot-toast";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -15,8 +16,9 @@ const LoginForm = () => {
     if (email && password) {
       // Simulate auth success
       navigate("/dashboard");
+      toast.success("Login successful!");
     } else {
-      alert("Please enter both email and password");
+      toast.error("Please enter both email and password");
     }
   };
   const togglePassword = () => {
@@ -25,7 +27,8 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="flex items-center border rounded-2xl px-3 py-2 bg-white">
+      <Toaster position="top-right" reverseOrder={false} />
+      <div className="flex items-center border-2 border-blue-400 rounded-2xl px-3 py-2 bg-white">
         <FaEnvelope className="text-gray-500 text-lg mr-2" />
         <input
           type="email"
@@ -37,7 +40,7 @@ const LoginForm = () => {
         />
       </div>
 
-      <div className="flex items-center border rounded-2xl px-3 py-2 bg-white mt-4">
+      <div className="flex items-center border-2 border-blue-400 rounded-2xl px-3 py-2 bg-white mt-4">
         <FaLock className="text-gray-500 text-lg mr-2" />
         <input
           type={showPassword ? "text" : "password"}
@@ -57,7 +60,7 @@ const LoginForm = () => {
           <input type="radio" />
           <span>Remember me</span>
         </label>
-        <a href="#" className="text-sm text-blue-500 hover:underline">
+        <a href="#" className="text-sm text-blue-900 hover:underline">
           Forgot Password?
         </a>
       </div>
