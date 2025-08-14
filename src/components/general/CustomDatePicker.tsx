@@ -2,7 +2,12 @@ import { useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
-const CustomDatePicker = () => {
+type CustomDatePickerProps = {
+  defaultDate?: string;
+  onChange?: (date: string) => void;
+};
+
+const CustomDatePicker: React.FC<CustomDatePickerProps> = () => {
   const [date, setDate] = useState<Date | string>(new Date());
 
   return (

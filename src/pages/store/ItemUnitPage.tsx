@@ -144,10 +144,10 @@ const ItemUnitPage = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SL</th>
-              <th className="px-4 py-3 border-r border-gray-300">Item Unit</th>
-              <th className="px-4 py-3 border-r border-gray-300">Status</th>
-              <th className="px-4 py-3">Action</th>
+              <th className="px-4 py-2 border-r border-gray-300">SL</th>
+              <th className="px-4 py-2 border-r border-gray-300">Item Unit</th>
+              <th className="px-4 py-2 border-r border-gray-300">Status</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -158,17 +158,17 @@ const ItemUnitPage = () => {
                   unit.status ? "hover:bg-gray-50" : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">{unit.name}</td>
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">{unit.name}</td>
+                <td className="px-4 border-r border-gray-200">
                   <ToggleSwitch
                     checked={unit.status}
                     onChange={() => handleStatusToggle(unit.id)}
                   />
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"
@@ -215,7 +215,7 @@ const ItemUnitPage = () => {
             value={newUnitName}
             onChange={(e) => setNewUnitName(e.target.value)}
             placeholder="Enter unit name"
-            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end gap-4 mt-6">
             <Button
@@ -255,7 +255,7 @@ const ItemUnitPage = () => {
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
             placeholder="Edit unit name"
-            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end gap-4 mt-6">
             <Button

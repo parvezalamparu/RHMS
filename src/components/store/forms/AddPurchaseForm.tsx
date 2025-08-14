@@ -341,7 +341,7 @@ const AddPurchaseForm = () => {
       </div>
 
       {/* Total Calculations */}
-      <div className="w-full flex justify-end mt-6">
+      <div className="w-full flex justify-end  mt-6">
         <div className="grid grid-cols-1 md:grid-rows-6 gap-1">
           {[
             { label: "SUB TOTAL", name: "subTotal" },

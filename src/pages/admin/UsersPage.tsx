@@ -204,7 +204,7 @@ const Users = () => {
                     border="border border-gray-500"
                     textColor="text-blue-900"
                     hover="hover:bg-gray-200"
-                    onClick={() => alert("Open EditUserModal")}
+                    onClick={() => navigate(`/admin/users/${user.id}/edit`, { state: user })}
                   />
                   <Button
                     icon={<MdInfoOutline className="text-lg" />}

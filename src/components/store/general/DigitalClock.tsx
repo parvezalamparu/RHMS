@@ -23,7 +23,8 @@ const DigitalClock: React.FC = () => {
       setTime(formatTime(new Date()));
     }, 1000);
 
-    return () => clearInterval(interval); // cleanup
+    return () => {
+      clearInterval(interval);} // cleanup
   }, []);
 
   const date = new Date();

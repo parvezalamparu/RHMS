@@ -161,12 +161,12 @@ const ItemCategoryPage = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SL</th>
-              <th className="px-4 py-3 border-r border-gray-300">
+              <th className="px-4 py-2 border-r border-gray-300">SL</th>
+              <th className="px-4 py-2 border-r border-gray-300">
                 Category Name
               </th>
-              <th className="px-4 py-3 border-r border-gray-300">Status</th>
-              <th className="px-4 py-3">Action</th>
+              <th className="px-4 py-2 border-r border-gray-300">Status</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -177,19 +177,19 @@ const ItemCategoryPage = () => {
                   cat.status ? "hover:bg-gray-50" : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">
                   {cat.name}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">
                   <ToggleSwitch
                     checked={cat.status}
                     onChange={() => handleStatusToggle(cat.id)}
                   />
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"

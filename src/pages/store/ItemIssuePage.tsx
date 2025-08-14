@@ -128,11 +128,11 @@ const ItemIssuePage = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SN</th>
+              <th className="px-4 py-2 border-r border-gray-300">SN</th>
               {["id", "requisitionNo", "issueTo", "generatedBy", "date"].map((key) => (
                 <th
                   key={key}
-                  className="px-4 py-3 border-r border-gray-300 cursor-pointer select-none"
+                  className="px-4 py-2 border-r border-gray-300 cursor-pointer select-none"
                   onClick={() => handleSort(key as keyof Issue)}
                 >
                   {key === "id"
@@ -154,7 +154,7 @@ const ItemIssuePage = () => {
                   </span>
                 </th>
               ))}
-              <th className="px-4 py-3">Action</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -163,13 +163,13 @@ const ItemIssuePage = () => {
                 key={issue.id}
                 className="border-t border-gray-300 hover:bg-gray-50 transition duration-200"
               >
-                <td className="px-4 py-2 border-r border-gray-200">{startIdx + index + 1}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{issue.id}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{issue.requisitionNo}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{issue.issueTo}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{issue.generatedBy}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{issue.date}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-1 border-r border-gray-200">{startIdx + index + 1}</td>
+                <td className="px-4 py-1 border-r border-gray-200">{issue.id}</td>
+                <td className="px-4 py-1 border-r border-gray-200">{issue.requisitionNo}</td>
+                <td className="px-4 py-1 border-r border-gray-200">{issue.issueTo}</td>
+                <td className="px-4 py-1 border-r border-gray-200">{issue.generatedBy}</td>
+                <td className="px-4 py-1 border-r border-gray-200">{issue.date}</td>
+                <td className="px-4 py-1">
                   <Button
                     icon={<FaRegEye className="text-lg" />}
                     bgcolor="bg-gray-100"

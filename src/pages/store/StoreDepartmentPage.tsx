@@ -135,10 +135,10 @@ const StoreDepartmentPage = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SL</th>
-              <th className="px-4 py-3 border-r border-gray-300">Department Name</th>
-              <th className="px-4 py-3 border-r border-gray-300">Status</th>
-              <th className="px-4 py-3">Action</th>
+              <th className="px-4 py-2 border-r border-gray-300">SL</th>
+              <th className="px-4 py-2 border-r border-gray-300">Department Name</th>
+              <th className="px-4 py-2 border-r border-gray-300">Status</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -149,17 +149,17 @@ const StoreDepartmentPage = () => {
                   dept.status ? "hover:bg-gray-50" : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">
                   {startIdx + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">{dept.name}</td>
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 border-r border-gray-200">{dept.name}</td>
+                <td className="px-4 border-r border-gray-200">
                   <ToggleSwitch
                     checked={dept.status}
                     onChange={() => handleStatusToggle(dept.id)}
                   />
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"
@@ -200,7 +200,7 @@ const StoreDepartmentPage = () => {
             value={newDepartment}
             onChange={(e) => setNewDepartment(e.target.value)}
             placeholder="Enter department name"
-            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end mt-4">
             <div className="mr-4">
@@ -238,7 +238,7 @@ const StoreDepartmentPage = () => {
               setEditDepartment((prev) => (prev ? { ...prev, name: e.target.value } : null))
             }
             placeholder="Enter department name"
-            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end mt-4">
             <div className="mr-4">

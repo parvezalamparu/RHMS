@@ -4,6 +4,7 @@ import MonthSelect from "../../components/general/MonthSelect";
 import CircularProgressBar from "../../components/store/general/CircularProgressBar";
 import RichTextEditor from "../../components/general/RichTextEditor";
 import { useState } from "react";
+import Badge from "../../components/general/Badge";
 
 const Dashboard = () => {
   // const [selectedDate, setSelectedDate] = useState(new Date());
@@ -61,7 +62,7 @@ const Dashboard = () => {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white p-12 border-[1px] border-gray-400 rounded-xl shadow text-center"
+              className="bg-white p-12 border-5 border-gray-300 rounded-xl shadow text-center hover:shadow-2xl"
             >
               <p className="text-2xl text-blue-600 font-bold">{item.count}</p>
               <p className="text-xs text-gray-500">{item.unit}</p>
@@ -71,7 +72,7 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-        <div className="bg-white p-4 shadow space-y-3  border-[1px] border-gray-400 rounded-xl">
+        <div className="bg-white p-4 shadow space-y-3  border-5 border-gray-300 rounded-xl hover:shadow-2xl">
           <h3 className="text-gray-600 font-medium">Inventory Summary</h3>
           <div className="text-sm">
             <p className="text-gray-600">Quantity In Hand</p>
@@ -87,7 +88,7 @@ const Dashboard = () => {
       {/* Product Details & Top Items */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
         {/* Product Summary */}
-        <div className="bg-white p-4 rounded shadow flex border-[1px] border-gray-400">
+        <div className="bg-white p-4 rounded shadow flex border-3 border-gray-300 hover:shadow-2xl">
           <div className="w-1/2 border-r pr-4 m-auto">
             <h4 className="font-semibold mb-2">Product Details</h4>
             <ul className="text-sm space-y-2">
@@ -121,7 +122,7 @@ const Dashboard = () => {
           </div>
         </div>
         {/* Top Selling Items with Scroll */}
-        <div className="bg-white p-4 rounded shadow border-[1px] border-gray-400">
+        <div className="bg-white p-4 rounded shadow border-3 border-gray-300 hover:shadow-2xl">
           <div className="flex justify-between items-center mb-3">
             <h4 className="font-semibold">Most requisition item</h4>
             {/* <DateRangePicker
@@ -177,7 +178,7 @@ const Dashboard = () => {
       {/* Purchase Order & Sales Order */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Purchase Order */}
-        <div className="bg-white p-4 rounded shadow border-[1px] border-gray-400">
+        <div className="bg-white p-4 rounded shadow border-3 border-gray-300 hover:shadow-2xl">
           <div className="flex justify-between items-center mb-2">
             <h4 className="font-semibold">Purchase Order</h4>
             <MonthSelect />
@@ -192,7 +193,7 @@ const Dashboard = () => {
         </div>
 
         {/* Requisitions */}
-        <div className="bg-white p-4 rounded shadow overflow-auto border-[1px] border-gray-400">
+        <div className="bg-white p-4 rounded shadow overflow-auto border-3 border-gray-300 hover:shadow-2xl">
           <div className="flex justify-between items-center mb-2 ">
             <h4 className="font-semibold">Requisitions</h4>
             {/* <MonthSelect /> */}
@@ -214,21 +215,21 @@ const Dashboard = () => {
                   department: "OPD",
                   date: "06-08-2025",
                   issuedBy: "",
-                  status: "Pending",
+                  status: <Badge label="Pending" color="bg-red-400" text="text-white" />,
                 },
                 {
                   reqId: "2",
                   department: "OT",
                   date: "06-08-2025",
                   issuedBy: "Parvez Alam",
-                  status: "Approved",
+                  status: <Badge label="Approved" color="bg-green-400" text="text-white" />,
                 },
                 {
                   reqId: "1",
                   department: "Reception",
                   date: "06-08-2025",
                   issuedBy: "Parvez Alam",
-                  status: "Approved",
+                  status: <Badge label="Approved" color="bg-green-400" text="text-white" />,
                 },
               ].map((row, idx) => (
                 <tr key={idx} className="border-t border-gray-300">

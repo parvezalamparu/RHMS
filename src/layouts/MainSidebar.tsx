@@ -372,13 +372,13 @@ const MainSidebar = () => {
             </ul>
           </li>
 
-          {/*Registration*/}
+          {/*Register*/}
 
           <li>
             <button
-              onClick={() => toggleSubMenu("Registration")}
+              onClick={() => toggleSubMenu("Register")}
               className={`flex w-full text-white items-center px-4 py-3 space-x-4 rounded-md ${
-                openMenu === "Registration"
+                openMenu === "Register"
                   ? "bg-gray-700 text-yellow-300"
                   : "hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -387,18 +387,18 @@ const MainSidebar = () => {
                 <FaCashRegister  />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
-                Registration
+                Register
               </span>
               <span className="hidden group-hover:inline ml-auto">
-                {openMenu === "Registration" ? <FaChevronDown /> : <FaChevronRight />}
+                {openMenu === "Register" ? <FaChevronDown /> : <FaChevronRight />}
               </span>
             </button>
 
-            {/* Registration Submenu */}
+            {/* Register Submenu */}
             <ul
               className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
               ${
-                openMenu === "Registration"
+                openMenu === "Register"
                   ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
                   : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
               }`}
@@ -406,38 +406,38 @@ const MainSidebar = () => {
               {/* Normal ipd links */}
               <li>
                 <Link
-                  to="/registration/admission-registration"
+                  to="/register/admission-register"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/admission-registration")
+                    isActive("register/admission-register")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  Admission Registration
+                  Admission Regiser
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/registration/patient-registration"
+                  to="/register/patient-register"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/admission-registration")
+                    isActive("register/patient-register")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  Patient Registration
+                  Patient Register
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/registration/nursery"
+                  to="/register/baby-register"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/nursery")
+                    isActive("register/register")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  Nursery
+                  Baby Register
                 </Link>
               </li>
             </ul>

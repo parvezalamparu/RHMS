@@ -18,6 +18,7 @@ import ViewUser from "./pages/admin/ViewUserPage";
 import RoleList from "./pages/admin/RoleList";
 import PermissionList from "./pages/admin/PermissionList";
 import AssignPermissionPage from "./pages/admin/AssignPermissionPage";
+import EditUserForm from "./pages/forms/EditUserForm";
 
 // Store Pages
 import Dashboard from "./pages/store/StoreDashboard";
@@ -42,6 +43,14 @@ import ItemIssue from "./pages/store/ItemIssuePage";
 import Invoice from "./pages/store/InvoicePage"
 import ViewItemDetails from "./pages/store/ViewItemDetails";
 import IssueItemForm from "./components/store/forms/IssueItemForm";
+import GeneralStockReport from "./pages/store/GeneralStockReport";
+import ViewPurchase from "./pages/store/ViewPurchase";
+import DepartmentStockReport from "./pages/store/DepartmentStockReport";
+import RequisitionReport from "./pages/store/RequisitionReport";
+import PurchaseOrderReport from "./pages/store/PurchaseOrderReport";
+import PurchaseReport from "./pages/store/PurchaseReport";
+import IssueReport from "./pages/store/ItemIssueReport";
+import ItemStockReport from "./pages/store/ItemStockReport";
 
 
 // React hot toast
@@ -50,6 +59,7 @@ import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
+    
     <Toaster position="top-right" reverseOrder= {false} />
     <Router>
       <Routes>
@@ -65,7 +75,7 @@ function App() {
           <Route path="/admin/roles" element={<RoleList />} />
           <Route path="/admin/permissions" element={<PermissionList />} />
           <Route path="/role/assign-permission" element={<AssignPermissionPage />} />
-
+          <Route path="/admin/users/:id/edit" element={<EditUserForm />} />
 
         </Route>
 
@@ -93,6 +103,14 @@ function App() {
           <Route path="/store/invoice" element={<Invoice />} />
           <Route path="/store/all-items/:id" element={<ViewItemDetails />} />
           <Route path="/store/issue/add-issue-form" element={<IssueItemForm />} />
+          <Route path="/store/general-stock-report" element={<GeneralStockReport />} />
+          <Route path="/store/purchase-list/view/:id" element={<ViewPurchase />} />
+          <Route path="/store/Department-stock-report" element={<DepartmentStockReport />} />
+          <Route path="/store/requisition-report" element={<RequisitionReport />} />
+          <Route path="/store/purchase-order-report" element={<PurchaseOrderReport />} />
+          <Route path="/store/purchase-report" element={<PurchaseReport />} />
+          <Route path="/store/item-issue-report" element={<IssueReport />} />
+          <Route path="/store/item-stock-report" element={<ItemStockReport />} />
 
 
         </Route>

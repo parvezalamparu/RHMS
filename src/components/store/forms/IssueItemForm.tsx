@@ -171,7 +171,7 @@ const IssueItemForm: React.FC = () => {
           <select
             value={formItem.itemName}
             onChange={(e) => handleFormItemChange("itemName", e.target.value)}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.itemName ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 h-[2.15rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
           >
             <option value="">Select...</option>
             <option value="Item A">Item A</option>
@@ -186,7 +186,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Batch No."
             value={formItem.batchNo}
             onChange={(e) => handleFormItemChange("batchNo", e.target.value)}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.batchNo ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.batchNo ? "border-red-500" : ""}`}
           />
           {errors.batchNo && <p className="text-xs text-red-500">{errors.batchNo}</p>}
         </div>
@@ -196,7 +196,7 @@ const IssueItemForm: React.FC = () => {
             type="date"
             value={formItem.expDate}
             onChange={(e) => handleFormItemChange("expDate", e.target.value)}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.expDate ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.expDate ? "border-red-500" : ""}`}
           />
           {errors.expDate && <p className="text-xs text-red-500">{errors.expDate}</p>}
         </div>
@@ -207,7 +207,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Qty"
             value={formItem.unitQty}
             onChange={(e) => handleFormItemChange("unitQty", parseInt(e.target.value))}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.unitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
           />
           {errors.unitQty && <p className="text-xs text-red-500">{errors.unitQty}</p>}
         </div>
@@ -218,7 +218,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Unit"
             value={formItem.unit}
             onChange={(e) => handleFormItemChange("unit", e.target.value)}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.unit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
           />
           {errors.unit && <p className="text-xs text-red-500">{errors.unit}</p>}
         </div>
@@ -229,7 +229,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Sub Qty"
             value={formItem.subUnitQty}
             onChange={(e) => handleFormItemChange("subUnitQty", parseInt(e.target.value))}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.subUnitQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
           />
           {errors.subUnitQty && <p className="text-xs text-red-500">{errors.subUnitQty}</p>}
         </div>
@@ -240,7 +240,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Sub Unit"
             value={formItem.subUnit}
             onChange={(e) => handleFormItemChange("subUnit", e.target.value)}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.subUnit ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
           />
           {errors.subUnit && <p className="text-xs text-red-500">{errors.subUnit}</p>}
         </div>
@@ -251,7 +251,7 @@ const IssueItemForm: React.FC = () => {
             placeholder="Avail."
             value={formItem.availableQty}
             onChange={(e) => handleFormItemChange("availableQty", parseInt(e.target.value))}
-            className={`w-full px-2 py-1 border border-gray-300 rounded ${errors.availableQty ? "border-red-500" : ""}`}
+            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.availableQty ? "border-red-500" : ""}`}
           />
           {errors.availableQty && <p className="text-xs text-red-500">{errors.availableQty}</p>}
         </div>
@@ -303,7 +303,7 @@ const IssueItemForm: React.FC = () => {
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
+          className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           rows={3}
         />
       </div>

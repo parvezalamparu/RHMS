@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import AddItemModal from "../../components/store/forms/AddItemModal";
 import EditItemModal from "../../components/store/forms/EditItemModal";
 import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
@@ -8,7 +8,8 @@ import { FaRegEdit } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { MdInfoOutline } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import usePreviousPage from "../../hooks/usePreviousPage";
 
 export interface Item {
   id: number;
@@ -37,6 +38,7 @@ export interface NewItemData
 
 const InventoryPage = () => {
   const navigate = useNavigate();
+  usePreviousPage();
 
 useEffect(() => {document.title = "Rhds | Items"});
 
@@ -143,6 +145,7 @@ useEffect(() => {document.title = "Rhds | Items"});
     setShowAddModal(false);
   };
 
+
   return (
     <div className="flex flex-col min-h-screen pl-2">
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
@@ -195,7 +198,7 @@ useEffect(() => {document.title = "Rhds | Items"});
         <table className="w-full text-sm text-gray-800 border-collapse">
           <thead className="bg-[var(--base-color)] text-xs font-semibold">
             <tr>
-              <th className="px-4 py-3 border border-gray-300 text-left">SN</th>
+              <th className="px-4 py-2 border border-gray-300 text-left">SN</th>
               {[
                 "itemName",
                 "itemCategory",
@@ -206,7 +209,7 @@ useEffect(() => {document.title = "Rhds | Items"});
               ].map((key) => (
                 <th
                   key={key}
-                  className="px-4 py-3 border border-gray-300 text-left cursor-pointer select-none"
+                  className="px-4 py-2 border border-gray-300 text-left cursor-pointer select-none"
                   onClick={() => handleSort(key as keyof Item)}
                 >
                   {key === "hsn"
@@ -246,29 +249,29 @@ useEffect(() => {document.title = "Rhds | Items"});
                     : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {startIndex + index + 1}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {item.itemName}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {item.itemCategory}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {item.itemUnit}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {item.subItemUnit}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">{item.hsn}</td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">{item.hsn}</td>
+                <td className="px-4 border border-gray-300">
                   <ToggleSwitch
                     checked={item.activated}
                     onChange={() => toggleActivation(item.id)}
                   />
                 </td>
-                <td className="px-4 py-2 border-gray-300 flex gap-2">
+                <td className="px-4 py-1 border-gray-300 flex gap-2 items-center">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"
@@ -278,6 +281,7 @@ useEffect(() => {document.title = "Rhds | Items"});
                     onClick={() => setEditItem(item)}
                     title="Edit Item"
                   />
+                  {/* view item */}
                   <Button
                     icon={<MdInfoOutline className="text-lg" />}
                     bgcolor="bg-gray-100"
