@@ -89,28 +89,30 @@ const ViewPurchase = () => {
       </div>
       {/* HEADER */}
       <div className="mt-4 bg-gray-100">
-        <h2 className="text-xl font-bold mb-2">Purchase #{header.id}</h2>
-        <div className="flex grid-cols-6 gap-6">
+        <div className="grid grid-cols-3 gap-2">
           <p>
-            <strong>Date:</strong> {header.date}
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Purchase ID:</strong> {header.id}
           </p>
           <p>
-            <strong>Vendor:</strong> {header.vendor}
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Date:</strong> {header.date}
           </p>
           <p>
-            <strong>Invoice No:</strong> {header.invoiceNo}
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Vendor:</strong> {header.vendor}
           </p>
           <p>
-            <strong>Purchase Type:</strong> {header.purchaseType}
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Invoice No:</strong> {header.invoiceNo}
           </p>
           <p>
-            <strong>PO No:</strong> {header.poNo}
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Purchase Type:</strong> {header.purchaseType}
+          </p>
+          <p>
+            <strong><span className="text-red-600 font-semibold mr-2">☮</span>PO No:</strong> {header.poNo}
           </p>
         </div>
       </div>
 
       {/* ITEMS TABLE */}
-      <div className="mt-6 overflow-auto border rounded">
+      <div className="mt-6 overflow-auto border border-gray-300 rounded">
         <table className="min-w-[1000px] w-full border-collapse text-sm">
           <thead className="bg-[#2fe2fe] text-gray-900">
             <tr>
@@ -132,7 +134,7 @@ const ViewPurchase = () => {
                 "IGST",
                 "Amount",
               ].map((col, i) => (
-                <th key={i} className="border px-2 py-1">
+                <th key={i} className="border border-gray-300 px-2 py-1">
                   {col}
                 </th>
               ))}
@@ -159,7 +161,7 @@ const ViewPurchase = () => {
                   "igst",
                   "amount",
                 ].map((key, i) => (
-                  <td key={i} className="border px-2 py-1 text-center">
+                  <td key={i} className="border border-gray-300 px-2 py-1 text-center">
                     {row[key]}
                   </td>
                 ))}

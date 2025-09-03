@@ -50,15 +50,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="pl-4 space-y-6">
+    <div className="pl-4 mb-2 space-y-6">
       {/* Top Stats */}
       <div className="bg-blue-50 p-4 rounded grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="grid grid-cols-2  sm:grid-cols-4 lg:col-span-4 gap-4">
           {[
-            { label: "To Be Packed", count: 25, unit: "Qty" },
-            { label: "To Be Shipped", count: 1, unit: "Pkgs" },
-            { label: "To Be Delivered", count: 3, unit: "Pkgs" },
-            { label: "To Be Invoiced", count: 4, unit: "Qty" },
+            { label: "Today Purchase", count: 25, unit: "Qty" },
+            { label: "Canceled Requisition", count: 1, unit: "Pkgs" },
+            { label: "Partial Requisition", count: 3, unit: "Pkgs" },
+            { label: "Pending Requisition", count: 4, unit: "Qty" },
           ].map((item, idx) => (
             <div
               key={idx}
@@ -232,7 +232,7 @@ const Dashboard = () => {
                   status: <Badge label="Approved" color="bg-green-400" text="text-white" />,
                 },
               ].map((row, idx) => (
-                <tr key={idx} className="border-t border-gray-300">
+                <tr key={idx} className="border-t border-gray-400">
                   <td className="py-1 px-2">
                     {row.reqId}
                   </td>

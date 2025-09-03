@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
-import { FaRegEye, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
+import { MdInfoOutline } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 
 interface Requisition {
@@ -26,6 +29,7 @@ const generateRandomRequisitions = (count: number): Requisition[] => {
 };
 
 const RequisitionPage = () => {
+
   const navigate = useNavigate();
   const [requisitions, setRequisitions] = useState<Requisition[]>(generateRandomRequisitions(100));
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,6 +44,12 @@ const RequisitionPage = () => {
       }
       return { key, direction: "asc" };
     });
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this requisition?")) {
+      setRequisitions((prev) => prev.filter((r) => r.id !== id));
+    }
   };
 
   const sortedRequisitions = [...requisitions].sort((a, b) => {
@@ -68,16 +78,11 @@ const RequisitionPage = () => {
   const startNumber = startIdx + 1;
   const endNumber = startIdx + currentRequisitions.length;
 
-  const handleEdit = (id: string) => {
-    const req = requisitions.find((r) => r.id === id);
-    if (req) {
-      alert(`Edit Requisition:\n\n${JSON.stringify(req, null, 2)}`);
-    }
-  };
+  
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] px-4 max-h-14">
+    <div className="pl-2 bg-gray-50">
+      <div className="flex justify-between items-center mb-2 bg-[var(--base-color)] px-4 max-h-14">
         <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase pt-5">Requisitions</h1>
         <Button
           bgcolor="bg-white"
@@ -90,7 +95,7 @@ const RequisitionPage = () => {
         />
       </div>
 
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
           <select
@@ -161,14 +166,30 @@ const RequisitionPage = () => {
                 <td className="px-4 py-1 border-r border-gray-200">{req.generatedBy}</td>
                 <td className="px-4 py-1 border-r border-gray-200">{req.department}</td>
                 <td className="px-4 py-1 border-r border-gray-200">{req.date}</td>
-                <td className="px-4 py-1">
+                <td className="px-4 py-1.5 flex gap-1.5 max-w-15">
                   <Button
-                    icon={<FaRegEye className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
+                    icon={<MdInfoOutline className="text-lg" />}
+                    bgcolor="bg-blue-200"
+                    border="border-2 border-blue-600"
                     textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
-                    onClick={() => handleEdit(req.id)}
+                    hover="hover:bg-blue-100"
+                    onClick={() => navigate(`/store/requisition/view/${req.id}`)}
+                  />
+                  <Button
+                    icon={<FaRegEdit className="text-lg" />}
+                    bgcolor="bg-yellow-200"
+                    border="border-2 border-yellow-600"
+                    textColor="text-yellow-900"
+                    hover="hover:bg-yellow-100"
+                    onClick={() => navigate(`/store/requisition/edit/${req.id}`, { state: { requisition: req } })}
+                  />
+                  <Button
+                    icon={<MdDelete className="text-lg" />}
+                    bgcolor="bg-red-200"
+                    border="border-2 border-red-600"
+                    textColor="text-red-900"
+                    hover="hover:bg-red-100"
+                    onClick={() => handleDelete(req.id)}
                   />
                 </td>
               </tr>

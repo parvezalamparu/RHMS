@@ -89,7 +89,7 @@ const ItemTypePage = () => {
   };
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
+    <div className="pl-2 bg-gray-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">
@@ -172,10 +172,10 @@ const ItemTypePage = () => {
                 <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
-                    textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    bgcolor="bg-yellow-200"
+                    border="border-2 border-yellow-600"
+                    textColor="text-yellow-900"
+                    hover="hover:bg-yellow-100"
                     onClick={() => openEditModal(type)}
                   />
                 </td>
@@ -216,7 +216,7 @@ const ItemTypePage = () => {
             value={newType}
             onChange={(e) => setNewType(e.target.value)}
             placeholder="Enter type name"
-            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end gap-3 mt-8">
             <Button
@@ -256,7 +256,7 @@ const ItemTypePage = () => {
             value={editType}
             onChange={(e) => setEditType(e.target.value)}
             placeholder="Enter type name"
-            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end gap-3 mt-8">
             <Button

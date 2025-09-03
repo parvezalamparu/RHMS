@@ -105,7 +105,7 @@ const ItemCategoryPage = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="pl-2 bg-gray-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">
@@ -192,10 +192,10 @@ const ItemCategoryPage = () => {
                 <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
+                    bgcolor="bg-blue-200"
+                    border="border-2 border-blue-600"
                     textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    hover="hover:bg-blue-100"
                     onClick={() => handleEdit(cat.id)}
                   />
                 </td>
@@ -244,10 +244,10 @@ const ItemCategoryPage = () => {
           <div className="col-span-4 mt-8 flex justify-end">
             <div className="mx-4">
               <Button
-                bgcolor="bg-red-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-red-300"
+                bgcolor=""
+                border="border-3"
+                textColor="text-red-700"
+                hover="hover:text-red-500"
                 name="Close"
                 onClick={() => setIsModalOpen(false)}
                 icon={<IoIosCloseCircleOutline />}
@@ -255,11 +255,11 @@ const ItemCategoryPage = () => {
             </div>
             <div>
               <Button
-                bgcolor="bg-green-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-green-300"
-                name="Save"
+                bgcolor=""
+                border="border-3"
+                textColor="text-green-800"
+                hover="hover:text-green-600"
+                name="Update"
                 onClick={handleAddCategory}
                 icon={<BiSave />}
               />
@@ -291,10 +291,10 @@ const ItemCategoryPage = () => {
           <div className="col-span-4 mt-8 flex justify-end">
             <div className="mx-4">
               <Button
-                bgcolor="bg-red-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-red-300"
+                bgcolor=""
+                border="border-3"
+                textColor="text-red-700"
+                hover="hover:text-red-500"
                 name="Close"
                 onClick={() => setIsEditModalOpen(false)}
                 icon={<IoIosCloseCircleOutline />}
@@ -302,10 +302,10 @@ const ItemCategoryPage = () => {
             </div>
             <div>
               <Button
-                bgcolor="bg-green-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-green-300"
+                bgcolor=""
+                border="border-3"
+                textColor="text-green-800"
+                hover="hover:text-green-600"
                 name="Update"
                 onClick={handleUpdateCategory}
                 icon={<BiSave />}

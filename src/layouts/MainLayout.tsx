@@ -1,5 +1,5 @@
 import Topbar from "../components/general/Topbar";
-import MainSidebar from "./MainSidebar"; // path as per your project
+import MainSidebar from "./MainSidebar"; 
 import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
@@ -8,7 +8,7 @@ const MainLayout = () => {
       <MainSidebar />
       <div  className="mt-16 pl-12 w-full h-[calc(100vh-4rem)] bg-gray-100 overflow-y-auto">
         <Topbar />
-        <main className="p-4">
+        <main className="px-4 pt-2">
           <Outlet />
         </main>
       </div>

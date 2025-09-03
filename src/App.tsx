@@ -38,7 +38,6 @@ import ItemStorePage from "./pages/store/ItemStorePage";
 import StoreDepartmentPage from "./pages/store/StoreDepartmentPage";
 import ReturnPage from "./pages/store/ReturnPage";
 import RepairItems from "./pages/store/RepairItemsPage";
-import Reports from "./pages/store/ReportsPage";
 import ItemIssue from "./pages/store/ItemIssuePage";
 import Invoice from "./pages/store/InvoicePage"
 import ViewItemDetails from "./pages/store/ViewItemDetails";
@@ -51,12 +50,21 @@ import PurchaseOrderReport from "./pages/store/PurchaseOrderReport";
 import PurchaseReport from "./pages/store/PurchaseReport";
 import IssueReport from "./pages/store/ItemIssueReport";
 import ItemStockReport from "./pages/store/ItemStockReport";
+import ViewRequisitionDetails from "./pages/store/ViewRequisitionDetails";
+import ViewIssueDetails from "./pages/store/ViewIssueDetails"
+import ReturnForm from "./components/store/forms/ReturnForm";
+import DiscardItemsPage from "./pages/store/DiscardItemsPage";
+import ViewReturnItemDetails from "./pages/store/ViewReturnItemDetails";
+import EditRequisitionForm from "./components/store/forms/EditRequisitionForm";
+import EditPurchaseOrderForm from "./components/store/forms/EditPurchaseOrderForm";
+import AllForms from "./pages/store/AllForms";
 
 
 // React hot toast
 import { Toaster } from "react-hot-toast";
 
 function App() {
+
   return (
     <>
     
@@ -98,7 +106,6 @@ function App() {
           <Route path="/store/store-department" element={<StoreDepartmentPage />} />
           <Route path="/store/return" element={<ReturnPage />} />
           <Route path="/store/repair-items" element={<RepairItems />} />
-          <Route path="/store/reports" element={<Reports />} />
           <Route path="/store/item-issue" element={<ItemIssue />} />
           <Route path="/store/invoice" element={<Invoice />} />
           <Route path="/store/all-items/:id" element={<ViewItemDetails />} />
@@ -111,6 +118,14 @@ function App() {
           <Route path="/store/purchase-report" element={<PurchaseReport />} />
           <Route path="/store/item-issue-report" element={<IssueReport />} />
           <Route path="/store/item-stock-report" element={<ItemStockReport />} />
+          <Route path="/store/requisition/view/:id" element={<ViewRequisitionDetails />} />
+          <Route path="/store/issue-item/view/:id" element={<ViewIssueDetails />} />
+          <Route path="/store/return-process/return-form" element={<ReturnForm />} />
+          <Route path="/store/discard-items" element={<DiscardItemsPage />} />
+          <Route path="/store/returned-items-details/:id" element={<ViewReturnItemDetails />} />
+          <Route path="/store/requisition/edit/:id" element={<EditRequisitionForm />} />
+          <Route path="/store/purchase-order/edit/:id" element={<EditPurchaseOrderForm />} />
+          <Route path="/store/all-forms" element={<AllForms />} />
 
 
         </Route>

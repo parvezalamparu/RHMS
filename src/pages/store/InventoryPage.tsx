@@ -147,7 +147,7 @@ useEffect(() => {document.title = "Rhds | Items"});
 
 
   return (
-    <div className="flex flex-col min-h-screen pl-2">
+    <div className="flex flex-col pl-2">
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">Items</h2>
         <Button
@@ -271,23 +271,23 @@ useEffect(() => {document.title = "Rhds | Items"});
                     onChange={() => toggleActivation(item.id)}
                   />
                 </td>
-                <td className="px-4 py-1 border-gray-300 flex gap-2 items-center">
+                <td className="px-4 py-1.5 border-gray-300 flex gap-2 items-center">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border border-gray-500"
+                    bgcolor="bg-yellow-300"
+                    border="border border-yellow-500"
                     textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    hover="hover:bg-yellow-200"
                     onClick={() => setEditItem(item)}
                     title="Edit Item"
                   />
                   {/* view item */}
                   <Button
                     icon={<MdInfoOutline className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border border-gray-500"
+                    bgcolor="bg-blue-200"
+                    border="border border-blue-500"
                     textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    hover="hover:bg-blue-100"
                     onClick={() =>
                       navigate(`/store/all-items/${item.id}`, { state: item })
                     }

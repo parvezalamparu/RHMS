@@ -1,15 +1,20 @@
 import LoginForm from "../../components/general/LoginForm";
 import { useCustomTitle } from "../../hooks/useCustomTitle";
+import { LiaWhatsapp } from "react-icons/lia";
 
 const LoginPage = () => {
-  useCustomTitle('Rainbow | Login');
+  useCustomTitle("Rainbow | Login");
   return (
     <div className="flex h-screen items-center justify-center bg-[url('/src/assets/login-bg.jpg')] bg-cover bg-center backdrop-blur-[2px] opacity-100 px-4">
       <div className="flex h-[500px] w-[800px] rounded-2xl overflow-hidden shadow-2xl  bg-white/20 border-6 border-[#035d67]">
-        
-        {/* Left branding section */}
-        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#035d67]/10 p-10 backdrop-blur-[4px]">
-          <h1 className="text-white text-4xl font-bold">Rainbow Hospital</h1>
+        {/* Left image section */}
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#035d67]/10 pr-1 backdrop-blur-[4px]">
+          {/* <img
+            src="/src/assets/hospital.jpg"
+            alt="Rainbow Hospital"
+            className="w-full h-full object-cover rounded-lg"
+          /> */}
+          <h1 className="text-2xl font-bold text-[#035d67]">Rainbow Hospital</h1>
         </div>
 
         {/* Right form section */}
@@ -19,9 +24,19 @@ const LoginPage = () => {
               Welcome
             </h2>
             <LoginForm />
+            <div className="flex flex-col items-center mt-4 text-sm font-semibold">
+              <p className="text-[#035d67] mb-1">Need Support? Message Us on WhatsApp</p>
+              <p className="flex items-center gap-2 text-violet-900">
+                <LiaWhatsapp className="text-green-600 text-lg" />
+                +91 8670047172
+              </p>
+              <p className="flex items-center gap-2 text-violet-900">
+                <LiaWhatsapp className="text-green-800 text-lg" />
+                +91 700196990
+              </p>
+            </div>
           </div>
         </div>
-        
       </div>
     </div>
   );

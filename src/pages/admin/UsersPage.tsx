@@ -94,7 +94,7 @@ const Users = () => {
   const endNumber = startIndex + paginatedUsers.length;
 
   return (
-    <div className="flex flex-col min-h-screen pl-2">
+    <div className="flex flex-col pl-2">
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">Users</h2>
         <Button
@@ -183,21 +183,21 @@ const Users = () => {
                   user.active ? "hover:bg-gray-50" : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">
                   {startIndex + index + 1}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">{user.employeeId}</td>
-                <td className="px-4 py-2 border border-gray-300">{user.name}</td>
-                <td className="px-4 py-2 border border-gray-300">{user.email}</td>
-                <td className="px-4 py-2 border border-gray-300">{user.mobile}</td>
-                <td className="px-4 py-2 border border-gray-300">{user.role}</td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 border border-gray-300">{user.employeeId}</td>
+                <td className="px-4 border border-gray-300">{user.name}</td>
+                <td className="px-4 border border-gray-300">{user.email}</td>
+                <td className="px-4 border border-gray-300">{user.mobile}</td>
+                <td className="px-4 border border-gray-300">{user.role}</td>
+                <td className="px-4 border border-gray-300">
                   <ToggleSwitch
                     checked={user.active}
                     onChange={() => toggleActivation(user.id)}
                   />
                 </td>
-                <td className="px-4 py-2 border border-gray-300 flex gap-2">
+                <td className="px-4 py-1.5 border-gray-300 flex gap-2">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
                     bgcolor="bg-gray-100"

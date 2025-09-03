@@ -131,10 +131,10 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
             <div className="mr-4">
               <Button
                 onClick={handleClose}
-                bgcolor="bg-red-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-red-300"
+                bgcolor=""
+                border="border-3"
+                textColor="text-red-700"
+                hover="hover:text-red-500"
                 name="Close"
                 icon={<IoIosCloseCircleOutline />}
               />
@@ -142,10 +142,10 @@ const AddVendorModal: React.FC<AddVendorModalProps> = ({ open, handleClose }) =>
             <div>
               <Button
                 type="submit"
-                bgcolor="bg-green-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-green-300"
+                bgcolor=""
+                border="border-3"
+                textColor="text-green-800"
+                hover="hover:text-green-600"
                 name="Save"
                 icon={<BiSave />}
               />

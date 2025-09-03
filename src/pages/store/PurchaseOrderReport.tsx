@@ -2,8 +2,11 @@ import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
-import { LiaFileExportSolid } from "react-icons/lia";
+import { PiMicrosoftExcelLogo } from "react-icons/pi";
+import { BsFiletypePdf } from "react-icons/bs";
 import { CiFilter } from "react-icons/ci";
+import { MdTableChart, MdBarChart } from "react-icons/md";
+
 
 interface PurchaseOrderItem {
   id: number;
@@ -14,6 +17,8 @@ interface PurchaseOrderItem {
 }
 
 const PurchaseOrderReport = () => {
+  const [viewMode, setViewMode] = useState("table");
+
   const [items] = useState<PurchaseOrderItem[]>(
     Array.from({ length: 20 }, (_, i) => {
       const qty = Math.floor(Math.random() * 100) + 1;
@@ -64,7 +69,10 @@ const PurchaseOrderReport = () => {
 
   const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedItems = sortedItems.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedItems = sortedItems.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const startNumber = startIndex + 1;
   const endNumber = startIndex + paginatedItems.length;
@@ -72,25 +80,49 @@ const PurchaseOrderReport = () => {
   const totalQty = filteredItems.reduce((sum, item) => sum + item.qty, 0);
 
   return (
-    <div className="flex flex-col min-h-screen pl-2">
+    <div className="flex flex-col pl-2">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
-          PurchaseOrder Report
+          Purchase Order Report
         </h2>
+        {viewMode === "table" && (
+<div className="flex gap-2">
+        {/* filter button */}
+        <Button
+          bgcolor="bg-white"
+          border="border border-gray-300"
+          textColor="text-black"
+          icon={<CiFilter className="text-lg" />}
+          hover="hover:bg-gray-100"
+          title="Filter"
+        />
+        {/* export button */}
         <Button
           bgcolor="bg-white"
           border="border-2 border-gray-800"
           textColor="text-black"
-          name="Export to Excel"
-          icon={<LiaFileExportSolid className="text-lg" />}
+          name="Export"
+          icon={<BsFiletypePdf />}
           hover="hover:bg-gray-100"
         />
+        <Button
+          bgcolor="bg-white"
+          border="border-2 border-gray-800"
+          textColor="text-black"
+          name="Export"
+          icon={<PiMicrosoftExcelLogo />}
+          hover="hover:bg-gray-100"
+        />
+      </div>
+        )}
       </div>
 
       {/* Top Controls */}
       <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
+          {viewMode === "table" ? (
+            <>
           <label htmlFor="pageSize" className="text-sm text-gray-700">
             Show
           </label>
@@ -108,32 +140,52 @@ const PurchaseOrderReport = () => {
             <option value="50">50</option>
           </select>
           <span className="text-sm text-gray-700">entries</span>
+          </>
+          ) : (
+            <p className="text-sm text-gray-700">Graph View Enabled</p>
+          )}
         </div>
 
         <div className="flex gap-6">
-          <Button
-            bgcolor="bg-white"
-            border="border border-gray-300"
-            textColor="text-black"
-            icon={<CiFilter className="text-lg" />}
-            hover="hover:bg-gray-100"
-            title="Filter"
-          />
-          <input
-            type="search"
-            className="border px-3 py-2 rounded border-gray-300 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
+          {/* Toggle Button */}
+                    <button
+                      onClick={() =>
+                        setViewMode(viewMode === "table" ? "graph" : "table")
+                      }
+                      className="border border-gray-300 px-3 py-2 w-[6rem] rounded shadow-sm flex items-center gap-2 text-sm hover:bg-gray-100 cursor-pointer"
+                    >
+                      {viewMode === "table" ? (
+                        <>
+                          <MdBarChart className="text-lg" />
+                          Graph
+                        </>
+                      ) : (
+                        <>
+                          <MdTableChart className="text-lg" />
+                          Table
+                        </>
+                      )}
+                    </button>
+                   {/* search */}
+          {viewMode === "table" && (
+            <input
+              type="search"
+              className="border px-3 py-2 rounded border-gray-300 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+          )}
         </div>
       </div>
 
       {/* Table */}
       <div className="overflow-auto bg-white rounded shadow-md border border-gray-200">
+        {viewMode === "table" ? (
+          // table
         <table className="w-full text-sm text-gray-800 border-collapse">
           <thead className="bg-[var(--base-color)] text-xs font-semibold">
             <tr>
@@ -191,10 +243,10 @@ const PurchaseOrderReport = () => {
                 <td className="px-4 py-2 border border-gray-300 min-w-[18rem]">
                   {item.itemName}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">{item.date}</td>
                 <td className="px-4 py-2 border border-gray-300">
-                  {item.qty}
+                  {item.date}
                 </td>
+                <td className="px-4 py-2 border border-gray-300">{item.qty}</td>
               </tr>
             ))}
 
@@ -207,16 +259,23 @@ const PurchaseOrderReport = () => {
                 >
                   Grand Total
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
-                  {totalQty}
-                </td>
+                <td className="px-4 py-2 border border-gray-300">{totalQty}</td>
               </tr>
             )}
           </tbody>
         </table>
+        ) : (
+          // Graph
+          <div className="p-4">
+            {/* Replace with your chart library like recharts or chart.js */}
+            <h3 className="text-lg font-semibold mb-4">Graph View</h3>
+            <p className="text-gray-600">Show Graph</p>
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
+      {viewMode === "table" && (
       <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
         <div>
           {!searchTerm && (
@@ -226,8 +285,8 @@ const PurchaseOrderReport = () => {
           )}
           {searchTerm && (
             <p>
-              Showing {startNumber} to {endNumber} of {filteredItems.length} items
-              (Filtered from {items.length} items)
+              Showing {startNumber} to {endNumber} of {filteredItems.length}{" "}
+              items (Filtered from {items.length} items)
             </p>
           )}
         </div>
@@ -241,6 +300,7 @@ const PurchaseOrderReport = () => {
           />
         </Stack>
       </div>
+      )}
     </div>
   );
 };

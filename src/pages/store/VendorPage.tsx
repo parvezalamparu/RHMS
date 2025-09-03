@@ -1,41 +1,63 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
 import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import AddVendorModal from "../../components/store/forms/AddVendorModal";
+import EditVendorModal from "../../components/store/forms/EditVendorModal";
 
 interface Vendor {
   id: string;
   name: string;
+  email: string;
   phone: string;
   gst: string;
   contactPerson: string;
+  pincode: string;
   address: string;
 }
 
 const generateRandomVendors = (count: number): Vendor[] => {
-  const names = ["ABC Traders", "QuickMart", "SupplyCo", "Mega Distributors", "Nova Vendors"];
-  const contacts = ["Amit Sharma", "Rekha Verma", "Suresh Das", "Nisha Rai", "Dinesh Patel"];
+  const names = [
+    "ABC Traders",
+    "QuickMart",
+    "SupplyCo",
+    "Mega Distributors",
+    "Nova Vendors",
+  ];
+  const contacts = [
+    "Amit Sharma",
+    "Rekha Verma",
+    "Suresh Das",
+    "Nisha Rai",
+    "Dinesh Patel",
+  ];
   const addresses = ["Kolkata", "Delhi", "Mumbai", "Chennai", "Hyderabad"];
   return Array.from({ length: count }, (_, i) => ({
     id: `V-${(i + 1).toString().padStart(3, "0")}`,
     name: names[Math.floor(Math.random() * names.length)],
-    phone: `98${Math.floor(100000000 + Math.random() * 89999999)}`,
+    email: `vendor${i + 1}@example.com`,
+    phone: `98${Math.floor(10000000 + Math.random() * 89999999)}`,
     gst: `27ABCDE${i + 1000}Z5`,
     contactPerson: contacts[Math.floor(Math.random() * contacts.length)],
+    pincode: `74${Math.floor(1000 + Math.random() * 8999)}`,
     address: addresses[Math.floor(Math.random() * addresses.length)],
   }));
 };
 
 const VendorPage = () => {
   const [vendors, setVendors] = useState<Vendor[]>(generateRandomVendors(20));
+  const [editVendor, setEditVendor] = useState<Vendor | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Vendor; direction: "asc" | "desc" } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Vendor;
+    direction: "asc" | "desc";
+  } | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleSort = (key: keyof Vendor) => {
     setSortConfig((prev) => {
@@ -70,7 +92,10 @@ const VendorPage = () => {
 
   const totalPages = Math.ceil(filteredVendors.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentVendors = filteredVendors.slice(startIdx, startIdx + itemsPerPage);
+  const currentVendors = filteredVendors.slice(
+    startIdx,
+    startIdx + itemsPerPage
+  );
 
   const changePage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -81,16 +106,23 @@ const VendorPage = () => {
   const handleEdit = (id: string) => {
     const vendor = vendors.find((v) => v.id === id);
     if (vendor) {
-      alert(`Edit Vendor:\n\n${JSON.stringify(vendor, null, 2)}`);
+      setEditVendor(vendor);
+      setShowEditModal(true);
     }
+  };
+
+  const handleSaveVendor = (updatedVendor: Vendor) => {
+    setVendors((prev) =>
+      prev.map((v) => (v.id === updatedVendor.id ? updatedVendor : v))
+    );
   };
 
   const startNumber = startIdx + 1;
   const endNumber = startIdx + currentVendors.length;
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
+    <div className="pl-2 bg-gray-50">
+      <div className="flex justify-between items-center mb-3 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold uppercase text-[#035d67]">Vendors</h1>
         <Button
           bgcolor="bg-white"
@@ -103,7 +135,7 @@ const VendorPage = () => {
         />
       </div>
 
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="pageSize" className="text-sm text-gray-700">
             Show
@@ -141,31 +173,43 @@ const VendorPage = () => {
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
               <th className="px-4 py-2 border-r border-gray-300">Sl. No</th>
-              {["name", "phone", "gst", "contactPerson", "address"].map((key) => (
-                <th
-                  key={key}
-                  className="px-4 py-2 border-r border-gray-300 cursor-pointer select-none"
-                  onClick={() => handleSort(key as keyof Vendor)}
-                >
-                  {(() => {
-                    switch (key) {
-                      case "name": return "Vendor Name";
-                      case "phone": return "Phone No";
-                      case "gst": return "Vendor GST";
-                      case "contactPerson": return "Contact Person Name";
-                      case "address": return "Address";
-                      default: return key;
-                    }
-                  })()}
-                  <span>
-                    {sortConfig?.key === key
-                      ? sortConfig.direction === "asc"
-                        ? " ▲"
-                        : " ▼"
-                      : " ⇅"}
-                  </span>
-                </th>
-              ))}
+              {["name", "email", "phone", "gst", "contactPerson", "pincode", "address"].map(
+                (key) => (
+                  <th
+                    key={key}
+                    className="px-4 py-2 border-r border-gray-300 cursor-pointer select-none"
+                    onClick={() => handleSort(key as keyof Vendor)}
+                  >
+                    {(() => {
+                      switch (key) {
+                        case "name":
+                          return "Vendor Name";
+                        case "email":
+                          return "Email"
+                        case "phone":
+                          return "Phone No";
+                        case "gst":
+                          return "Vendor GST";
+                        case "contactPerson":
+                          return "Contact Person Name";
+                        case "pincode":
+                          return "Pin Code"
+                        case "address":
+                          return "Address";
+                        default:
+                          return key;
+                      }
+                    })()}
+                    <span>
+                      {sortConfig?.key === key
+                        ? sortConfig.direction === "asc"
+                          ? " ▲"
+                          : " ▼"
+                        : " ⇅"}
+                    </span>
+                  </th>
+                )
+              )}
               <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
@@ -178,18 +222,34 @@ const VendorPage = () => {
                 <td className="px-4 py-1 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-1 border-r border-gray-200">{vendor.name}</td>
-                <td className="px-4 py-1 border-r border-gray-200">{vendor.phone}</td>
-                <td className="px-4 py-1 border-r border-gray-200">{vendor.gst}</td>
-                <td className="px-4 py-1 border-r border-gray-200">{vendor.contactPerson}</td>
-                <td className="px-4 py-1 border-r border-gray-200">{vendor.address}</td>
-                <td className="px-4 py-1">
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.name}
+                </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.email}
+                  </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.phone}
+                </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.gst}
+                </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.contactPerson}
+                </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.pincode}
+                  </td>
+                <td className="px-4 py-1 border-r border-gray-200">
+                  {vendor.address}
+                </td>
+                <td className="px-4 py-1.5">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
-                    textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    bgcolor="bg-yellow-200"
+                    border="border-2 border-yellow-600"
+                    textColor="text-yellow-900"
+                    hover="hover:bg-yellow-100"
                     onClick={() => handleEdit(vendor.id)}
                   />
                 </td>
@@ -200,7 +260,8 @@ const VendorPage = () => {
 
         <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            Showing {startNumber} to {endNumber} of {filteredVendors.length} entries
+            Showing {startNumber} to {endNumber} of {filteredVendors.length}{" "}
+            entries
           </div>
           <Stack spacing={2} direction="row" justifyContent="flex-end">
             <Pagination
@@ -214,7 +275,16 @@ const VendorPage = () => {
         </div>
       </div>
 
-      <AddVendorModal open={showAddModal} handleClose={() => setShowAddModal(false)} />
+      <AddVendorModal
+        open={showAddModal}
+        handleClose={() => setShowAddModal(false)}
+      />
+      <EditVendorModal
+        open={showEditModal}
+        vendor={editVendor}
+        handleClose={() => setShowEditModal(false)}
+        onSave={handleSaveVendor}
+      />
     </div>
   );
 };

@@ -190,7 +190,7 @@ export default function AddUserForm() {
             <input {...register("idNumber")} className="w-full border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 border-gray-300" />
           </div>
         </div>
-        <div className="col-span-4 mt-8 flex justify-end">
+        <div className="col-span-4 m-8 flex justify-end">
               <Button
                 onClick={handleSubmit(onSubmit)}
                 bgcolor="bg-green-400"

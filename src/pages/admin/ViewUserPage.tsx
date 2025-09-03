@@ -1,15 +1,18 @@
 import { FaUserMd, FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import { GiGraduateCap } from "react-icons/gi";
 import { HiOutlineIdentification } from "react-icons/hi";
+import { LiaEdit } from "react-icons/lia";
+import { MdLock } from "react-icons/md";
+import Button from "../../components/store/general/Button";
 
 export default function ViewUser() {
   const user = {
     name: "Parvez Alam",
     role: "SPECIAL",
-    employeeId: "RHDS-9999",
+    employeeId: "RHDS-999",
     gender: "Male",
     dob: "02-01-2000",
-    doj: "01/07/2025",
+    doj: "01-07-2025",
     fatherName: "",
     motherName: "",
     maritalStatus: "Single",
@@ -38,19 +41,35 @@ export default function ViewUser() {
         <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-4xl text-blue-500">
           <FaUserMd />
         </div>
-        <h2 className="mt-4 text-xl font-bold">{user.name}</h2>
-        <span className="text-sm text-gray-600">{user.role}</span>
+        <h2 className="mt-4 text-xl text-[#035d67] font-bold">{user.name}</h2>
+        <span className="text-sm text-green-600">{user.role}</span>
+        <div className="flex gap-2 mt-2">
+          <Button
+          border="border border-blue-400"
+          bgcolor=""
+          textColor=""
+          hover="hover:bg-blue-100"
+          icon= {<LiaEdit className="text-blue-900" />}
+          />
+          <Button
+          border="border border-blue-400"
+          bgcolor=""
+          textColor=""
+          hover="hover:bg-blue-100"
+          icon= {<MdLock className="text-blue-900" />}
+          />
+        </div>
         <div className="mt-6 w-full">
-          <h3 className="text-lg font-semibold border-b pb-1 mb-2">Personal Details</h3>
-          <ul className="text-sm space-y-1">
-            <li><strong>Employee ID:</strong> {user.employeeId}</li>
-            <li><strong>Gender:</strong> {user.gender}</li>
-            <li><strong>Date of Birth:</strong> {user.dob}</li>
-            <li><strong>Joining Date:</strong> {user.doj}</li>
-            <li><strong>Father's Name:</strong> {user.fatherName}</li>
-            <li><strong>Mother's Name:</strong> {user.motherName}</li>
-            <li><strong>Marital Status:</strong> {user.maritalStatus}</li>
-            <li><strong>Blood Group:</strong> {user.bloodGroup}</li>
+          <h3 className="text-lg font-semibold text-violet-800 border-b pb-1 mb-2">Personal Details</h3>
+          <ul className="text-sm font-semibold space-y-1 ">
+            <li><strong className="text-blue-700">Employee ID:</strong> {user.employeeId}</li>
+            <li><strong className="text-blue-700">Gender:</strong> {user.gender}</li>
+            <li><strong className="text-blue-700">Date of Birth:</strong> {user.dob}</li>
+            <li><strong className="text-blue-700">Joining Date:</strong> {user.doj}</li>
+            <li><strong className="text-blue-700">Father's Name:</strong> {user.fatherName}</li>
+            <li><strong className="text-blue-700">Mother's Name:</strong> {user.motherName}</li>
+            <li><strong className="text-blue-700">Marital Status:</strong> {user.maritalStatus}</li>
+            <li><strong className="text-blue-700">Blood Group:</strong> {user.bloodGroup}</li>
           </ul>
         </div>
       </div>

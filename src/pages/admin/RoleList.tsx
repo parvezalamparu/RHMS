@@ -58,9 +58,9 @@ const RoleList = () => {
   };
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
+    <div className="pl-2 bg-gray-50">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
+      <div className="flex justify-between items-center mb-3 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">Role List</h1>
         <Button
           bgcolor="bg-white"
@@ -74,7 +74,7 @@ const RoleList = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="pageSize" className="text-sm text-gray-700">
             Show
@@ -112,19 +112,19 @@ const RoleList = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SL</th>
-              <th className="px-4 py-3 border-r border-gray-300">Role Name</th>
-              <th className="px-4 py-3">Assign Permission</th>
+              <th className="px-4 py-2 border-r border-gray-300">SL</th>
+              <th className="px-4 py-2 border-r border-gray-300">Role Name</th>
+              <th className="px-4 py-2">Assign Permission</th>
             </tr>
           </thead>
           <tbody>
             {currentRoles.map((role, index) => (
               <tr key={role.id} className="border-t border-gray-300 hover:bg-gray-50">
-                <td className="px-4 py-2 border-r border-gray-200">
+                <td className="px-4 py-1 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="px-4 py-2 border-r border-gray-200">{role.name}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-1 border-r border-gray-200">{role.name}</td>
+                <td className="px-4 py-1.5">
                   <Button
                     icon={<MdAssignmentAdd  className="text-lg" />}
                     bgcolor="bg-gray-100"

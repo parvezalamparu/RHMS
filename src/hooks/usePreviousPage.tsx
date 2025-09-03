@@ -5,13 +5,15 @@ const usePreviousPage = () => {
     const navigate = useNavigate();
     return (
         useEffect(() => {
-           window.addEventListener('keydown', (event) => {
+            const back =(event:any) => {
             if(event.key === "Escape"){
                 navigate(-1);
             }
-           })
+           window.addEventListener('keydown',back);
+           
+           return () => window.removeEventListener('keydown',back);
             
-        }, [])
+        }}, [])
     )
 }
 

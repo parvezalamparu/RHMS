@@ -16,7 +16,11 @@ body {
   --dark-color : #035d67;
   
 }   
-/* KINTU KAAJ KORCHE OK */
+
+::selection {
+  background: rgb(243, 16, 167);
+  color: white;
+}
 
 @keyframes fadeInScale {
   0% {

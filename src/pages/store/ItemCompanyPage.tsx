@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
@@ -93,7 +93,7 @@ const ItemCompanyPage = () => {
   };
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
+    <div className="pl-2 bg-gray-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">
@@ -175,10 +175,10 @@ const ItemCompanyPage = () => {
                 <td className="px-4">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
-                    textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
+                    bgcolor="bg-yellow-200"
+                    border="border-2 border-yellow-600"
+                    textColor="text-yellow-900"
+                    hover="hover:bg-yellow-100"
                     onClick={() => handleEdit(company.id)}
                   />
                 </td>
@@ -220,7 +220,7 @@ const ItemCompanyPage = () => {
               }
             }}
             placeholder="Enter company name"
-            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end space-x-4 mt-8">
             <Button
@@ -261,7 +261,7 @@ const ItemCompanyPage = () => {
               }
             }}
             placeholder="Edit company name"
-            className="w-full border border-gray-300 rounded px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+            className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
           />
           <div className="flex justify-end space-x-4 mt-8">
             <Button

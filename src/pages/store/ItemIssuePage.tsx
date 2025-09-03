@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
-import { FaRegEye, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
+import { MdInfoOutline } from "react-icons/md";
 
 interface Issue {
   id: string;
@@ -79,9 +80,9 @@ const ItemIssuePage = () => {
   };
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] px-4 max-h-14">
-        <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase pt-5">Issues</h1>
+    <div className="pl-2 bg-gray-50">
+      <div className="flex justify-between items-center mb-2 bg-[var(--base-color)] px-4 max-h-14">
+        <h1 className="text-2xl font-bold mb-5 text-[#035d67] uppercase pt-5">Issues</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"
@@ -93,7 +94,7 @@ const ItemIssuePage = () => {
         />
       </div>
 
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
           <select
@@ -169,14 +170,14 @@ const ItemIssuePage = () => {
                 <td className="px-4 py-1 border-r border-gray-200">{issue.issueTo}</td>
                 <td className="px-4 py-1 border-r border-gray-200">{issue.generatedBy}</td>
                 <td className="px-4 py-1 border-r border-gray-200">{issue.date}</td>
-                <td className="px-4 py-1">
+                <td className="px-4 py-1.5">
                   <Button
-                    icon={<FaRegEye className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
+                    icon={<MdInfoOutline className="text-lg" />}
+                    bgcolor="bg-blue-200"
+                    border="border-2 border-blue-600"
                     textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
-                    onClick={() => handleView(issue.id)}
+                    hover="hover:bg-blue-100"
+                    onClick={() => navigate(`/store/issue-item/view/${issue.id}`)}
                   />
                 </td>
               </tr>

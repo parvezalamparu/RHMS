@@ -61,7 +61,7 @@ const PermissionList = () => {
   };
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
+    <div className="pl-2 bg-gray-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">Permission List</h1>
@@ -107,14 +107,14 @@ const PermissionList = () => {
         <table className="min-w-full text-sm text-left table-auto">
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
-              <th className="px-4 py-3 border-r border-gray-300">SL</th>
-              <th className="px-4 py-3">Permission Name</th>
+              <th className="px-4 py-2 border-r border-gray-300">SL</th>
+              <th className="px-4 py-2">Permission Name</th>
             </tr>
           </thead>
           <tbody>
             {currentPermissions.map((permission, index) => (
               <tr key={permission.id} className="border-t border-gray-300 hover:bg-gray-50">
-                <td className="px-4 py-4 border-r border-gray-200">
+                <td className="px-4 py-2.4 border-r border-gray-200">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
                 <td className="px-4 py-2">{permission.name}</td>

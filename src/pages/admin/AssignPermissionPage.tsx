@@ -84,13 +84,13 @@ const AssignPermissionPage: React.FC = () => {
                     : "bg-red-50 text-gray-400"
                 }`}
               >
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 py-1 border border-gray-300">
                   {permission.id}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 py-1 border border-gray-300">
                   {permission.name}
                 </td>
-                <td className="px-4 py-2 border border-gray-300">
+                <td className="px-4 py-1 border border-gray-300">
                   <ToggleSwitch
                     checked={permission.enabled}
                     onChange={() => toggleActivation(permission.id)}

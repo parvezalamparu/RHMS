@@ -355,10 +355,10 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
                   reset();
                   handleClose();
                 }}
-                bgcolor="bg-red-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-red-300"
+                bgcolor=""
+                border="border-3 "
+                textColor="text-red-700"
+                hover="hover:text-red-500"
                 name="Close"
                 icon={<IoIosCloseCircleOutline />}
               />
@@ -366,10 +366,10 @@ const AddItemModal: React.FC<AddItemModalProps> = ({
             <div>
               <Button
                 onClick={handleSubmit(onSubmit)}
-                bgcolor="bg-green-400"
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-green-300"
+                bgcolor=""
+                border="border-3 border"
+                textColor="text-green-800"
+                hover="hover:text-green-600"
                 name="Save"
                 icon={<BiSave />}
               />

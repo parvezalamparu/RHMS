@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "../../components/store/general/Button";
-import { LiaFileExportSolid } from "react-icons/lia";
+import { PiMicrosoftExcelLogo } from "react-icons/pi";
+
 
 interface StockItem {
   id: number;
@@ -35,7 +36,7 @@ const DepartmentStockReport: React.FC = () => {
   const totalAmount = stockData.reduce((sum, item) => sum + item.amount, 0);
 
   return (
-    <div className="flex flex-col pl-4 mx-auto min-h-screen">
+    <div className="flex flex-col pl-4 mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-xl font-bold text-[#035d67] uppercase">
@@ -45,8 +46,8 @@ const DepartmentStockReport: React.FC = () => {
           bgcolor="bg-white"
           border="border-2 border-gray-800"
           textColor="text-black"
-          name="Export to Excel"
-          icon={<LiaFileExportSolid className="text-lg" />}
+          name="Export"
+          icon={<PiMicrosoftExcelLogo />}
           hover="hover:bg-gray-100"
         />
       </div>

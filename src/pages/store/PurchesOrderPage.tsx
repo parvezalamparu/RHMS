@@ -83,21 +83,21 @@ const PurchaseOrderPage = () => {
   const endNumber = startIdx + currentOrders.length;
 
   return (
-    <div className="pl-2 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6 bg-[var(--base-color)] p-2">
+    <div className="pl-2 bg-gray-50">
+      <div className="flex justify-between items-center mb-2 bg-[var(--base-color)] p-2">
         <h1 className="text-2xl font-bold text-[#035d67] uppercase">Purchase Orders</h1>
         <Button
           bgcolor="bg-white"
           border="border-3 border-[var(--dark-color)]"
           textColor="text-black"
-          name="Add Purchase Order"
+          name="Add PO"
           icon={<FaPlus />}
           hover="hover:bg-gray-200"
           onClick={() => navigate("/store/purchase-orders/add-purchase-order")}
         />
       </div>
 
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="pageSize" className="text-sm text-gray-700">
             Show
@@ -170,14 +170,14 @@ const PurchaseOrderPage = () => {
                 <td className="px-4 py-2 border-r border-gray-200">{order.vendor}</td>
                 <td className="px-4 py-2 border-r border-gray-200">{order.generatedBy}</td>
                 <td className="px-4 py-2 border-r border-gray-200">{order.date}</td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-1.5">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
-                    bgcolor="bg-gray-100"
-                    border="border-2 border-gray-600"
-                    textColor="text-blue-900"
-                    hover="hover:bg-gray-200"
-                    onClick={() => handleEdit(order.id)}
+                    bgcolor="bg-yellow-200"
+                    border="border-2 border-yellow-600"
+                    textColor="text-yellow-900"
+                    hover="hover:bg-yellow-100"
+                    onClick={() => navigate(`/store/purchase-order/edit/${order.id}`)}
                   />
                 </td>
               </tr>
@@ -185,7 +185,7 @@ const PurchaseOrderPage = () => {
           </tbody>
         </table>
 
-        <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
+        <div className="flex justify-between items-center p-3.5 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
             Showing {startNumber} to {endNumber} of {filteredOrders.length} entries
           </div>

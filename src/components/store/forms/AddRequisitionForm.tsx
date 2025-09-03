@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import Button from "../general/Button";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { BiSave } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 interface RequisitionItem {
   itemName: string;
@@ -10,83 +11,110 @@ interface RequisitionItem {
   unit: string;
   subUnitQty: number;
   subUnit: string;
+  relation: string;
 }
 
+interface FormValues {
+  department: string;
+  note: string;
+  items: RequisitionItem[];
+  itemsToAppend?: RequisitionItem;
+}
+
+// In a real application, you would fetch these from an API
+const departments = ["Pharmacy", "General Store", "Pathology", "Radiology"];
+const itemNames = [
+  "LIQUID PARAFFIN",
+  "GLUCOSE",
+  "PARACETAMOL",
+  "AMOXICILLIN",
+  "IBUPROFEN",
+];
+
 const AddRequisitionForm: React.FC = () => {
-  const [note, setNote] = useState("");
-  const [items, setItems] = useState<RequisitionItem[]>([]);
-  const [formItem, setFormItem] = useState<RequisitionItem>({
-    itemName: "",
-    unitQty: 0,
-    unit: "",
-    subUnitQty: 0,
-    subUnit: "",
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      department: "", 
+      note: "Urgent requisition for stock refill",
+      items: [],
+      itemsToAppend: {
+        itemName: "", 
+        unitQty: 0,
+        unit: "",
+        subUnitQty: 0,
+        subUnit: "",
+        relation: "",
+      },
+    },
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof RequisitionItem, string>>>({});
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "items",
+  });
 
-  const validateItem = (item: RequisitionItem) => {
-    const error: Partial<Record<keyof RequisitionItem, string>> = {};
-    if (!item.itemName) error.itemName = "Required";
-    if (!item.unitQty || item.unitQty <= 0) error.unitQty = "Required";
-    if (!item.unit) error.unit = "Required";
-    if (!item.subUnitQty || item.subUnitQty <= 0) error.subUnitQty = "Required";
-    if (!item.subUnit) error.subUnit = "Required";
-    return error;
-  };
+  const watchAddItem = useWatch({ control, name: "itemsToAppend" });
 
-  const handleAddItem = () => {
-    const error = validateItem(formItem);
-    if (Object.keys(error).length > 0) {
-      setErrors(error);
-      return;
-    }
-
-    setItems([...items, formItem]);
-    setFormItem({ itemName: "", unitQty: 0, unit: "", subUnitQty: 0, subUnit: "" });
-    setErrors({});
-  };
-
-  const handleRemoveItem = (index: number) => {
-    setItems((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleFormItemChange = (field: keyof RequisitionItem, value: string | number) => {
-    setFormItem({ ...formItem, [field]: value as never });
-
-    if (errors[field]) {
-      const newErrors = { ...errors };
-      delete newErrors[field];
-      setErrors(newErrors);
-    }
-  };
-
-  const handleSubmit = () => {
-    if (items.length === 0) {
+  const onSubmit = (data: FormValues) => {
+    if (data.items.length === 0) {
       alert("Please add at least one item before submitting.");
       return;
     }
+    console.log("New Requisition Submitted:", data);
+    alert("requisition form submitted succesfully");
+    reset();
+  };
 
-    const requisitionData = {
-      date: new Date().toISOString(),
-      note,
-      items,
-    };
+  const handleAddItem = () => {
+    const newItem = watchAddItem;
 
-    console.log("Requisition Submitted:", requisitionData);
-    
+    if (
+      newItem?.itemName &&
+      newItem.unitQty > 0 &&
+      newItem.unit &&
+      newItem.subUnitQty > 0 &&
+      newItem.subUnit
+    ) {
+      append(newItem);
+      reset((formValues) => ({
+        ...formValues,
+        itemsToAppend: {
+          itemName: "",
+          unitQty: 0,
+          unit: "",
+          subUnitQty: 0,
+          subUnit: "",
+          relation: "",
+        },
+      }));
+    } else {
+      alert("Please fill in all required fields for the item.");
+    }
   };
 
   return (
-    <div className="p-6 bg-white shadow rounded-md w-full mx-2">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-2 bg-gray-100 shadow rounded-md w-full mx-1"
+    >
       <h2 className="text-xl font-semibold text-[#035d67] bg-[var(--base-color)] uppercase mb-4 p-3">
-        Add Requisition
+        New Requisition
       </h2>
 
       {/* Top section */}
       <div className="flex gap-4 my-4">
         <div className="w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Date
+          </label>
           <input
             type="text"
             value={new Date().toLocaleString()}
@@ -96,113 +124,221 @@ const AddRequisitionForm: React.FC = () => {
         </div>
 
         <div className="w-1/4">
-          <label className="block text-sm font-medium text-gray-700 mb-1 ">Department</label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Department
+          </label>
+          <select
+            {...register("department", { required: "Department is required" })}
+            className="w-full px-3 py-[.55rem] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+          >
+            <option value="">Select a Department</option>
+            {departments.map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
+          </select>
+          {errors.department && (
+            <p className="text-xs text-red-500 mt-1">{errors.department.message}</p>
+          )}
         </div>
       </div>
 
       {/* Table Head */}
-      <div className="grid grid-cols-12 gap-2 font-semibold text-[#035d67] bg-[var(--base-color)] px-2 py-2 rounded">
-        <div className="col-span-4">Item Name <span className="text-red-500">*</span></div>
-        <div className="col-span-1">Unit Qty <span className="text-red-500">*</span></div>
-        <div className="col-span-2">Unit <span className="text-red-500">*</span></div>
-        <div className="col-span-2">Sub Unit Qty <span className="text-red-500">*</span></div>
-        <div className="col-span-2">Sub Unit <span className="text-red-500">*</span></div>
+      <div className="grid grid-cols-14 gap-2 font-semibold text-[#035d67] bg-[var(--base-color)] px-2 py-1.5 rounded">
+        <div className="col-span-4">
+          Item Name <span className="text-red-500">*</span>
+        </div>
+        <div className="col-span-1">
+          Unit Qty <span className="text-red-500">*</span>
+        </div>
+        <div className="col-span-2">
+          Unit <span className="text-red-500">*</span>
+        </div>
+        <div className="col-span-2">
+          Sub Unit Qty <span className="text-red-500">*</span>
+        </div>
+        <div className="col-span-2">
+          Sub Unit <span className="text-red-500">*</span>
+        </div>
+        <div className="col-span-2">Relation</div>
         <div className="col-span-1 text-center">Action</div>
       </div>
 
-      {/* Input Row (Form Row) */}
-      <div className="grid grid-cols-12 gap-2 items-start border border-gray-200 rounded px-2 py-2 mt-2 bg-white">
+      {/* Input row for adding new items */}
+      <div className="grid grid-cols-14 gap-2 items-start border border-gray-200 rounded py-0.5 px-1">
         <div className="col-span-4">
           <select
-            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.itemName ? "border-red-500" : ""}`}
-            value={formItem.itemName}
-            onChange={(e) => handleFormItemChange("itemName", e.target.value)}
+            {...register("itemsToAppend.itemName", {
+              required:fields.length===0? "Item is required":false,
+            })}
+            className="w-full px-2 py-[.36rem] border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
           >
-            <option value="">Select One...</option>
-            <option value="LIQUID PARAFFIN">LIQUID PARAFFIN</option>
-            <option value="GLUCOSE">GLUCOSE</option>
+            <option value="">Select an Item</option>
+            {itemNames.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
           </select>
-          {errors.itemName && <p className="text-xs text-red-500">{errors.itemName}</p>}
+          {errors.itemsToAppend?.itemName && (
+            <p className="text-xs text-red-500">
+              {errors.itemsToAppend?.itemName.message}
+            </p>
+          )}
         </div>
 
         <div className="col-span-1">
           <input
             type="number"
-            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unitQty ? "border-red-500" : ""}`}
-            placeholder="Qty"
-            value={formItem.unitQty}
-            onChange={(e) => handleFormItemChange("unitQty", parseInt(e.target.value))}
+            {...register("itemsToAppend.unitQty", {
+              valueAsNumber: true,
+              min:fields.length===0? { value: 1, message: "Must be > 0" }:undefined,
+              required: fields.length===0? "Required":false,
+            })}
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
           />
-          {errors.unitQty && <p className="text-xs text-red-500">{errors.unitQty}</p>}
+          {errors.itemsToAppend?.unitQty && (
+            <p className="text-xs text-red-500">
+              {errors.itemsToAppend?.unitQty.message}
+            </p>
+          )}
         </div>
 
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.unit ? "border-red-500" : ""}`}
-            placeholder="Unit"
-            value={formItem.unit}
-            onChange={(e) => handleFormItemChange("unit", e.target.value)}
+            {...register("itemsToAppend.unit", { required: fields.length===0? "Required":false })}
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
           />
-          {errors.unit && <p className="text-xs text-red-500">{errors.unit}</p>}
+          {errors.itemsToAppend?.unit && (
+            <p className="text-xs text-red-500">
+              {errors.itemsToAppend?.unit.message}
+            </p>
+          )}
         </div>
 
         <div className="col-span-2">
           <input
             type="number"
-            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnitQty ? "border-red-500" : ""}`}
-            placeholder="Sub Qty"
-            value={formItem.subUnitQty}
-            onChange={(e) => handleFormItemChange("subUnitQty", parseInt(e.target.value))}
+            {...register("itemsToAppend.subUnitQty", {
+              valueAsNumber: true,
+              min: fields.length===0? { value: 1, message: "Must be > 0" }:undefined,
+              required: fields.length===0? "Required":false,
+            })}
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
           />
-          {errors.subUnitQty && <p className="text-xs text-red-500">{errors.subUnitQty}</p>}
+          {errors.itemsToAppend?.subUnitQty && (
+            <p className="text-xs text-red-500">
+              {errors.itemsToAppend?.subUnitQty.message}
+            </p>
+          )}
         </div>
 
         <div className="col-span-2">
           <input
             type="text"
-            className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm ${errors.subUnit ? "border-red-500" : ""}`}
-            placeholder="Sub Unit"
-            value={formItem.subUnit}
-            onChange={(e) => handleFormItemChange("subUnit", e.target.value)}
+            {...register("itemsToAppend.subUnit", { required:fields.length===0? "Required":false })}
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
           />
-          {errors.subUnit && <p className="text-xs text-red-500">{errors.subUnit}</p>}
+          {errors.itemsToAppend?.subUnit && (
+            <p className="text-xs text-red-500">
+              {errors.itemsToAppend?.subUnit.message}
+            </p>
+          )}
         </div>
 
-        <div className="col-span-1 flex justify-center">
+        <div className="col-span-2">
+          <input
+            type="text"
+            {...register("itemsToAppend.relation")}
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm border-gray-300"
+          />
+        </div>
+
+        <div className="col-span-1 flex justify-center items-center">
           <Button
+            type="button"
             onClick={handleAddItem}
             bgcolor=""
-            border="border-3 border-[--var(--base-color)]"
-            textColor="text-black"
-            hover="hover:bg-green-300"
+            border="border-3 border"
+            textColor="text-blue-800"
+            hover="hover:text-blue-600"
             icon={<FaPlus />}
           />
         </div>
       </div>
 
-      <div className="space-y-2 mt-4">
-        {items.map((item, index) => (
+      {/* Added Rows */}
+      <div className="">
+        {fields.map((field, index) => (
           <div
-            key={index}
-            className="grid grid-cols-12 gap-2 items-center border border-gray-200 rounded px-2 py-2 bg-gray-50"
+            key={field.id}
+            className="grid grid-cols-14 gap-2 items-start border bg-gray-50 border-gray-200 rounded py-0.5 px-1"
           >
-            <div className="col-span-4">{item.itemName}</div>
-            <div className="col-span-1">{item.unitQty}</div>
-            <div className="col-span-2">{item.unit}</div>
-            <div className="col-span-2">{item.subUnitQty}</div>
-            <div className="col-span-2">{item.subUnit}</div>
+            {/* Item Name */}
+            <div className="col-span-4">
+              <input
+                type="text"
+                {...register(`items.${index}.itemName` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Unit Qty */}
+            <div className="col-span-1">
+              <input
+                type="number"
+                {...register(`items.${index}.unitQty` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Unit */}
+            <div className="col-span-2">
+              <input
+                type="text"
+                {...register(`items.${index}.unit` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Sub Unit Qty */}
+            <div className="col-span-2">
+              <input
+                type="number"
+                {...register(`items.${index}.subUnitQty` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Sub Unit */}
+            <div className="col-span-2">
+              <input
+                type="text"
+                {...register(`items.${index}.subUnit` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Relation */}
+            <div className="col-span-2">
+              <input
+                type="text"
+                {...register(`items.${index}.relation` as const)}
+                className="w-full px-2 py-1"
+                disabled
+              />
+            </div>
+            {/* Delete */}
             <div className="col-span-1 flex justify-center">
               <Button
-                onClick={() => handleRemoveItem(index)}
+                type="button"
+                onClick={() => remove(index)}
                 bgcolor=""
-                border="border-3 border-[--var(--base-color)]"
-                textColor="text-black"
-                hover="hover:bg-red-300"
+                border="border-3 border"
+                textColor="text-red-700"
+                hover="hover:text-red-500"
                 icon={<MdOutlineDeleteForever />}
               />
             </div>
@@ -210,33 +346,44 @@ const AddRequisitionForm: React.FC = () => {
         ))}
       </div>
 
-      {/* Notes */}
+      {/* Note */}
       <div className="mt-6">
-        <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="note"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Note
         </label>
         <textarea
           id="note"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
+          {...register("note")}
           className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-200"
           rows={3}
         />
       </div>
 
-      {/* Submit Button */}
-      <div className="mt-6 flex justify-center">
+      {/* Button */}
+      <div className="my-6 flex justify-end gap-2">
         <Button
-          onClick={handleSubmit}
-          bgcolor="bg-green-400"
+          type="button"
+          bgcolor=""
           border="border-3 border"
-          textColor="text-black"
-          hover="hover:bg-green-300"
-          name="Submit"
-          icon={<BiSave />}
+          textColor="text-red-500"
+          hover="hover:text-red-800"
+          name="Cancel"
+          onClick={() => navigate(-1)}
+        />
+
+        <Button
+          type="submit"
+          bgcolor=""
+          border="border-3 border"
+          textColor="text-green-900"
+          hover="hover:border-green-600 hover:text-green-700"
+          name="Create Requisition"
         />
       </div>
-    </div>
+    </form>
   );
 };
 

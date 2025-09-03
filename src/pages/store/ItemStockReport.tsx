@@ -2,14 +2,17 @@ import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Button from "../../components/store/general/Button";
-import { LiaFileExportSolid } from "react-icons/lia";
+import { PiMicrosoftExcelLogo } from "react-icons/pi";
+import { BsFiletypePdf } from "react-icons/bs";
 import { CiFilter } from "react-icons/ci";
+import { MdTableChart, MdBarChart } from "react-icons/md";
+import FilterForm from "../../components/general/FilterForm";
 
 interface IssueItem {
   id: number;
   itemName: string;
   date: string;
-  expDate:string;
+  expDate: string;
   updatedBy: string;
   batchNo: string;
   qty: number;
@@ -23,6 +26,30 @@ interface IssueItem {
 }
 
 const ItemStockReport = () => {
+  const [viewMode, setViewMode] = useState("table");
+
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [tempFilters, setTempFilters] = useState<Record<string, string>>({});
+  const [showFilter, setShowFilter] = useState(false);
+
+  const filterFields = [
+    { key: "startDate", label: "Start Date", type: "date" },
+    { key: "endDate", label: "End Date", type: "date" },
+    { key: "itemName", label: "Item Name", type: "text" },
+    { key: "batchNo", label: "Batch No", type: "text" },
+    { key: "id", label: "ID", type: "number" },
+  ];
+
+  const handleApply = () => {
+    setFilters(tempFilters);
+    setShowFilter(false);
+  };
+
+  const handleReset = () => {
+    setTempFilters({});
+    setFilters({});
+  };
+
   const [items] = useState<IssueItem[]>(
     Array.from({ length: 20 }, (_, i) => {
       const qty = Math.floor(Math.random() * 100) + 1;
@@ -73,9 +100,27 @@ const ItemStockReport = () => {
     });
   };
 
+  const filterByForm = (item: IssueItem) => {
+    const { startDate, endDate, itemName, batchNo, id } = filters;
+
+    if (startDate && new Date(item.date) < new Date(startDate)) return false;
+    if (endDate && new Date(item.date) > new Date(endDate)) return false;
+    if (
+      itemName &&
+      !item.itemName.toLowerCase().includes(itemName.toLowerCase())
+    )
+      return false;
+    if (batchNo && !item.batchNo.toLowerCase().includes(batchNo.toLowerCase()))
+      return false;
+    if (id && item.id.toString() !== id) return false;
+
+    return true;
+  };
+
   const filteredItems = items.filter(
     (item) =>
-      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) 
+      filterByForm(item) &&
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const sortedItems = [...filteredItems].sort((a, b) => {
@@ -94,12 +139,18 @@ const ItemStockReport = () => {
 
   const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedItems = sortedItems.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedItems = sortedItems.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const startNumber = startIndex + 1;
   const endNumber = startIndex + paginatedItems.length;
 
-  const grandTotalAmount = filteredItems.reduce((sum, item) => sum + item.total, 0);
+  const grandTotalAmount = filteredItems.reduce(
+    (sum, item) => sum + item.total,
+    0
+  );
 
   const headers: { label: string; key: keyof IssueItem | "sn" }[] = [
     { label: "SN", key: "sn" },
@@ -119,163 +170,273 @@ const ItemStockReport = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen pl-2">
+    <div className="flex flex-col pl-2">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
           Item Stock Report
         </h2>
-        <Button
-          bgcolor="bg-white"
-          border="border-2 border-gray-800"
-          textColor="text-black"
-          name="Export to Excel"
-          icon={<LiaFileExportSolid className="text-lg" />}
-          hover="hover:bg-gray-100"
-        />
+        {viewMode === "table" && (
+          <div className="flex gap-2">
+            
+
+            {/* export buttons */}
+            <Button
+              bgcolor="bg-white"
+              border="border-2 border-gray-800"
+              textColor="text-black"
+              name="PDF"
+              icon={<BsFiletypePdf />}
+              hover="hover:bg-gray-100"
+            />
+            <Button
+              bgcolor="bg-white"
+              border="border-2 border-gray-800"
+              textColor="text-black"
+              name="Excel"
+              icon={<PiMicrosoftExcelLogo />}
+              hover="hover:bg-gray-100"
+            />
+            {/* filter button */}
+            <div className="relative">
+              <Button
+                bgcolor="bg-white"
+                border="border-2 border-gray-800"
+                textColor="text-black"
+                name="Filter"
+                icon={<CiFilter className="text-lg" />}
+                hover="hover:bg-gray-100"
+                onClick={() => setShowFilter((prev) => !prev)}
+              />
+
+              {showFilter && (
+                <div className="absolute right-0 mt-2 z-50 bg-white shadow-lg rounded-lg border w-80 min-h-145">
+                  <FilterForm
+                    fields={filterFields}
+                    filters={tempFilters}
+                    setFilters={setTempFilters}
+                    onApply={handleApply}
+                    onReset={handleReset}
+                  />
+                  {Object.keys(filters).length > 0 && (
+                    <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Top Controls */}
       <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
-          <label htmlFor="pageSize" className="text-sm text-gray-700">
-            Show
-          </label>
-          <select
-            id="pageSize"
-            className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
-            value={itemsPerPage}
-            onChange={(e) => {
-              setItemsPerPage(parseInt(e.target.value));
-              setCurrentPage(1);
-            }}
-          >
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-          <span className="text-sm text-gray-700">entries</span>
+          {viewMode === "table" ? (
+            <>
+              <label htmlFor="pageSize" className="text-sm text-gray-700">
+                Show
+              </label>
+              <select
+                id="pageSize"
+                className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(parseInt(e.target.value));
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+              <span className="text-sm text-gray-700">entries</span>
+            </>
+          ) : (
+            <p className="text-sm text-gray-700">Graph View Enabled</p>
+          )}
         </div>
 
         <div className="flex gap-6">
-          <Button
-            bgcolor="bg-white"
-            border="border border-gray-300"
-            textColor="text-black"
-            icon={<CiFilter className="text-lg" />}
-            hover="hover:bg-gray-100"
-            title="Filter"
-          />
-          <input
-            type="search"
-            className="border px-3 py-2 rounded border-gray-300 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
+          {/* Toggle Button */}
+          <button
+            onClick={() =>
+              setViewMode(viewMode === "table" ? "graph" : "table")
+            }
+            className="border border-gray-300 px-3 py-2 w-[6rem] rounded shadow-sm flex items-center gap-2 text-sm hover:bg-gray-100 cursor-pointer"
+          >
+            {viewMode === "table" ? (
+              <>
+                <MdBarChart className="text-lg" />
+                Graph
+              </>
+            ) : (
+              <>
+                <MdTableChart className="text-lg" />
+                Table
+              </>
+            )}
+          </button>
+
+          {/* search */}
+          {viewMode === "table" && (
+            <input
+              type="search"
+              className="border px-3 py-2 rounded border-gray-300 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-cyan-200 shadow-sm"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+          )}
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table or Graph View */}
       <div className="overflow-auto bg-white rounded shadow-md border border-gray-200">
-        <table className="w-full text-sm text-gray-800 border-collapse">
-          <thead className="bg-[var(--base-color)] text-xs font-semibold">
-            <tr>
-              {headers.map((header) => (
-                <th
-                  key={header.label}
-                  className="px-4 py-3 border border-gray-300 text-left cursor-pointer select-none"
-                  onClick={() =>
-                    header.key !== "sn" && handleSort(header.key as keyof IssueItem)
-                  }
-                >
-                  {header.label}{" "}
-                  {header.key !== "sn" && (
-                    <span>
-                      {sortConfig?.key === header.key
-                        ? sortConfig.direction === "asc"
-                          ? "▲"
-                          : "▼"
-                        : "⇅"}
-                    </span>
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredItems.length === 0 && (
+        {viewMode === "table" ? (
+          // Table
+          <table className="w-full text-sm text-gray-800 border-collapse">
+            <thead className="bg-[var(--base-color)] text-xs font-semibold">
               <tr>
-                <td colSpan={headers.length} className="text-center py-4 text-red-400 text-lg">
-                  No data found
-                </td>
+                {headers.map((header) => (
+                  <th
+                    key={header.label}
+                    className="px-4 py-3 border border-gray-300 text-left cursor-pointer select-none"
+                    onClick={() =>
+                      header.key !== "sn" &&
+                      handleSort(header.key as keyof IssueItem)
+                    }
+                  >
+                    {header.label}{" "}
+                    {header.key !== "sn" && (
+                      <span>
+                        {sortConfig?.key === header.key
+                          ? sortConfig.direction === "asc"
+                            ? "▲"
+                            : "▼"
+                          : "⇅"}
+                      </span>
+                    )}
+                  </th>
+                ))}
               </tr>
-            )}
+            </thead>
+            <tbody>
+              {filteredItems.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={headers.length}
+                    className="text-center py-4 text-red-400 text-lg"
+                  >
+                    No data found
+                  </td>
+                </tr>
+              )}
 
-            {paginatedItems.map((item, index) => (
-              <tr
-                key={item.id}
-                className="transition duration-150 border border-gray-300 hover:bg-gray-50"
-              >
-                <td className="px-4 py-2 border border-gray-300">{startIndex + index + 1}</td>
-                <td className="px-4 py-2 border border-gray-300 min-w-[14rem]">{item.itemName}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.date}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.expDate}</td>
-                <td className="px-4 py-2 border border-gray-300 min-w-[10rem]">{item.updatedBy}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.batchNo}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.qty}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.mrpUnit}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.rateUnit}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.subTotal}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.cgst}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.sgst}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.igst}</td>
-                <td className="px-4 py-2 border border-gray-300">{item.total}</td>
-              </tr>
-            ))}
+              {paginatedItems.map((item, index) => (
+                <tr
+                  key={item.id}
+                  className="transition duration-150 border border-gray-300 hover:bg-gray-50"
+                >
+                  <td className="px-4 py-2 border border-gray-300">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300 min-w-[14rem]">
+                    {item.itemName}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.date}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.expDate}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300 min-w-[10rem]">
+                    {item.updatedBy}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.batchNo}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.qty}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.mrpUnit}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.rateUnit}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.subTotal}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.cgst}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.sgst}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.igst}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.total}
+                  </td>
+                </tr>
+              ))}
 
-            {/* Total Row */}
-            {filteredItems.length > 0 && (
-              <tr className="bg-gray-100 font-bold text-blue-500">
-                <td colSpan={13} className="px-4 py-2 border border-gray-300 text-center">
-                  Grand Total
-                </td>
-                <td colSpan={1} className="px-4 py-2 border border-gray-300">
-                  {grandTotalAmount.toFixed(2)}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              {/* Total Row */}
+              {filteredItems.length > 0 && (
+                <tr className="bg-gray-100 font-bold text-blue-500">
+                  <td
+                    colSpan={13}
+                    className="px-4 py-2 border border-gray-300 text-center"
+                  >
+                    Grand Total
+                  </td>
+                  <td colSpan={1} className="px-4 py-2 border border-gray-300">
+                    {grandTotalAmount.toFixed(2)}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        ) : (
+          // Graph
+          <div className="p-4">
+            {/* Replace with your chart library like recharts or chart.js */}
+            <h3 className="text-lg font-semibold mb-4">Graph View</h3>
+            <p className="text-gray-600">Show Graph</p>
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
-        <div>
-          {!searchTerm ? (
-            <p>
-              Showing {startNumber} to {endNumber} of {items.length} entries
-            </p>
-          ) : (
-            <p>
-              Showing {startNumber} to {endNumber} of {filteredItems.length} items (Filtered from{" "}
-              {items.length} items)
-            </p>
-          )}
+      {viewMode === "table" && (
+        <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
+          <div>
+            {!searchTerm ? (
+              <p>
+                Showing {startNumber} to {endNumber} of {items.length} entries
+              </p>
+            ) : (
+              <p>
+                Showing {startNumber} to {endNumber} of {filteredItems.length}{" "}
+                items (Filtered from {items.length} items)
+              </p>
+            )}
+          </div>
+          <Stack spacing={2} direction="row" justifyContent="flex-end">
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(_, page) => setCurrentPage(page)}
+              variant="outlined"
+              color="primary"
+            />
+          </Stack>
         </div>
-        <Stack spacing={2} direction="row" justifyContent="flex-end">
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={(_, page) => setCurrentPage(page)}
-            variant="outlined"
-            color="primary"
-          />
-        </Stack>
-      </div>
+      )}
     </div>
   );
 };

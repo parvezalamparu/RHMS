@@ -10,7 +10,7 @@ import {
 import { IoPersonSharp } from "react-icons/io5";
 import { BiSolidPurchaseTag } from "react-icons/bi";
 import { BiSolidDashboard } from "react-icons/bi";
-import { GiAutoRepair } from "react-icons/gi";
+import { GiCardDiscard } from "react-icons/gi";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { GoIssueClosed } from "react-icons/go";
 import { useState } from "react";
@@ -82,11 +82,7 @@ const StoreSidebar = () => {
                 Items
               </span>
               <span className="hidden group-hover:inline ml-auto">
-                {openMenu === "Items" ? (
-                  <FaChevronDown />
-                ) : (
-                  <FaChevronRight />
-                )}
+                {openMenu === "Items" ? <FaChevronDown /> : <FaChevronRight />}
               </span>
             </button>
 
@@ -115,7 +111,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/item-category"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/item-category")
+                    isActive("/store/item-category")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -127,7 +123,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/item-unit"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/inventory/categories")
+                    isActive("/store/item-unit")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -139,7 +135,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/item-type"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/inventory/categories")
+                    isActive("/store/item-type")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -152,7 +148,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/item-company"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/inventory/categories")
+                    isActive("/store/item-company")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -165,7 +161,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/item-store"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/inventory/categories")
+                    isActive("/store/item-store")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -178,7 +174,7 @@ const StoreSidebar = () => {
                 <Link
                   to="/store/store-department"
                   className={`block px-2 py-2 rounded-md text-sm ${
-                    isActive("/inventory/categories")
+                    isActive("/store/store-department")
                       ? "bg-gray-700 text-yellow-300"
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
@@ -195,7 +191,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/requisition"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/requisition")
+                isActive("/store/requisition")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -213,7 +209,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/purchase-list"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/purchase-list")
+                isActive("/store/purchase-list")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -231,7 +227,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/purchase-orders"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/purchase-orders")
+                isActive("/store/purchase-orders")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -267,7 +263,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/return"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/return")
+                isActive("/store/return")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -283,18 +279,18 @@ const StoreSidebar = () => {
 
           <li>
             <Link
-              to="/store/repair-items"
+              to="/store/discard-items"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/repair-items")
+                isActive("/store/discard-items")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
-                <GiAutoRepair />
+                <GiCardDiscard />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
-                Repair Items
+                Discard Items
               </span>
             </Link>
           </li>
@@ -303,7 +299,7 @@ const StoreSidebar = () => {
             <Link
               to="/store/vendor"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/vendor")
+                isActive("/store/vendor")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -319,9 +315,9 @@ const StoreSidebar = () => {
 
           <li>
             <Link
-              to="/dashboard/all-forms"
+              to="/store/all-forms"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/all-forms")
+                isActive("/store/all-forms")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -337,9 +333,9 @@ const StoreSidebar = () => {
 
           <li>
             <Link
-              to="store/invoice"
+              to="/store/invoice"
               className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/invoice")
+                isActive("/store/invoice")
                   ? "bg-gray-700 text-yellow-300"
                   : "text-white hover:bg-gray-700 hover:text-yellow-300"
               }`}
@@ -352,7 +348,7 @@ const StoreSidebar = () => {
               </span>
             </Link>
           </li>
-
+          {/* reports */}
           <li>
             <button
               onClick={() => toggleSubMenu("Reports")}
@@ -381,10 +377,10 @@ const StoreSidebar = () => {
             <ul
               className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out 
                 ${
-                openMenu === "Reports"
-                  ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
-                  : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
-              }`}
+                  openMenu === "Reports"
+                    ? "max-h-[24rem] opacity-100 overflow-visible pointer-events-auto"
+                    : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+                }`}
             >
               {/* Normal Admin links */}
               <li>
@@ -469,6 +465,18 @@ const StoreSidebar = () => {
                   }`}
                 >
                   Item Stock Report
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/store/discard-items-report"
+                  className={`block px-2 py-2 mb-4 rounded-md text-sm ${
+                    isActive("/store/discard-items-report")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Discarded Items Report
                 </Link>
               </li>
             </ul>

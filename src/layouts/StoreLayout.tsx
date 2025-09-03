@@ -7,9 +7,9 @@ const StoreLayout = () => {
   return (
     <div className="flex">
       <StoreSidebar />
-      <div className="mt-16 pl-12 w-full h-[calc(100vh-4rem)] bg-gray-100 overflow-y-auto">
+      <div className="mt-16 pl-12 w-full max-h-[calc(100vh-4rem)] bg-gray-100 overflow-y-auto">
         <Topbar />
-        <main className="p-4">
+        <main className="px-4 pt-2">
           <Outlet />
         </main>
       </div>
