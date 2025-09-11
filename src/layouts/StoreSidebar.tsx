@@ -10,7 +10,6 @@ import {
 import { IoPersonSharp } from "react-icons/io5";
 import { BiSolidPurchaseTag } from "react-icons/bi";
 import { BiSolidDashboard } from "react-icons/bi";
-import { GiCardDiscard } from "react-icons/gi";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { GoIssueClosed } from "react-icons/go";
 import { useState } from "react";
@@ -260,39 +259,83 @@ const StoreSidebar = () => {
           </li>
 
           <li>
-            <Link
-              to="/store/return"
-              className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/store/return")
+            <button
+              onClick={() => toggleSubMenu("return")}
+              className={`flex w-full text-white return-center px-4 py-3 space-x-4 rounded-md ${
+                openMenu === "return"
                   ? "bg-gray-700 text-yellow-300"
-                  : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  : "hover:bg-gray-700 hover:text-yellow-300"
               }`}
             >
               <span className="text-xl">
                 <PiKeyReturnFill />
               </span>
               <span className="text-sm font-medium hidden group-hover:inline">
-                Return Processing
+                Return
               </span>
-            </Link>
-          </li>
+              <span className="hidden group-hover:inline ml-auto">
+                {openMenu === "return" ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+            </button>
 
-          <li>
-            <Link
-              to="/store/discard-items"
-              className={`flex items-center px-4 py-3 space-x-4 rounded-md transition-colors duration-200 ${
-                isActive("/store/discard-items")
-                  ? "bg-gray-700 text-yellow-300"
-                  : "text-white hover:bg-gray-700 hover:text-yellow-300"
+            {/* Submenu */}
+            <ul
+              className={`ml-10 mt-1 space-y-1 hidden group-hover:block transition-all duration-500 ease-in-out
+              ${
+                openMenu === "return"
+                  ? "max-h-[20rem] opacity-100 overflow-visible pointer-events-auto"
+                  : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
               }`}
             >
-              <span className="text-xl">
-                <GiCardDiscard />
-              </span>
-              <span className="text-sm font-medium hidden group-hover:inline">
-                Discard Items
-              </span>
-            </Link>
+              <li>
+                <Link
+                  to="/store/return-items"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/store/return-items")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Return Items
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/store/approved-return"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/store/approved-return")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Approved Return
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/store/repair-items"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/store/repair-items")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Repair
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/store/discard-items"
+                  className={`block px-2 py-2 rounded-md text-sm ${
+                    isActive("/store/discard-items")
+                      ? "bg-gray-700 text-yellow-300"
+                      : "text-white hover:bg-gray-700 hover:text-yellow-300"
+                  }`}
+                >
+                  Discard Items
+                </Link>
+              </li>
+            </ul>
           </li>
 
           <li>

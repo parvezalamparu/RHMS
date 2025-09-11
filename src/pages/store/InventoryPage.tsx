@@ -10,6 +10,7 @@ import Stack from "@mui/material/Stack";
 import { MdInfoOutline } from "react-icons/md";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import usePreviousPage from "../../hooks/usePreviousPage";
+import { Link } from "react-router-dom";
 
 export interface Item {
   id: number;
@@ -253,7 +254,9 @@ useEffect(() => {document.title = "Rhds | Items"});
                   {startIndex + index + 1}
                 </td>
                 <td className="px-4 border border-gray-300">
+                  <Link to={`/store/item-register/${item.id}`} className="text-blue-600 ">
                   {item.itemName}
+                  </Link>
                 </td>
                 <td className="px-4 border border-gray-300">
                   {item.itemCategory}

@@ -250,7 +250,7 @@ const AddPurchaseForm = () => {
   }, [items, discountType, discountValue]);
 
   return (
-    <div className="pl-2">
+    <div className="pl-2 mb-4">
       <h2 className="text-2xl font-bold text-[#035d67] mb-6 bg-[var(--base-color)] p-2">
         ADD PURCHASE ENTRY
       </h2>

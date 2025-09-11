@@ -1,3 +1,6 @@
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
 import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -5,7 +8,10 @@ import Button from "../../components/store/general/Button";
 import { PiMicrosoftExcelLogo } from "react-icons/pi";
 import { BsFiletypePdf } from "react-icons/bs";
 import { CiFilter } from "react-icons/ci";
-import { MdTableChart, MdBarChart } from "react-icons/md";
+import ToggleButton from "../../components/store/general/ToggleButton";
+import { PieChart } from "@mui/x-charts/PieChart";
+import { BarChart } from "@mui/x-charts/BarChart";
+import { LineChart } from "@mui/x-charts/LineChart";
 
 interface PurchaseItem {
   id: number;
@@ -25,7 +31,8 @@ interface PurchaseItem {
 }
 
 const PurchaseReport = () => {
-  const [viewMode, setViewMode] = useState("table");
+  const [viewMode, setViewMode] = useState<"table" | "graph">("table");
+
   const [items] = useState<PurchaseItem[]>(
     Array.from({ length: 20 }, (_, i) => {
       const qty = Math.floor(Math.random() * 100) + 1;
@@ -59,7 +66,7 @@ const PurchaseReport = () => {
     })
   );
 
-  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(15);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
@@ -129,6 +136,86 @@ const PurchaseReport = () => {
     { label: "Total", key: "total" },
   ];
 
+  //export to Excel
+  const handleExportExcel = () => {
+      const dataToExport = filteredItems.map((item, index) => ({
+        SN: index + 1,
+        "Purchase ID": item.purchaseId,
+        "Item Name": item.itemName,
+        Date: item.date,
+        "Purchased By": item.purchaseBy,
+        "Batch No": item.batchNo,
+        Qty: item.qty,
+        "MRP Unit": item.mrpUnit,
+        "Rate Unit": item.rateUnit,
+        "Sub Total": item.subTotal,
+        SGST: item.sgst,
+        CGST: item.cgst,
+        IGST: item.igst,
+        TOTAL: item.total,
+      }));
+      const ws = XLSX.utils.json_to_sheet(dataToExport);
+  
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Purchase Report");
+  
+      XLSX.writeFile(wb, "purchase_report.xlsx");
+    };
+
+    //export to PDF
+    const handleExportPDF = () => {
+        const doc = new jsPDF();
+    
+        doc.setFontSize(16);
+        doc.text("Purchase Report", 14, 15);
+    
+        const tableColumn = [
+          "SN",
+          "Issue ID",
+          "Item Name",
+          "Date",
+          "Issued By",
+          "Batch No",
+          "Qty",
+          "MRP Unit",
+          "Rate Unit",
+          "Sub Total",
+          "SGST",
+          "CGST",
+          "IGST",
+          "TOTAL",
+        ];
+    
+        const tableRows = filteredItems.map((item, index) => [
+          index + 1,
+          item.purchaseId,
+          item.itemName,
+          item.date,
+          item.purchaseBy,
+          item.batchNo,
+          item.qty,
+          item.mrpUnit,
+          item.rateUnit,
+          item.subTotal,
+          item.sgst,
+          item.cgst,
+          item.igst,
+          item.total,
+        ]);
+    
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 25,
+          styles: { fontSize: 8 },
+          headStyles: { fillColor: [3, 93, 103] },
+        });
+    
+        // Save PDF
+        doc.save("purchase_report.pdf");
+      };
+  
+
   return (
     <div className="flex flex-col pl-2">
       {/* Header */}
@@ -136,16 +223,9 @@ const PurchaseReport = () => {
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
           Purchase Report
         </h2>
+        <div className="flex gap-2">
         {viewMode === "table" && (
           <div className="flex gap-2">
-            {/* filter button */}
-            <Button
-              bgcolor="bg-white"
-              border="border-2 border-gray-800"
-              textColor="text-black"
-              icon={<CiFilter className="text-lg" />}
-              hover="hover:bg-gray-100"
-            />
             {/* export button */}
 
             <Button
@@ -155,6 +235,7 @@ const PurchaseReport = () => {
               name="Export"
               icon={<BsFiletypePdf />}
               hover="hover:bg-gray-100"
+              onClick={handleExportPDF}
             />
             <Button
               bgcolor="bg-white"
@@ -163,9 +244,24 @@ const PurchaseReport = () => {
               name="Export"
               icon={<PiMicrosoftExcelLogo />}
               hover="hover:bg-gray-100"
+              onClick={handleExportExcel}
             />
           </div>
         )}
+        {/* filter button */}
+            <Button
+              bgcolor="bg-white"
+              border="border-2 border-gray-800"
+              textColor="text-black"
+              icon={<CiFilter className="text-lg" />}
+              name="Filter"
+              hover="hover:bg-gray-100"
+            />
+            {/* Toggle Button */}
+          <ToggleButton viewMode={viewMode} setViewMode={setViewMode} />
+
+          {viewMode === "table" ? "" : ""}
+        </div>
       </div>
 
       {/* Top Controls */}
@@ -185,7 +281,7 @@ const PurchaseReport = () => {
                   setCurrentPage(1);
                 }}
               >
-                <option value="10">10</option>
+                <option value="15">15</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
               </select>
@@ -197,25 +293,6 @@ const PurchaseReport = () => {
         </div>
 
         <div className="flex gap-6">
-          {/* Toggle Button */}
-          <button
-            onClick={() =>
-              setViewMode(viewMode === "table" ? "graph" : "table")
-            }
-            className="border border-gray-300 px-3 py-2 w-[6rem] rounded shadow-sm flex items-center gap-2 text-sm hover:bg-gray-100 cursor-pointer"
-          >
-            {viewMode === "table" ? (
-              <>
-                <MdBarChart className="text-lg" />
-                Graph
-              </>
-            ) : (
-              <>
-                <MdTableChart className="text-lg" />
-                Table
-              </>
-            )}
-          </button>
           {viewMode === "table" && (
             <input
               type="search"
@@ -340,11 +417,62 @@ const PurchaseReport = () => {
           </table>
         ) : (
           // Graph
-          <div className="p-4">
-            {/* Replace with your chart library like recharts or chart.js */}
-            <h3 className="text-lg font-semibold mb-4">Graph View</h3>
-            <p className="text-gray-600">Show Graph</p>
-          </div>
+          <>
+            <div className="flex">
+              <div className="p-4 w-1/2 ">
+                {/* Replace with your chart library like recharts or chart.js */}
+                <h3 className="text-lg font-semibold mb-4">Graph View</h3>
+
+                <PieChart
+                  series={[
+                    {
+                      data: [
+                        { id: 0, value: 21, label: "A" },
+                        { id: 1, value: 14, label: "B" },
+                        { id: 2, value: 34, label: "C" },
+                      ],
+                    },
+                  ]}
+                  width={400}
+                  height={200}
+                />
+              </div>
+              {/* div 2 */}
+              <div className="w-1/2">
+                <BarChart
+                  xAxis={[{ data: ["group A", "group B", "group C"] }]}
+                  series={[
+                    { data: [4, 3, 5] },
+                    { data: [1, 6, 3] },
+                    { data: [2, 5, 6] },
+                  ]}
+                  height={300}
+                />
+              </div>
+            </div>
+            <div className="mt-8 px-2 border border-gray-200">
+              <LineChart
+                xAxis={[{ data: [1, 2, 3, 5, 8, 10, 12, 15, 16] }]}
+                series={[
+                  {
+                    data: [2, 5.5, 2, 8.5, 1.5, 5],
+                    valueFormatter: (value) =>
+                      value == null ? "NaN" : value.toString(),
+                  },
+                  {
+                    data: [null, null, null, null, 5.5, 2, 8.5, 1.5, 5],
+                  },
+                  {
+                    data: [7, 8, 5, 4, null, null, 2, 5.5, 1],
+                    valueFormatter: (value) =>
+                      value == null ? "?" : value.toString(),
+                  },
+                ]}
+                height={200}
+                margin={{ bottom: 10 }}
+              />
+            </div>
+          </>
         )}
       </div>
 

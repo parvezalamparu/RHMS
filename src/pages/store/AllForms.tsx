@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../components/store/general/Button";
+import AddItemModal from "../../components/store/forms/AddItemModal";
 
 export default function AllForms() {
   return (
@@ -167,6 +168,7 @@ export default function AllForms() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

@@ -33,7 +33,7 @@ const fetchReturnDetails = async (id: string) => {
   };
 };
 
-const ViewReturnItemDetails = () => {
+const ViewApprovedReturnDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [returnData, setReturnData] = useState<any>(null);
 
@@ -51,7 +51,7 @@ const ViewReturnItemDetails = () => {
     <div className="pl-2">
       <div>
         <h2 className="text-2xl font-bold text-[#035d67] mb-6 bg-[var(--base-color)] p-2">
-          VIEW RETURN DETAILS
+          APPROVED RETURN DETAILS
         </h2>
       </div>
 
@@ -136,9 +136,23 @@ const ViewReturnItemDetails = () => {
           <Button
             bgcolor=""
             border="border-3"
+            textColor="text-yellow-500"
+            hover="hover:text-yellow-600"
+            name="Repair"
+          />
+          <Button
+            bgcolor=""
+            border="border-3"
+            textColor="text-blue-700"
+            hover="hover:text-blue-800"
+            name="Discard"
+          />
+          <Button
+            bgcolor=""
+            border="border-3"
             textColor="text-green-700"
             hover="hover:text-green-800"
-            name="Approve"
+            name="Add to Item"
           />
 
         </div>
@@ -146,4 +160,4 @@ const ViewReturnItemDetails = () => {
   );
 };
 
-export default ViewReturnItemDetails;
+export default ViewApprovedReturnDetails;

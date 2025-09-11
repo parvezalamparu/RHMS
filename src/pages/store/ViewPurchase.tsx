@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-
 // Simulated API fetch
 const fetchPurchaseDetails = async (id: string) => {
   // Replace with real API call
@@ -67,7 +66,7 @@ const fetchPurchaseDetails = async (id: string) => {
 
 const ViewPurchase = () => {
   const { id } = useParams<{ id: string }>();
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
   const [purchase, setPurchase] = useState<any>(null);
 
   useEffect(() => {
@@ -82,31 +81,52 @@ const ViewPurchase = () => {
 
   return (
     <div className="pl-2">
-        <div>
-      <h2 className="text-2xl font-bold text-[#035d67] mb-6 bg-[var(--base-color)] p-2">
-        VIEW PURCHASE
-      </h2>
+      <div>
+        <h2 className="text-2xl font-bold text-[#035d67] mb-6 bg-[var(--base-color)] p-2">
+          VIEW PURCHASE
+        </h2>
       </div>
       {/* HEADER */}
       <div className="mt-4 bg-gray-100">
         <div className="grid grid-cols-3 gap-2">
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Purchase ID:</strong> {header.id}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>Purchase
+              ID:
+            </strong>{" "}
+            {header.id}
           </p>
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Date:</strong> {header.date}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>Date:
+            </strong>{" "}
+            {header.date}
           </p>
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Vendor:</strong> {header.vendor}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>Vendor:
+            </strong>{" "}
+            {header.vendor}
           </p>
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Invoice No:</strong> {header.invoiceNo}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>Invoice
+              No:
+            </strong>{" "}
+            {header.invoiceNo}
           </p>
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>Purchase Type:</strong> {header.purchaseType}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>Purchase
+              Type:
+            </strong>{" "}
+            {header.purchaseType}
           </p>
           <p>
-            <strong><span className="text-red-600 font-semibold mr-2">☮</span>PO No:</strong> {header.poNo}
+            <strong>
+              <span className="text-red-600 font-semibold mr-2">☮</span>PO No:
+            </strong>{" "}
+            {header.poNo}
           </p>
         </div>
       </div>
@@ -161,7 +181,10 @@ const ViewPurchase = () => {
                   "igst",
                   "amount",
                 ].map((key, i) => (
-                  <td key={i} className="border border-gray-300 px-2 py-1 text-center">
+                  <td
+                    key={i}
+                    className="border border-gray-300 px-2 py-1 text-center"
+                  >
                     {row[key]}
                   </td>
                 ))}
@@ -188,25 +211,43 @@ const ViewPurchase = () => {
           )}
         </div>
       </div>
-      <div className="w-full flex justify-end mt-6">
-        <div className="grid grid-cols-1 md:grid-rows-6 gap-1">
-          <p>
-            <strong>Sub Total:</strong> ₹{footer.subTotal}
+      <div className="w-full flex justify-end my-6">
+        <div className="grid grid-cols-1 md:grid-rows-6 gap-1 w-72">
+          <p className="flex justify-end items-center">
+            <strong>Sub Total:</strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.subTotal}
+            </span>
           </p>
-          <p>
-            <strong>CGST Amount:</strong> ₹{footer.cgstAmt}
+          <p className="flex justify-end items-center">
+            <strong>CGST Amount:</strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.cgstAmt}
+            </span>
           </p>
-          <p>
-            <strong>SGST Amount:</strong> ₹{footer.sgstAmt}
+          <p className="flex justify-end items-center">
+            <strong>SGST Amount:</strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.sgstAmt}
+            </span>
           </p>
-          <p>
-            <strong>IGST Amount:</strong> ₹{footer.igstAmt}
+          <p className="flex justify-end items-center">
+            <strong>IGST Amount: </strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.igstAmt}
+            </span>
           </p>
-          <p>
-            <strong>Discount:</strong> ₹{footer.discount}
+          <p className="flex justify-end items-center">
+            <strong>Discount: </strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.discount}
+            </span>
           </p>
-          <p className="font-bold text-lg">
-            <strong>Total:</strong> ₹{footer.total}
+          <p className="flex justify-end items-center font-bold text-lg">
+            <strong>Total: </strong>
+            <span className="border border-gray-200 rounded ml-4 px-2 w-30">
+              ₹ {footer.total}
+            </span>
           </p>
         </div>
       </div>

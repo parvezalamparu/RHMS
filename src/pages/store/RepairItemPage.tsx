@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Button from "../../components/store/general/Button";
-import { FaPlus } from "react-icons/fa6";
 import { MdInfoOutline } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -8,32 +7,34 @@ import { useNavigate } from "react-router-dom";
 import usePreviousPage from "../../hooks/usePreviousPage";
 import Badge from "../../components/general/Badge";
 
-interface ReturnItem {
+interface RepairItem {
   id: string;
+  batchNo: string;
   date: string;
-  dept: string;
   qty: number;
-  returnedBy: string;
-  note: string;
+  qtyUnit: string;
+  sentBy: string;
+  reason: string;
 }
 
-const ReturnPage = () => {
+const RepairItemsPage = () => {
   const navigate = useNavigate();
   usePreviousPage();
 
   useEffect(() => {
-    document.title = "Rhds | Returned Items";
+    document.title = "Rhds | Repair";
   }, []);
 
   // Dummy data
-  const [items, setItems] = useState<ReturnItem[]>(
-    Array.from({ length: 10 }, (_, i) => ({
-      id: `RET00${i + 1}`,
+  const [items, setItems] = useState<RepairItem[]>(
+    Array.from({ length: 4 }, (_, i) => ({
+      id: `REP-00${i + 1}`,
+      batchNo: `BATCH-${100 + i}`,
       date: "12-8-2025",
-      dept: i % 2 === 0 ? "OPD" : "OT",
       qty: 1,
-      returnedBy: `User${i + 1}`,
-      note: "Not working",
+      qtyUnit: "PCS",
+      sentBy: `User${i + 1}`,
+      reason: "Not working",
     }))
   );
 
@@ -48,8 +49,9 @@ const ReturnPage = () => {
   // Filtering
   const filteredItems = items.filter(
     (item) =>
-      item.dept.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.returnedBy.toLowerCase().includes(searchTerm.toLowerCase())
+    //   item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.batchNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.sentBy.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination
@@ -68,17 +70,8 @@ const ReturnPage = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
-          Returned Items
+          Repair Items
         </h2>
-        <Button
-          bgcolor="bg-white"
-          border="border-2 border-gray-800"
-          textColor="text-black"
-          name="Return an Item"
-          icon={<FaPlus className="text-lg" />}
-          hover="hover:bg-gray-100"
-          onClick={() => navigate("/store/return-process/return-form")}
-        />
       </div>
 
       {/* Controls */}
@@ -120,26 +113,23 @@ const ReturnPage = () => {
         <table className="w-full text-sm text-gray-800 border-collapse">
           <thead className="bg-[var(--base-color)] text-xs font-semibold">
             <tr>
-              <th className="px-4 py-2 border border-gray-300 text-left w-[1rem] whitespace-nowrap">
+              <th className="px-4 py-2 border border-gray-300 text-left w-[1rem]">
                 Sl. No.
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left w-[10rem]">
-                Return ID
+              <th className="px-4 py-2 border border-gray-300 text-left min-w-[8rem]">
+                Repair ID
               </th>
               <th className="px-4 py-2 border border-gray-300 text-left">
                 Date
               </th>
               <th className="px-4 py-2 border border-gray-300 text-left">
-                Dept
-              </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
                 Qty
               </th>
               <th className="px-4 py-2 border border-gray-300 text-left">
-                Returned By
+                Qty Unit
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left min-w-[6rem]">
-                Note
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Sent By
               </th>
               <th className="px-4 py-2 border border-gray-300 text-left w-[3rem]">
                 Status
@@ -156,7 +146,7 @@ const ReturnPage = () => {
                   colSpan={7}
                   className="text-center py-4 text-red-400 text-lg"
                 >
-                  No returned items found
+                  No pending repair items found
                 </td>
               </tr>
             )}
@@ -170,10 +160,9 @@ const ReturnPage = () => {
                 </td>
                 <td className="px-4 border border-gray-300">{item.id}</td>
                 <td className="px-4 border border-gray-300">{item.date}</td>
-                <td className="px-4 border border-gray-300">{item.dept}</td>
                 <td className="px-4 border border-gray-300">{item.qty}</td>
-                <td className="px-4 border border-gray-300">{item.returnedBy}</td>
-                <td className="px-4 border border-gray-300">{item.note}</td>
+                <td className="px-4 border border-gray-300">{item.qtyUnit}</td>
+                <td className="px-4 border border-gray-300">{item.sentBy}</td>
                 <td className="px-4 border border-gray-300">
                   <Badge 
                   label="Pending"
@@ -189,11 +178,11 @@ const ReturnPage = () => {
                     textColor="text-blue-900"
                     hover="hover:bg-blue-100"
                     onClick={() =>
-                      navigate(`/store/returned-items-details/${item.id}`, {
+                      navigate(`/store/repair-items-details/${item.id}`, {
                         state: item,
                       })
                     }
-                    title="View Return"
+                    title="View"
                   />
                 </td>
               </tr>
@@ -231,4 +220,4 @@ const ReturnPage = () => {
   );
 };
 
-export default ReturnPage;
+export default RepairItemsPage;

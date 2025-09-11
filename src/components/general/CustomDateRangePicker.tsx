@@ -1,9 +1,16 @@
-import { useState, useRef } from 'react';
-import Flatpickr from 'react-flatpickr';
-import 'flatpickr/dist/themes/material_blue.css';
+import { useRef } from "react";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
-const CustomDateRangePicker = () => {
-  const [range, setRange] = useState<Date[]>([]);
+interface CustomDateRangePickerProps {
+  value: Date[];
+  onChange: (dates: Date[]) => void;
+}
+
+const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
+  value,
+  onChange,
+}) => {
   const inputRef = useRef<any>(null);
 
   return (
@@ -12,12 +19,12 @@ const CustomDateRangePicker = () => {
       <div className="relative">
         <Flatpickr
           options={{
-            mode: 'range',
-            dateFormat: 'd-m-Y',
+            mode: "range",
+            dateFormat: "d-m-Y",
             closeOnSelect: false,
           }}
-          value={range}
-          onChange={(selectedDates) => setRange(selectedDates)}
+          value={value}
+          onChange={(selectedDates) => onChange(selectedDates)}
           className="border px-3 py-2 rounded w-full pr-10"
           ref={inputRef}
         />

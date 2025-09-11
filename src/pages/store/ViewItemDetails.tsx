@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../components/store/general/Button";
 import { TiArrowBackOutline } from "react-icons/ti";
@@ -142,7 +142,6 @@ const ViewItemDetails: React.FC = () => {
 
     const startNumber = startIndex + 1;
     const endNumber = startIndex + paginatedRows.length;
-
     return (
       <div>
         {/* Controls */}

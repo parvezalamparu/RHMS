@@ -11,6 +11,8 @@ import MainLayout from "./layouts/MainLayout";
 
 // General Pages
 import LoginPage from "./pages/general/LoginPage";
+
+// Main Pages
 import { MainDashboard } from "./pages/general/MainDashboard";
 import Users from "./pages/admin/UsersPage";
 import AddUserForm from "./pages/forms/AddUserForm";
@@ -19,6 +21,9 @@ import RoleList from "./pages/admin/RoleList";
 import PermissionList from "./pages/admin/PermissionList";
 import AssignPermissionPage from "./pages/admin/AssignPermissionPage";
 import EditUserForm from "./pages/forms/EditUserForm";
+import OPDListPage from "./components/opd/pages/OPDList";
+import PatientListPage from "./components/opd/pages/PatientsListPage";
+
 
 // Store Pages
 import Dashboard from "./pages/store/StoreDashboard";
@@ -37,7 +42,6 @@ import ItemCompanyPage from "./pages/store/ItemCompanyPage";
 import ItemStorePage from "./pages/store/ItemStorePage";
 import StoreDepartmentPage from "./pages/store/StoreDepartmentPage";
 import ReturnPage from "./pages/store/ReturnPage";
-import RepairItems from "./pages/store/RepairItemsPage";
 import ItemIssue from "./pages/store/ItemIssuePage";
 import Invoice from "./pages/store/InvoicePage"
 import ViewItemDetails from "./pages/store/ViewItemDetails";
@@ -58,6 +62,12 @@ import ViewReturnItemDetails from "./pages/store/ViewReturnItemDetails";
 import EditRequisitionForm from "./components/store/forms/EditRequisitionForm";
 import EditPurchaseOrderForm from "./components/store/forms/EditPurchaseOrderForm";
 import AllForms from "./pages/store/AllForms";
+import ViewItemRegister from "./pages/store/ViewItemRegister";
+import ApproveReturn from "./pages/store/ApprovedReturn";
+import RepairItemsPage from "./pages/store/RepairItemPage";
+import DiscardItemsReport from "./pages/store/DiscardItemsReport";
+import ViewApprovedReturnDetails from "./pages/store/ViewApprovedReturnDetails";
+import ViewRepairItemDetails from "./pages/store/ViewRepairItemDetails";
 
 
 // React hot toast
@@ -84,6 +94,8 @@ function App() {
           <Route path="/admin/permissions" element={<PermissionList />} />
           <Route path="/role/assign-permission" element={<AssignPermissionPage />} />
           <Route path="/admin/users/:id/edit" element={<EditUserForm />} />
+          <Route path="/opd/appointments" element={<OPDListPage />} />
+          <Route path="/register/patient-register" element={<PatientListPage />} />
 
         </Route>
 
@@ -104,8 +116,8 @@ function App() {
           <Route path="/store/item-company" element={<ItemCompanyPage />} />
           <Route path="/store/item-store" element={<ItemStorePage />} />
           <Route path="/store/store-department" element={<StoreDepartmentPage />} />
-          <Route path="/store/return" element={<ReturnPage />} />
-          <Route path="/store/repair-items" element={<RepairItems />} />
+          <Route path="/store/return-items" element={<ReturnPage />} />
+          <Route path="/store/repair-items" element={<RepairItemsPage />} />
           <Route path="/store/item-issue" element={<ItemIssue />} />
           <Route path="/store/invoice" element={<Invoice />} />
           <Route path="/store/all-items/:id" element={<ViewItemDetails />} />
@@ -126,6 +138,11 @@ function App() {
           <Route path="/store/requisition/edit/:id" element={<EditRequisitionForm />} />
           <Route path="/store/purchase-order/edit/:id" element={<EditPurchaseOrderForm />} />
           <Route path="/store/all-forms" element={<AllForms />} />
+          <Route path="/store/item-register/:id" element={<ViewItemRegister />} />
+          <Route path="/store/approved-return" element={<ApproveReturn/>} />
+          <Route path="/store/discard-items-report" element={<DiscardItemsReport/>} />
+          <Route path="/store/approved-return-details/:id" element={<ViewApprovedReturnDetails />} />
+          <Route path="/store/repair-items-details/:id" element={<ViewRepairItemDetails />} />
 
 
         </Route>

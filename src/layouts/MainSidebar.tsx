@@ -425,7 +425,7 @@ const MainSidebar = () => {
                       : "text-white hover:bg-gray-700 hover:text-yellow-300"
                   }`}
                 >
-                  Patient Register
+                  Patients Register
                 </Link>
               </li>
               <li>

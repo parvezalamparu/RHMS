@@ -1,10 +1,6 @@
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import * as XLSX from "xlsx";
 import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Badge from "../../components/general/Badge";
 import Button from "../../components/store/general/Button";
 import { PiMicrosoftExcelLogo } from "react-icons/pi";
 import { BsFiletypePdf } from "react-icons/bs";
@@ -14,35 +10,33 @@ import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { LineChart } from "@mui/x-charts/LineChart";
 
-interface StockReportItem {
+interface DiscardItem {
   id: number;
+  returnId: string;
   itemName: string;
-  unitType: string;
-  totalQty: number;
-  returnQty: number;
-  amount: number;
-  status: boolean;
+  date: string;
+  qty: number;
+  price: number;
 }
 
-const GeneralStockReport = () => {
+const DiscardItemsReport = () => {
   const [viewMode, setViewMode] = useState<"table" | "graph">("table");
-  const [showFilter, setShowFilter] = useState(false);
 
-  const handleFilter = (data: any) => {
-    console.log("Filter Data:", data);
-  };
+  // Dummy Data
+  const [items] = useState<DiscardItem[]>(
+    Array.from({ length: 25 }, (_, i) => {
+      const qty = Math.floor(Math.random() * 50) + 1;
+      const price = parseFloat((Math.random() * 200).toFixed(2));
+      const date = new Date();
+      date.setDate(date.getDate() - i);
 
-  const [items] = useState<StockReportItem[]>(
-    Array.from({ length: 30 }, (_, i) => {
-      const qty = Math.random() > 0.2 ? Math.floor(Math.random() * 100) : 0;
       return {
         id: i + 1,
-        itemName: `Item ${i + 1}`,
-        unitType: "PCS",
-        totalQty: qty,
-        returnQty: qty === 0 ? 0 : Math.floor(Math.random() * 10),
-        amount: qty === 0 ? 0 : parseFloat((Math.random() * 500).toFixed(2)),
-        status: qty > 0,
+        returnId: `RET-${1000 + i}`,
+        itemName: `Discard Item ${i + 1}`,
+        date: date.toISOString().split("T")[0],
+        qty,
+        price,
       };
     })
   );
@@ -51,11 +45,12 @@ const GeneralStockReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
-    key: keyof StockReportItem;
+    key: keyof DiscardItem;
     direction: "asc" | "desc";
   } | null>(null);
 
-  const handleSort = (key: keyof StockReportItem) => {
+  // Sorting logic
+  const handleSort = (key: keyof DiscardItem) => {
     setSortConfig((prev) => {
       if (prev?.key === key) {
         return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
@@ -64,20 +59,29 @@ const GeneralStockReport = () => {
     });
   };
 
-  const filteredItems = items.filter((item) =>
-    item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filtering
+  const filteredItems = items.filter(
+    (item) =>
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.returnId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Sorting
   const sortedItems = [...filteredItems].sort((a, b) => {
     if (!sortConfig) return 0;
     const { key, direction } = sortConfig;
     const aVal = a[key];
     const bVal = b[key];
-    if (aVal < bVal) return direction === "asc" ? -1 : 1;
-    if (aVal > bVal) return direction === "asc" ? 1 : -1;
-    return 0;
+
+    if (typeof aVal === "number" && typeof bVal === "number") {
+      return direction === "asc" ? aVal - bVal : bVal - aVal;
+    }
+    return direction === "asc"
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
   });
 
+  // Pagination
   const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedItems = sortedItems.slice(
@@ -88,85 +92,29 @@ const GeneralStockReport = () => {
   const startNumber = startIndex + 1;
   const endNumber = startIndex + paginatedItems.length;
 
-  const totalAmount = filteredItems.reduce((sum, item) => sum + item.amount, 0);
+  // Total row
+  const totalPrice = filteredItems.reduce((sum, item) => sum + item.price, 0);
 
-  // EXPORT TO EXCEL
-  const handleExportExcel = () => {
-    // Map data to clean format
-    const dataToExport = filteredItems.map((item, index) => ({
-      "Sl. No": index + 1,
-      "Item Name": item.itemName,
-      "Unit Type": item.unitType,
-      "Total Qty": item.totalQty,
-      "Return Qty": item.returnQty,
-      Amount: item.amount,
-      Status: item.status ? "Available" : "Out of Stock",
-    }));
-
-    // Convert JSON to worksheet
-    const ws = XLSX.utils.json_to_sheet(dataToExport);
-
-    // Create a workbook and append worksheet
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "General Stock Report");
-
-    // Save file
-    XLSX.writeFile(wb, "general_stock_report.xlsx");
-  };
-
-  // EXPORT TO PDF
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-
-    // Title
-    doc.setFontSize(16);
-    doc.text("General Stock Report", 14, 15);
-
-    // Table headers
-    const tableColumn = [
-      "Sl. No",
-      "Item Name",
-      "Unit Type",
-      "Total Qty",
-      "Return Qty",
-      "Amount",
-      "Status",
-    ];
-
-    // Table rows
-    const tableRows = filteredItems.map((item, index) => [
-      index + 1,
-      item.itemName,
-      item.unitType,
-      item.totalQty,
-      item.returnQty,
-      `₹${item.amount.toFixed(2)}`,
-      item.status ? "Available" : "Out of Stock",
-    ]);
-
-    // Add AutoTable
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 25,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [3, 93, 103] },
-    });
-
-    // Save PDF
-    doc.save("general_stock_report.pdf");
-  };
+  const headers: { label: string; key: keyof DiscardItem | "sn" }[] = [
+    { label: "SN", key: "sn" },
+    { label: "Return ID", key: "returnId" },
+    { label: "Item Name", key: "itemName" },
+    { label: "Date", key: "date" },
+    { label: "Qty", key: "qty" },
+    { label: "Price", key: "price" },
+  ];
 
   return (
     <div className="flex flex-col pl-2">
-      <div className="flex justify-between items-center mb-3 bg-[var(--base-color)] max-h-12 p-2">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
-          General Stock Report
+          Discard Items Report
         </h2>
         <div className="flex gap-2">
           {viewMode === "table" && (
             <div className="flex gap-2">
-              {/* export button */}
+              {/* Export Buttons */}
               <Button
                 bgcolor="bg-white"
                 border="border-2 border-gray-800"
@@ -174,7 +122,6 @@ const GeneralStockReport = () => {
                 name="Export"
                 icon={<BsFiletypePdf />}
                 hover="hover:bg-gray-100"
-                onClick={handleExportPDF}
               />
               <Button
                 bgcolor="bg-white"
@@ -183,11 +130,10 @@ const GeneralStockReport = () => {
                 name="Export"
                 icon={<PiMicrosoftExcelLogo />}
                 hover="hover:bg-gray-100"
-                onClick={handleExportExcel}
               />
             </div>
           )}
-          {/* filter button */}
+          {/* Filter Button */}
           <Button
             bgcolor="bg-white"
             border="border-2 border-gray-800"
@@ -195,18 +141,14 @@ const GeneralStockReport = () => {
             icon={<CiFilter className="text-lg" />}
             name="Filter"
             hover="hover:bg-gray-100"
-            onClick={() => setShowFilter((prev) => !prev)}
           />
-
           {/* Toggle Button */}
           <ToggleButton viewMode={viewMode} setViewMode={setViewMode} />
-
-          {viewMode === "table" ? "" : ""}
         </div>
       </div>
-      {showFilter && <div className="bg-red-200 h-14"></div>}
 
-      <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
+      {/* Top Controls */}
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
           {viewMode === "table" ? (
             <>
@@ -229,9 +171,10 @@ const GeneralStockReport = () => {
               <span className="text-sm text-gray-700">entries</span>
             </>
           ) : (
-            <p className="text-sm text-gray-700">Graph View Enabled</p>
+            <p className="text-sm text-gray-700">Visualization Mood</p>
           )}
         </div>
+
         <div className="flex gap-6">
           {viewMode === "table" && (
             <input
@@ -248,54 +191,31 @@ const GeneralStockReport = () => {
         </div>
       </div>
 
+      {/* Table */}
       <div className="overflow-auto bg-white rounded shadow-md border border-gray-200">
         {viewMode === "table" ? (
           <table className="w-full text-sm text-gray-800 border-collapse">
             <thead className="bg-[var(--base-color)] text-xs font-semibold">
               <tr>
-                {[
-                  "Sl. No",
-                  "Item Name",
-                  "Unit Type",
-                  "Total Qty",
-                  "Return Qty",
-                  "Amount",
-                  "Status",
-                ].map((header, idx) => (
+                {headers.map((header) => (
                   <th
-                    key={idx}
+                    key={header.label}
                     className="px-4 py-3 border border-gray-300 text-left cursor-pointer select-none"
                     onClick={() =>
-                      handleSort(
-                        [
-                          "id",
-                          "itemName",
-                          "unitType",
-                          "totalQty",
-                          "returnQty",
-                          "amount",
-                          "status",
-                        ][idx] as keyof StockReportItem
-                      )
+                      header.key !== "sn" &&
+                      handleSort(header.key as keyof DiscardItem)
                     }
                   >
-                    {header}{" "}
-                    <span>
-                      {sortConfig?.key ===
-                      ([
-                        "id",
-                        "itemName",
-                        "unitType",
-                        "totalQty",
-                        "returnQty",
-                        "amount",
-                        "status",
-                      ][idx] as keyof StockReportItem)
-                        ? sortConfig.direction === "asc"
-                          ? "▲"
-                          : "▼"
-                        : "⇅"}
-                    </span>
+                    {header.label}{" "}
+                    {header.key !== "sn" && (
+                      <span>
+                        {sortConfig?.key === header.key
+                          ? sortConfig.direction === "asc"
+                            ? "▲"
+                            : "▼"
+                          : "⇅"}
+                      </span>
+                    )}
                   </th>
                 ))}
               </tr>
@@ -304,80 +224,41 @@ const GeneralStockReport = () => {
               {filteredItems.length === 0 && (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={headers.length}
                     className="text-center py-4 text-red-400 text-lg"
                   >
                     No data found
                   </td>
                 </tr>
               )}
-              {paginatedItems.map((item, index) => {
-                const isOutOfStock = item.totalQty <= 0;
-                return (
-                  <tr
-                    key={item.id}
-                    className={`transition duration-150 border border-gray-300 ${
-                      isOutOfStock
-                        ? "bg-red-50 text-gray-400"
-                        : "hover:bg-gray-50"
-                    }`}
-                  >
-                    <td className="px-4 py-2 border border-gray-300">
-                      {startIndex + index + 1}
-                    </td>
-                    <td className="px-4 py-1 border border-gray-300 min-w-[18rem]">
-                      {item.itemName}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-300">
-                      {item.unitType}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-300 min-w-[14rem]">
-                      {item.totalQty}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-300">
-                      {item.returnQty}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-300">
-                      ₹{item.amount.toFixed(2)}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-300">
-                      <span
-                        className={`px-2 py-1 rounded text-white text-xs font-semibold ${
-                          !isOutOfStock ? (
-                            <Badge
-                              label="Available"
-                              color="bg-green-300"
-                              text="text-white"
-                            />
-                          ) : (
-                            <Badge
-                              label="Out of stock"
-                              text="text-white"
-                              color="bg-red-300"
-                            />
-                          )
-                        }`}
-                      >
-                        {!isOutOfStock ? (
-                          <Badge
-                            label="Available"
-                            color="bg-green-400"
-                            text="text-white"
-                          />
-                        ) : (
-                          <Badge
-                            label="Out of stock"
-                            text="text-white"
-                            color="bg-red-400"
-                          />
-                        )}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
 
-              {/* Total row */}
+              {paginatedItems.map((item, index) => (
+                <tr
+                  key={item.id}
+                  className="transition duration-150 border border-gray-300 hover:bg-gray-50"
+                >
+                  <td className="px-4 py-2 border border-gray-300">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.returnId}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300 min-w-[14rem]">
+                    {item.itemName}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.date}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.qty}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {item.price}
+                  </td>
+                </tr>
+              ))}
+
+              {/* Total Row */}
               {filteredItems.length > 0 && (
                 <tr className="bg-gray-100 font-bold text-blue-500">
                   <td
@@ -386,16 +267,18 @@ const GeneralStockReport = () => {
                   >
                     Grand Total
                   </td>
+                  {/* <td className="px-4 py-2 border border-gray-300">
+                    {totalQty}
+                  </td> */}
                   <td className="px-4 py-2 border border-gray-300">
-                    ₹{totalAmount.toFixed(2)}
+                    {totalPrice.toFixed(2)}
                   </td>
-                  <td className="border border-gray-300"></td>
                 </tr>
               )}
             </tbody>
           </table>
         ) : (
-          // Graph
+          //graph
           <>
             <div className="flex">
               <div className="p-4 w-1/2 ">
@@ -454,16 +337,16 @@ const GeneralStockReport = () => {
           </>
         )}
       </div>
-      {/* pagination */}
+
+      {/* Pagination */}
       {viewMode === "table" && (
-        <div className="flex justify-between items-center p-2 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
+        <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            {!searchTerm && (
+            {!searchTerm ? (
               <p>
                 Showing {startNumber} to {endNumber} of {items.length} entries
               </p>
-            )}
-            {searchTerm && (
+            ) : (
               <p>
                 Showing {startNumber} to {endNumber} of {filteredItems.length}{" "}
                 items (Filtered from {items.length} items)
@@ -485,4 +368,4 @@ const GeneralStockReport = () => {
   );
 };
 
-export default GeneralStockReport;
+export default DiscardItemsReport;

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Button from "../../components/store/general/Button";
-import { FaPlus } from "react-icons/fa6";
 import { MdInfoOutline } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -17,7 +16,7 @@ interface ReturnItem {
   note: string;
 }
 
-const ReturnPage = () => {
+const ApprovedReturn = () => {
   const navigate = useNavigate();
   usePreviousPage();
 
@@ -68,17 +67,8 @@ const ReturnPage = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-4 bg-[var(--base-color)] max-h-12 p-2">
         <h2 className="text-2xl font-bold text-[#035d67] uppercase">
-          Returned Items
+          Approved Return Items
         </h2>
-        <Button
-          bgcolor="bg-white"
-          border="border-2 border-gray-800"
-          textColor="text-black"
-          name="Return an Item"
-          icon={<FaPlus className="text-lg" />}
-          hover="hover:bg-gray-100"
-          onClick={() => navigate("/store/return-process/return-form")}
-        />
       </div>
 
       {/* Controls */}
@@ -189,7 +179,7 @@ const ReturnPage = () => {
                     textColor="text-blue-900"
                     hover="hover:bg-blue-100"
                     onClick={() =>
-                      navigate(`/store/returned-items-details/${item.id}`, {
+                      navigate(`/store/approved-return-details/${item.id}`, {
                         state: item,
                       })
                     }
@@ -231,4 +221,4 @@ const ReturnPage = () => {
   );
 };
 
-export default ReturnPage;
+export default ApprovedReturn;

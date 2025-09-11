@@ -24,16 +24,16 @@ const LoginPage = () => {
               Welcome
             </h2>
             <LoginForm />
-            <div className="flex flex-col items-center mt-4 text-sm font-semibold">
+            <div className="flex flex-col p-2 items-center mt-2 text-sm font-semibold bg-gray-200 rounded-2xl">
               <p className="text-[#035d67] mb-1">Need Support? Message Us on WhatsApp</p>
               <p className="flex items-center gap-2 text-violet-900">
                 <LiaWhatsapp className="text-green-600 text-lg" />
-                +91 8670047172
+                +91 8670047172 or +91 700196990
               </p>
-              <p className="flex items-center gap-2 text-violet-900">
+              {/* <p className="flex items-center gap-2 text-violet-900 pb-4">
                 <LiaWhatsapp className="text-green-800 text-lg" />
                 +91 700196990
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
