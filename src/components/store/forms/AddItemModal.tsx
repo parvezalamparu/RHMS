@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import { BiSave } from "react-icons/bi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useForm } from "react-hook-form";
-import Button from "../general/Button";
+import Button from "../../general/Button";
 import { useState } from "react";
 import ImageUploader from "../../general/ImageUploader";
 import toast from "react-hot-toast";

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../store/general/Button";
-import { MdInfoOutline } from "react-icons/md";
+import Button from "../../general/Button";
 import { FaRegEdit } from "react-icons/fa";
 
 interface Patient {
@@ -20,15 +19,15 @@ interface Patient {
 
 // mock data
 const generatePatients = (count: number): Patient[] => {
-  const names = ["Rahul Das", "Anita Sharma", "Suresh Kumar", "Priya Roy", "Arjun Sen"];
-  const guardians = ["Ramesh", "Sunita", "Kiran", "Manoj", "Deepa"];
-  const addresses = [
-    "Howrah",
-    "Kolkata",
-    "Uluberia",
-    "Durgapur",
-    "Siliguri",
+  const names = [
+    "Rahul Das",
+    "Anita Sharma",
+    "Suresh Kumar",
+    "Priya Roy",
+    "Arjun Sen",
   ];
+  const guardians = ["Ramesh", "Sunita", "Kiran", "Manoj", "Deepa"];
+  const addresses = ["Howrah", "Kolkata", "Uluberia", "Durgapur", "Siliguri"];
   const genders = ["Male", "Female"];
 
   return Array.from({ length: count }, (_, i) => ({
@@ -40,8 +39,7 @@ const generatePatients = (count: number): Patient[] => {
     age: Math.floor(Math.random() * 50) + 18,
     mobile: (6000000000 + Math.floor(Math.random() * 999999999)).toString(),
     address: addresses[Math.floor(Math.random() * addresses.length)],
-    state: "West Bengal(W.B)"
-    
+    state: "West Bengal(W.B)",
   }));
 };
 
@@ -51,7 +49,10 @@ const PatientListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Patient; direction: "asc" | "desc" } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Patient;
+    direction: "asc" | "desc";
+  } | null>(null);
 
   const handleSort = (key: keyof Patient) => {
     setSortConfig((prev) => {
@@ -85,7 +86,10 @@ const PatientListPage = () => {
 
   const totalPages = Math.ceil(filteredPatients.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentPatients = filteredPatients.slice(startIdx, startIdx + itemsPerPage);
+  const currentPatients = filteredPatients.slice(
+    startIdx,
+    startIdx + itemsPerPage
+  );
   const startNumber = startIdx + 1;
   const endNumber = startIdx + currentPatients.length;
 
@@ -93,13 +97,15 @@ const PatientListPage = () => {
     <div className="pl-2 bg-gray-50">
       <div className="flex justify-between items-center mb-2 bg-[var(--base-color)] px-4 max-h-14">
         <h1 className="text-2xl font-bold mb-6 text-[#035d67] uppercase pt-5">
-          Patients
+          Patients List
         </h1>
       </div>
 
       <div className="flex items-center justify-between mb-2 flex-wrap gap-4">
         <div className="flex items-center space-x-2">
-          <label htmlFor="pageSize" className="text-sm text-gray-700">Show</label>
+          <label htmlFor="pageSize" className="text-sm text-gray-700">
+            Show
+          </label>
           <select
             id="pageSize"
             className="border border-gray-300 cursor-pointer rounded px-2 py-1 text-sm"
@@ -113,7 +119,6 @@ const PatientListPage = () => {
             <option value="20">20</option>
             <option value="50">50</option>
             <option value="100">100</option>
-
           </select>
           <span className="text-sm text-gray-700">entries</span>
         </div>
@@ -135,7 +140,16 @@ const PatientListPage = () => {
           <thead className="bg-[var(--base-color)] text-gray-700 border-b border-gray-300">
             <tr>
               <th className="px-4 py-2 border-r border-gray-300">SN</th>
-              {["uhid", "name", "due", "guardian", "gender", "age", "mobile", "address"].map((key) => (
+              {[
+                "uhid",
+                "name",
+                "due",
+                "guardian",
+                "gender",
+                "age",
+                "mobile",
+                "address",
+              ].map((key) => (
                 <th
                   key={key}
                   className="px-4 py-2 border-r border-gray-300 cursor-pointer select-none"
@@ -147,8 +161,7 @@ const PatientListPage = () => {
                     ? "Patient Name"
                     : key === "due"
                     ? "Due Amount"
-                    : key.charAt(0).toUpperCase() + key.slice(1)}
-                  {" "}
+                    : key.charAt(0).toUpperCase() + key.slice(1)}{" "}
                   <span>
                     {sortConfig?.key === key
                       ? sortConfig.direction === "asc"
@@ -169,23 +182,35 @@ const PatientListPage = () => {
                   p.due > 0 ? "bg-red-50" : "bg-green-50"
                 }`}
               >
-                <td className="px-4 py-2 border-r border-gray-200">{startIdx + index + 1}</td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {startIdx + index + 1}
+                </td>
                 <td className="px-4 py-2 border-r border-gray-200">{p.uhid}</td>
                 <td className="px-4 py-2 border-r border-gray-200">{p.name}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{p.due > 0 ? (
-                      <span className="px-2 py-1 text-sm font-bold  text-red-700">
-                        {p.due.toFixed(2)}
-                      </span>
-                    ) : (
-                      <span className="px-2 py-1 text-sm font-bold text-green-700">
-                        No Due
-                      </span>
-                    )}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{p.guardian}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{p.gender}</td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {p.due > 0 ? (
+                    <span className="px-2 py-1 text-sm font-bold  text-red-700">
+                      {p.due.toFixed(2)}
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 text-sm font-bold text-green-700">
+                      No Due
+                    </span>
+                  )}
+                </td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {p.guardian}
+                </td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {p.gender}
+                </td>
                 <td className="px-4 py-2 border-r border-gray-200">{p.age}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{p.mobile}</td>
-                <td className="px-4 py-2 border-r border-gray-200">{p.address} <br /> {p.state}</td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {p.mobile}
+                </td>
+                <td className="px-4 py-2 border-r border-gray-200">
+                  {p.address} <br /> {p.state}
+                </td>
                 <td className="px-4 py-1.5 flex gap-1.5 max-w-15">
                   <Button
                     icon={<FaRegEdit className="text-lg" />}
@@ -204,7 +229,8 @@ const PatientListPage = () => {
 
         <div className="flex justify-between items-center p-4 border-t border-b border-gray-300 bg-gray-50 text-sm text-gray-600">
           <div>
-            Showing {startNumber} to {endNumber} of {filteredPatients.length} entries
+            Showing {startNumber} to {endNumber} of {filteredPatients.length}{" "}
+            entries
           </div>
           <Stack spacing={2} direction="row" justifyContent="flex-end">
             <Pagination

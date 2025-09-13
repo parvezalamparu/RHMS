@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { FaPlus } from "react-icons/fa6";
 import { MdInfoOutline } from "react-icons/md";
 

@@ -321,7 +321,7 @@ const MainSidebar = () => {
             >
               <li>
                 <Link
-                  to="/opd/appointments"
+                  to="/opd"
                   className={`block px-2 py-2 rounded-md text-sm ${
                     isActive("/opd")
                       ? "bg-gray-700 text-yellow-300"

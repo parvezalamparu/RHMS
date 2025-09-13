@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import Button from "../general/Button";
+import Button from "../../general/Button";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useNavigate } from "react-router-dom";

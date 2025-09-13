@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AddItemModal from "../../components/store/forms/AddItemModal";
 import EditItemModal from "../../components/store/forms/EditItemModal";
 import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";

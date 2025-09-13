@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { PiMicrosoftExcelLogo } from "react-icons/pi";
 
 

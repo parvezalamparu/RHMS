@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
-import Button from "../general/Button";
+import Button from "../../general/Button";
 import { BiSave } from "react-icons/bi";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useForm } from "react-hook-form";

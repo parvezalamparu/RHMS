@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { MdInfoOutline } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";

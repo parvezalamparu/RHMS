@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import CustomDatePicker from "../../components/general/CustomDatePicker";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { BiSave } from "react-icons/bi";
 
 export default function EditUserForm() {

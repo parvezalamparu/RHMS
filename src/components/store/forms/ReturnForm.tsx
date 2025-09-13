@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import Button from "../general/Button";
+import Button from "../../general/Button";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { BiSave } from "react-icons/bi";

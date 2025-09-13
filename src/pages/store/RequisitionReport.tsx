@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { PiMicrosoftExcelLogo } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
 import { BsFiletypePdf } from "react-icons/bs";

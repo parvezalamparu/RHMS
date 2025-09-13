@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import Button from "../general/Button";
+import Button from "../../general/Button";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -181,6 +181,7 @@ const AddPurchaseForm = () => {
       amount: 0,
     });
   };
+  
 
   // Delete item from the list
   const deleteItem = (indexToDelete: number) => {
@@ -362,7 +363,7 @@ const AddPurchaseForm = () => {
         {/* Table Header */}
         <div className="overflow-auto border rounded">
           <table className="min-w-[2500px] w-full border-collapse text-sm">
-            <thead className="bg-[#2fe2fe] text-gray-900">
+            <thead className="bg-[var(--base-color)] text-gray-900">
               <tr>
                 {[
                   { label: "Item", required: true },

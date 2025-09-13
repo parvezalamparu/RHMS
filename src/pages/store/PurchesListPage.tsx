@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { FaPlus } from "react-icons/fa6";
 import { CgOptions } from "react-icons/cg";
 import { MdInfoOutline } from "react-icons/md";

@@ -3,7 +3,7 @@ import { GiGraduateCap } from "react-icons/gi";
 import { HiOutlineIdentification } from "react-icons/hi";
 import { LiaEdit } from "react-icons/lia";
 import { MdLock } from "react-icons/md";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 
 export default function ViewUser() {
   const user = {

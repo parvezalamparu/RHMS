@@ -23,6 +23,9 @@ import AssignPermissionPage from "./pages/admin/AssignPermissionPage";
 import EditUserForm from "./pages/forms/EditUserForm";
 import OPDListPage from "./components/opd/pages/OPDList";
 import PatientListPage from "./components/opd/pages/PatientsListPage";
+import AppointmentListPage from "./components/opd/pages/AppointmentListPage";
+import OPDRegister from "./components/opd/forms/OPDRegisterForm";
+import NewEnquiryForm from "./components/opd/forms/NewEnquiryForm";
 
 
 // Store Pages
@@ -72,6 +75,7 @@ import ViewRepairItemDetails from "./pages/store/ViewRepairItemDetails";
 
 // React hot toast
 import { Toaster } from "react-hot-toast";
+import OPDRegisterForm from "./components/opd/forms/OPDRegisterForm";
 
 function App() {
 
@@ -94,8 +98,12 @@ function App() {
           <Route path="/admin/permissions" element={<PermissionList />} />
           <Route path="/role/assign-permission" element={<AssignPermissionPage />} />
           <Route path="/admin/users/:id/edit" element={<EditUserForm />} />
-          <Route path="/opd/appointments" element={<OPDListPage />} />
+          <Route path="/opd" element={<OPDListPage />} />
           <Route path="/register/patient-register" element={<PatientListPage />} />
+          <Route path="/opd/appointment" element={<AppointmentListPage />} />
+          <Route path="/opd/register" element={<OPDRegister />} />
+          <Route path="/opd/add-enquiry" element={<NewEnquiryForm />} />
+          <Route path="/opd/register/:id" element={<OPDRegisterForm />} />
 
         </Route>
 

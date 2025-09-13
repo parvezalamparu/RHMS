@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { MdInfoOutline } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";

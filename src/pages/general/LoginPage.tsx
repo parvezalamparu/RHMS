@@ -8,7 +8,7 @@ const LoginPage = () => {
     <div className="flex h-screen items-center justify-center bg-[url('/src/assets/login-bg.jpg')] bg-cover bg-center backdrop-blur-[2px] opacity-100 px-4">
       <div className="flex h-[500px] w-[800px] rounded-2xl overflow-hidden shadow-2xl  bg-white/20 border-6 border-[#035d67]">
         {/* Left image section */}
-        <div className="hidden md:flex w-1/2 items-center justify-center bg-[#035d67]/10 pr-1 backdrop-blur-[4px]">
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-gradient-to-r from-pink-500 via-yellow-500 to-red-500 p-6 pr-1 backdrop-blur-[4px]">
           {/* <img
             src="/src/assets/hospital.jpg"
             alt="Rainbow Hospital"

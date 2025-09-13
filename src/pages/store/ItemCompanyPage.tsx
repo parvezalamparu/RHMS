@@ -1,7 +1,7 @@
 import  { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import ToggleSwitch from "../../components/store/general/ToggleSwitchProps";

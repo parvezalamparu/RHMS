@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { Item } from "../../../pages/store/InventoryPage";
-import Button from "../../store/general/Button";
+import Button from "../../general/Button";
 import { X } from "lucide-react";
 import { BiSave } from "react-icons/bi";
 import { IoIosCloseCircleOutline } from "react-icons/io";

@@ -5,7 +5,7 @@ import { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Badge from "../../components/general/Badge";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { PiMicrosoftExcelLogo } from "react-icons/pi";
 import { BsFiletypePdf } from "react-icons/bs";
 import { CiFilter } from "react-icons/ci";

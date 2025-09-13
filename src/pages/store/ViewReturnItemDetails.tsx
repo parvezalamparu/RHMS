@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 
 // Simulated API fetch
 const fetchReturnDetails = async (id: string) => {

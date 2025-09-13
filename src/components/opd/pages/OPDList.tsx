@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Button from "../../store/general/Button";
-import { MdInfoOutline } from "react-icons/md";
+import Button from "../../general/Button";
 import { useNavigate } from "react-router-dom";
+import { MdMale, MdFemale } from "react-icons/md";
+import { RiStethoscopeFill } from "react-icons/ri";
+import { FcViewDetails } from "react-icons/fc";
+import { FaFilter } from "react-icons/fa";
 
 interface OPD {
   id: string;
@@ -94,6 +97,7 @@ const OPDListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof OPD | null>(null);
   const [sortDir, setSortDir] = useState<SortDirection>(null);
+  const [showFilter, setShowFilter] = useState(false);
 
   const navigate = useNavigate();
 
@@ -118,6 +122,10 @@ const OPDListPage = () => {
         .includes(t)
     );
   }, [opdList, searchTerm]);
+
+  const handleFilter = (data: any) => {
+    console.log("Filter Data:", data);
+  };
 
   // Sorting
   const sorted = useMemo(() => {
@@ -210,12 +218,23 @@ const OPDListPage = () => {
             bgcolor="bg-white"
             border="border-2 border-gray-800"
             textColor="text-black"
+            icon={<FaFilter  />}
+            title="Filter Data"
+            hover="hover:bg-gray-100"
+            onClick={() => setShowFilter((prev) => !prev)}
+
+          />
+          <Button
+            bgcolor="bg-white"
+            border="border-2 border-gray-800"
+            textColor="text-black"
             name="NEW OPD REGISTER"
             hover="hover:bg-gray-100"
             onClick={() => navigate("/opd/register")}
           />
         </div>
       </div>
+      {showFilter && <div className="bg-green-200 h-14 mb-2"></div>}
 
       {/* Controls */}
       <div className="flex justify-between mb-2 flex-wrap gap-4 items-center">
@@ -236,7 +255,6 @@ const OPDListPage = () => {
             <option value={20}>20</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
-
           </select>
           <span className="text-sm text-gray-700">entries</span>
         </div>
@@ -297,9 +315,18 @@ const OPDListPage = () => {
 
                   {/* Patient expanded */}
                   <td className="px-4 py-2 border w-56">
-                    <div className="font-semibold text-blue-900 truncate">{opd.patient}</div>
-                    <div className="text-xs text-gray-600">
-                      {opd.gender} • {opd.age}Y
+                    <div className="text-md font-semibold text-blue-900 truncate">
+                      {opd.patient}
+                    </div>
+                    <div className="text-gray-800 flex items-center gap-1">
+                      {opd.gender === "Male" ? (
+                        <MdMale className="text-blue-500 text-sm" />
+                      ) : (
+                        <MdFemale className="text-pink-500 text-sm" />
+                      )}
+                      <span>
+                        {opd.gender} • {opd.age}Y
+                      </span>
                     </div>
                   </td>
 
@@ -310,7 +337,7 @@ const OPDListPage = () => {
                   {/* Visit details expanded */}
                   <td className="px-4 py-2 border w-48">
                     <div className="text-sm truncate">{opd.visit}</div>
-                    <div className="text-xs text-gray-600">{opd.doctor}</div>
+                    <div className="text-sm text-gray-800 flex gap-2"><RiStethoscopeFill className="text-blue-700 text-sm"/>{opd.doctor}</div>
                   </td>
 
                   <td className="px-2 py-2 border w-20 font-semibold text-center">
@@ -327,12 +354,12 @@ const OPDListPage = () => {
 
                   <td className="px-2 py-2 border w-20 text-center">
                     <Button
-                      icon={<MdInfoOutline className="text-lg" />}
+                      icon={<FcViewDetails className="text-lg" />}
                       bgcolor=""
                       border="border-2"
                       textColor="text-blue-900"
                       hover="hover:text-blue-700"
-                      title="View Patient"
+                      title="View Patient Details"
                       onClick={() => navigate(`/opd/view/${opd.id}`)}
                     />
                   </td>

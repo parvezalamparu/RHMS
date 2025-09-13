@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../store/general/Button";
+import Button from "./Button";
 import { AiOutlineSearch } from "react-icons/ai";
 
 interface Patient {

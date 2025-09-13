@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Button from "../../components/store/general/Button";
+import Button from "../../components/general/Button";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { a4 } from "../../assets/assets";
 import Pagination from "@mui/material/Pagination";
